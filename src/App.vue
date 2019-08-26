@@ -21,7 +21,7 @@
                         :key="item.name"
                         :label="item.title"
                         :name="item.name">
-                    <el-form ref="form" :model="form" label-width="80px">
+                    <el-form v-if="item.isSimple" ref="form" :model="form" label-width="80px">
                         <el-form-item label="日志">
                             <el-input type="textarea" :rows="10" v-model="form.desc"></el-input>
                         </el-form-item>
@@ -84,7 +84,11 @@
                             <el-button>停止测试</el-button>
                         </el-form-item>
                     </el-form>
+                    <el-form v-if="!item.isSimple">
+                        <h1>复杂页面</h1>
+                    </el-form>
                 </el-tab-pane>
+
             </el-tabs>
         </el-row>
     </div>
@@ -129,7 +133,8 @@
                 this.editableTabs.push({
                     title: '新简单任务',
                     name: newTabName,
-                    content: '新简单任务页内容'
+                    content: '新简单任务页内容',
+                    isSimple: true,
                 });
                 this.editableTabsValue = newTabName;
             },
@@ -139,7 +144,8 @@
                 this.editableTabs.push({
                     title: '新复杂任务',
                     name: newTabName,
-                    content: '新复杂任务页内容'
+                    content: '新复杂任务页内容',
+                    isSimple: false,
                 });
                 this.editableTabsValue = newTabName;
             },
@@ -147,9 +153,12 @@
                 this.task = '复制当前任务';
             },
             deleteCurrentTask() {
+                console.log(this.editableTabsValue)
+                this.removeTab(this.editableTabsValue)
                 this.task = '删除当前任务';
             },
             deleteAllTasks() {
+                this.editableTabs = []
                 this.task = '删除所有任务';
             },
             removeTab(targetName) {
