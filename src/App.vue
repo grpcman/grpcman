@@ -13,75 +13,77 @@
             <el-button type="warning" @click="deleteCurrentTask">删除当前任务</el-button>
             <el-button type="danger" @click="deleteAllTasks">删除所有任务</el-button>
         </el-row>
+        <el-divider></el-divider>
         <el-row>
-            <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
+            <el-tabs v-model="editableTabsValue" type="border-card" editable closable @tab-remove="removeTab">
                 <el-tab-pane
                         v-for="(item) in editableTabs"
                         :key="item.name"
                         :label="item.title"
-                        :name="item.name"
-                >
+                        :name="item.name">
                     <el-form ref="form" :model="form" label-width="80px">
-                        <el-form-item label="测试日志">
-                            <el-input type="textarea" :rows="10" v-model="form.desc" disabled="disabled"></el-input>
+                        <el-form-item label="日志">
+                            <el-input type="textarea" :rows="10" v-model="form.desc"></el-input>
                         </el-form-item>
                         <el-row>
-                            <el-col :span="6">
-                                <el-form-item label="线程数">
-                                    <el-input v-model="form.name" type="number"></el-input>
+                            <el-col :span="8">
+                                <el-form-item label="文件">
+                                    <el-upload
+                                            :auto-upload="false"
+                                            :on-change="elInFile"
+                                            ref="upload"
+                                            class="upload-demo"
+                                            accept=".proto" action="">
+                                        <el-button slot="trigger" size="mini" type="success" plain>选取文件</el-button>
+                                        <i slot="tip" class="el-upload__tip el-icon-info">只能选取proto</i>
+                                    </el-upload>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="循环数">
-                                    <el-input v-model="form.name" type="number"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
+                            <el-col :span="8">
                                 <el-form-item label="服务">
-                                    <el-select v-model="form.region" placeholder="请选择服务" value="">
-                                        <el-option label="区域一" value="shanghai"></el-option>
-                                        <el-option label="区域二" value="beijing"></el-option>
+                                    <el-select v-model="form.service" placeholder="请选择服务" value="" style="width: 100%">
+                                        <el-option label="auth" value="shanghai"></el-option>
+                                        <el-option label="game" value="beijing"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="6">
+                            <el-col :span="8">
                                 <el-form-item label="协议">
-                                    <el-select v-model="form.region" placeholder="请选择协议" value="">
-                                        <el-option label="区域一" value="shanghai"></el-option>
-                                        <el-option label="区域二" value="beijing"></el-option>
+                                    <el-select v-model="form.rpc" placeholder="请选择协议" value="" style="width: 100%">
+                                        <el-option label="login" value="shanghai"></el-option>
+                                        <el-option label="register" value="beijing"></el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        <el-form-item label="参数">
-                            <el-input type="textarea" :rows="10" v-model="form.desc"></el-input>
-                        </el-form-item>
-                        <el-form-item label="是否异步">
+                        <el-row>
+                            <el-col :span="8">
+                                <el-form-item label="线程">
+                                    <el-input v-model="form.task" type="number"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="循环">
+                                    <el-input v-model="form.loop" type="number"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="超时">
+                                    <el-input v-model="form.timeout" type="number"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-form-item label="异步">
                             <el-switch v-model="form.delivery"></el-switch>
                         </el-form-item>
-                        <el-form-item label="活动性质">
-                            <el-checkbox-group v-model="form.type">
-                                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-                                <el-checkbox label="地推活动" name="type"></el-checkbox>
-                                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-                                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-                            </el-checkbox-group>
-                        </el-form-item>
-                        <el-form-item label="特殊资源">
-                            <el-radio-group v-model="form.resource">
-                                <el-radio label="线上品牌商赞助"></el-radio>
-                                <el-radio label="线下场地免费"></el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item label="活动形式">
-                            <el-input type="textarea" v-model="form.desc"></el-input>
+                        <el-form-item label="参数">
+                            <el-input type="textarea" :rows="2" v-model="form.param"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                            <el-button>取消</el-button>
+                            <el-button type="primary" @click="onSubmit">开始测试</el-button>
+                            <el-button>停止测试</el-button>
                         </el-form-item>
                     </el-form>
-                    {{item.content}}
                 </el-tab-pane>
             </el-tabs>
         </el-row>
@@ -107,13 +109,14 @@
                 tabIndex: 2,
                 form: {
                     name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
                     delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                    desc: '',
+                    service: [],
+                    rpc: [],
+                    task: 0,
+                    loop: 0,
+                    timeout: 0,
+                    param: ''
                 }
             }
         },
@@ -141,17 +144,13 @@
                 this.editableTabsValue = newTabName;
             },
             copyCurrentTask() {
-                this.task = '复制当前任务'
+                this.task = '复制当前任务';
             },
             deleteCurrentTask() {
-                this.task = '删除当前任务'
+                this.task = '删除当前任务';
             },
             deleteAllTasks() {
-                this.task = '删除所有任务'
-            },
-            handleClick(tab, event) {
-                // eslint-disable-next-line no-console
-                console.log(tab, event);
+                this.task = '删除所有任务';
             },
             removeTab(targetName) {
                 let tabs = this.editableTabs;
@@ -166,25 +165,19 @@
                         }
                     });
                 }
-
                 this.editableTabsValue = activeName;
                 this.editableTabs = tabs.filter(tab => tab.name !== targetName);
             },
             onSubmit() {
                 // eslint-disable-next-line no-console
                 console.log('submit!');
-            }
+            },
+            elInFile(f, fs) {
+                // eslint-disable-next-line no-console
+                console.log(fs);
+                // eslint-disable-next-line no-console
+                console.log(f);
+            },
         },
     }
 </script>
-
-<style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
-    }
-</style>
