@@ -104,11 +104,12 @@
                 editableTabs: [{
                     title: 'Tab 1',
                     name: '1',
-                    content: 'Tab 1 content'
+                    content: 'Tab 1 content',
+                    isSimple: true,
                 }, {
                     title: 'Tab 2',
                     name: '2',
-                    content: 'Tab 2 content'
+                    content: 'Tab 2 content',
                 }],
                 tabIndex: 2,
                 form: {
@@ -153,12 +154,13 @@
                 this.task = '复制当前任务';
             },
             deleteCurrentTask() {
-                console.log(this.editableTabsValue)
-                this.removeTab(this.editableTabsValue)
+                // eslint-disable-next-line no-console
+                console.log(this.editableTabsValue);
+                this.removeTab(this.editableTabsValue);
                 this.task = '删除当前任务';
             },
             deleteAllTasks() {
-                this.editableTabs = []
+                this.editableTabs = [];
                 this.task = '删除所有任务';
             },
             removeTab(targetName) {
