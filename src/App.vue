@@ -15,7 +15,7 @@
         </el-row>
         <el-divider></el-divider>
         <el-row>
-            <el-tabs v-model="editableTabsValue" type="border-card" editable closable @tab-remove="removeTab">
+            <el-tabs v-model="editableTabsValue" type="border-card" closable @tab-remove="removeTab">
                 <el-tab-pane
                         v-for="(item) in editableTabs"
                         :key="item.name"
