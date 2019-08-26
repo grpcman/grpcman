@@ -1,7 +1,9 @@
-# gRPC-testing-tool based Vue.js and element-UI
+# gRPC-testing-tool
 
-npm i
+## This is a tool for testing .proto file, it's based electron & Vue.js & Element-UI
 
-dev: **npm run electron:serve
+`cd gRPC-testing-tool && npm i`
 
-prod: **npm run electron:build
+If you don't have vue-cli please install it before other scripts `npm install -g @vue/cli`
+
+run with `npm run electron:serve` or `npm run electron:build`
