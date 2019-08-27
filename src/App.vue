@@ -11,10 +11,10 @@
     <el-row>
       <el-tabs v-model="editableTabsValue" type="border-card" closable @tab-remove="removeTab">
         <el-tab-pane
-                v-for="(item) in editableTabs"
-                :key="item.name"
-                :label="item.title"
-                :name="item.name">
+          v-for="(item) in editableTabs"
+          :key="item.name"
+          :label="item.title"
+          :name="item.name">
           <el-form v-if="item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
               <el-input type="textarea" :rows="10" v-model="item.log1"></el-input>
@@ -23,12 +23,12 @@
               <el-col :span="8">
                 <el-form-item label="文件">
                   <el-upload
-                          :auto-upload="false"
-                          :on-change="elInFile"
-                          ref="upload"
-                          class="upload-demo"
-                          accept=".proto"
-                          action="">
+                    :auto-upload="false"
+                    :on-change="elInFile"
+                    ref="upload"
+                    class="upload-demo"
+                    accept=".proto"
+                    action="">
                     <el-button slot="trigger" size="mini" type="success" plain>选取文件</el-button>
                     <i slot="tip" class="el-upload__tip el-icon-info">只能选取proto</i>
                   </el-upload>
@@ -37,11 +37,11 @@
               <el-col :span="16">
                 <el-form-item label="服务和协议">
                   <el-cascader
-                          v-model="item.value"
-                          :options="item.options"
-                          :props="{ expandTrigger: 'hover' }"
-                          @change="handleChange"
-                          style="width: 100%">
+                    v-model="item.value"
+                    :options="item.options"
+                    :props="{ expandTrigger: 'hover' }"
+                    @change="handleChange"
+                    style="width: 100%">
                   </el-cascader>
                 </el-form-item>
               </el-col>
@@ -108,12 +108,11 @@
 </template>
 
 <script>
-  const protoLoader = require('@grpc/proto-loader')
-  const grpc = require('grpc')
+  const protoLoader = require('@grpc/proto-loader');
+  const grpc = require('grpc');
   export default {
-    data () {
+    data() {
       return {
-        task: '无',
         activeName: 'first',
         editableTabsValue: '1',
         editableTabs: [
@@ -144,69 +143,86 @@
         },
         formLabelWidth: '120px',
         dialogFormVisible: false,
-        isSimple: true
+        isSimple: true,
+        proto: null
       }
     },
     created: async function () {
     },
     methods: {
-      createTask () {
-        this.task = '创建简单任务'
-        let newTabName = ++this.tabIndex + ''
-        this.editableTabs.push({
-          title: this.form.title,
-          name: newTabName,
-          isSimple: this.isSimple,
-        })
-        this.editableTabsValue = newTabName
+      createTask() {
+        let newTabName = ++this.tabIndex + '';
+        if(this.isSimple){
+          this.editableTabs.push(
+          {
+            title: this.form.title,
+            name: newTabName,
+            isSimple: true,            //是否简单任务
+            delivery: false,           //是否异步
+            log1: '这是简单任务的日志',           //这是有序列表，存放日志
+            value: '',
+            options: [],
+            task: 0,                   //多线程
+            loop: 0,                   //循环次数
+            timeout: 0,                //超时时间
+            param: '这是参数'           //请求参数
+          })
+        }else{
+          this.editableTabs.push({
+            title: this.form.title,
+            name: newTabName,
+            isSimple: this.isSimple,
+          });
+        }
+        this.editableTabsValue = newTabName;
         this.dialogFormVisible = false
       },
-      createSimpleTask () {
-        this.task = '创建简单任务'
-        this.isSimple = true
-        this.dialogFormVisible = true
-        this.editableTabs[0].log1 += '\n|||||||||||||||||||||||||test'
+      createSimpleTask() {
+        this.isSimple = true;
+        this.dialogFormVisible = true;
+        this.editableTabs[0].log1 += '\n创建简单任务'
       },
-      createCompositeTask () {
-        this.task = '创建复合任务'
-        this.isSimple = false
-        this.dialogFormVisible = true
+      createCompositeTask() {
+        this.isSimple = false;
+        this.dialogFormVisible = true;
+        this.editableTabs[0].log1 += '\n创建复合任务'
       },
-      copyCurrentTask () {
-        this.task = '复制当前任务'
+      copyCurrentTask() {
+        this.editableTabs[0].log1 += '\n复制当前任务'
       },
-      deleteCurrentTask () {
+      deleteCurrentTask() {
         // eslint-disable-next-line no-console
-        console.log(this.editableTabsValue)
-        this.removeTab(this.editableTabsValue)
-        this.task = '删除当前任务'
+        console.log(this.editableTabsValue);
+        this.removeTab(this.editableTabsValue);
+        this.editableTabs[0].log1 += '\n删除当前任务'
       },
-      deleteAllTasks () {
-        this.editableTabs = []
-        this.task = '删除所有任务'
+      deleteAllTasks() {
+        this.editableTabs = [];
+        this.editableTabs[0].log1 += '\n删除所有任务'
       },
-      removeTab (targetName) {
-        let tabs = this.editableTabs
-        let activeName = this.editableTabsValue
+      removeTab(targetName) {
+        let tabs = this.editableTabs;
+        let activeName = this.editableTabsValue;
         if (activeName === targetName) {
           tabs.forEach((tab, index) => {
             if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1]
+              let nextTab = tabs[index + 1] || tabs[index - 1];
               if (nextTab) {
                 activeName = nextTab.name
               }
             }
           })
         }
-        this.editableTabsValue = activeName
+        this.editableTabsValue = activeName;
         this.editableTabs = tabs.filter(tab => tab.name !== targetName)
       },
-      onSubmit () {
+      onSubmit() {
         // eslint-disable-next-line no-console
         console.log('submit!')
       },
-      elInFile (f, fs) {
-        console.log(f)
+      elInFile(f, fs) {
+        // eslint-disable-next-line no-console
+        console.log(f);
         let packageDefinition = protoLoader.loadSync(
           f.raw.path,
           {
@@ -216,26 +232,31 @@
             defaults: true,
             oneofs: true
           }
-        )
-        console.log(packageDefinition)
-        let index = 0
+        );
+        this.proto = grpc.loadPackageDefinition(packageDefinition).proto;
+        // eslint-disable-next-line no-console
+        console.log(packageDefinition);
+        let index = 0;
         for (let i in packageDefinition) {
-          console.log(i)
-          this.editableTabs[0].options.push({ label: i, value: i, children: [] })
+          // eslint-disable-next-line no-console
+          console.log(i);
+          this.editableTabs[0].options.push({label: i, value: i.split(".")[1], children: []});
           for (let j in packageDefinition[i]) {
-            console.log(this.editableTabs[0].options[index].children.push({ label: j, value: j }))
+            this.editableTabs[0].options[index].children.push({label: j, value: j});
+            // eslint-disable-next-line no-console
             console.log('\t' + j)
           }
           index++
         }
-
-        let proto = grpc.loadPackageDefinition(packageDefinition).proto
-        let login = new proto.login('localhost:8080', grpc.credentials.createInsecure())
-        console.log(login)
       },
-      handleChange (value) {
+      handleChange(value) {
         // eslint-disable-next-line no-console
-        console.log(value)
+        console.log(value); //[0,1]
+
+        let client = new this.proto[value[0]]('localhost:8080', grpc.credentials.createInsecure());
+        // eslint-disable-next-line no-console
+        console.log(client)
+
       }
     },
   }
