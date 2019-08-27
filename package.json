@@ -13,16 +13,16 @@
   },
   "main": "background.js",
   "dependencies": {
-    "core-js": "^2.6.5",
-    "element-ui": "^2.11.1",
-    "protobufjs": "^6.8.8",
-    "vue": "^2.6.10",
     "@grpc/proto-loader": "^0.1.0",
     "async": "^1.5.2",
+    "core-js": "^2.6.5",
+    "element-ui": "^2.11.1",
     "google-protobuf": "^3.0.0",
-    "grpc": "^1.11.0",
+    "grpc": "^1.23.3",
     "lodash": "^4.6.1",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "protobufjs": "^6.8.8",
+    "vue": "^2.6.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
@@ -31,14 +31,15 @@
     "babel-eslint": "^10.0.1",
     "babel-plugin-component": "^1.1.1",
     "css-loader": "^3.2.0",
-    "electron": "6.0.0",
+    "electron": "6.0.4",
+    "electron-builder": "^21.2.0",
+    "electron-rebuild": "^1.8.6",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.3.1",
     "style-loader": "^1.0.0",
     "vue-cli-plugin-electron-builder": "^1.4.0",
-    "electron-builder": "^21.2.0",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.10"
   },
@@ -64,5 +65,6 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "__npminstall_done": false
 }
