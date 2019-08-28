@@ -18,7 +18,7 @@
         >
           <el-form v-if="item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
-              <el-input type="textarea" :rows="10" v-model="item.log1" style="width: 99%"></el-input>
+              <el-input type="textarea" :rows="10" v-model="item.log1" style="width: 95%"></el-input>
             </el-form-item>
             <el-row>
               <el-col :span="8">
@@ -37,44 +37,44 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="地址">
-                  <el-input v-model="item.address" style="width: 99%"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
                 <el-form-item label="服务和协议">
                   <el-cascader
                     v-model="item.value"
                     :options="item.options"
                     :props="{ expandTrigger: 'hover' }"
                     @change="handleChange"
-                    style="width: 99%"
+                    style="width: 95%"
                   ></el-cascader>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="地址">
+                  <el-input v-model="item.address" style="width: 95%"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="线程">
-                  <el-input v-model="item.task" type="number" style="width: 99%"></el-input>
+                  <el-input v-model="item.task" type="number" style="width: 95%"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="循环">
-                  <el-input v-model="item.loop" type="number" style="width: 99%"></el-input>
+                  <el-input v-model="item.loop" type="number" style="width: 95%"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="超时">
-                  <el-input v-model="item.timeout" type="number" style="width: 99%"></el-input>
+                  <el-input v-model="item.timeout" type="number" style="width: 95%"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item label="异步">
-              <el-switch v-model="item.delivery" style="width: 99%"></el-switch>
+              <el-switch v-model="item.delivery" style="width: 95%"></el-switch>
             </el-form-item>
             <el-form-item label="参数">
-              <el-input type="textarea" :rows="2" v-model="item.param" style="width: 99%"></el-input>
+              <el-input type="textarea" :rows="2" v-model="item.param" style="width: 95%"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSimpleStart">开始测试</el-button>
@@ -117,7 +117,6 @@
 <script>
 const protoLoader = require("@grpc/proto-loader");
 const grpc = require("grpc");
-const {lib} =require("./lib.js");
 export default {
   data() {
     return {
@@ -135,11 +134,11 @@ export default {
           log1: "这是简单任务的日志", //这是有序列表，存放日志
           value: "",  //级联选择器的已选内容
           options: [],  //级联选择器的选项
-          task: 1, //多线程
-          loop: 1, //循环次数
-          timeout: 10000, //超时时间
-          param:{ userName: 'robot2', password: 'cc3e7bb5ad6f13c65f0bb97da5c35f7c' }, //请求参数
-          address: "localhost:50301", //任务的端口
+          task: 0, //多线程
+          loop: 0, //循环次数
+          timeout: 0, //超时时间
+          param: "这是参数", //请求参数
+          address: "localhost:50001", //任务的端口
           isTesting: false, //任务是否正在进行
           client: null  //gRPC的client，用来调用rpc
         },
@@ -177,11 +176,11 @@ export default {
           log1: "这是简单任务的日志", //这是有序列表，存放日志
           value: "",
           options: [],
-          task: 1, //多线程
-          loop: 1, //循环次数
-          timeout: 10000, //超时时间
-          param: { userName: 'robot2', password: 'cc3e7bb5ad6f13c65f0bb97da5c35f7c' }, //请求参数
-          address: "localhost:50301", //任务的端口
+          task: 0, //多线程
+          loop: 0, //循环次数
+          timeout: 0, //超时时间
+          param: "这是参数", //请求参数
+          address: "localhost:50001", //任务的端口
           isTesting: false, //任务是否正在进行
           client: null  //gRPC的client，用来调用rpc
         });
@@ -212,7 +211,9 @@ export default {
       //复制当前任务
       let newTabName = ++this.tabIndex + "";
       let data=this.editableTabs[this.editableTabsValue - 1];
+      console.log(data);
       data.name=newTabName;
+      console.log(data);
       this.editableTabs.push(data);
       this.editableTabsValue = newTabName;
     },
@@ -243,21 +244,11 @@ export default {
       this.editableTabsValue = activeName;
       this.editableTabs = tabs.filter(tab => tab.name !== targetName);
     },
-    async onSimpleStart() {
+    onSimpleStart() {
       //简单任务的开始
       // eslint-disable-next-line no-console
       console.log(this.editableTabsValue - 1);
       this.editableTabs[this.editableTabsValue - 1].istesting = true;
-      for (let i = 0; i < this.editableTabs[this.editableTabsValue - 1].loop; i++) {
-        // eslint-disable-next-line no-console
-        console.log(this.editableTabs[this.editableTabsValue - 1].client);
-        // eslint-disable-next-line no-console
-        console.log(this.editableTabs[this.editableTabsValue - 1].value[1]);
-        // eslint-disable-next-line no-console
-        console.log(this.editableTabs[this.editableTabsValue - 1].param);
-        let res = await lib.grpcCall(this.editableTabs[this.editableTabsValue - 1].client, this.editableTabs[this.editableTabsValue - 1].value[1], this.editableTabs[this.editableTabsValue - 1].param, null)
-        this.editableTabs[this.editableTabsValue - 1].log1 += "\n" + res;
-      }
     },
     onSimpleEnd() {
       //简单任务的结束
@@ -271,12 +262,7 @@ export default {
       //混合任务的开始
       this.editableTabs[this.editableTabsValue - 1].istesting = false;
     },
-    // eslint-disable-next-line no-unused-vars
     elInFile(f, fs) {
-      this.$message({
-        message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
-        type: 'warning'
-      });
       //通过f获取到上传的文件
       let packageDefinition = protoLoader.loadSync(f.raw.path, {
         keepCase: true,
@@ -290,14 +276,14 @@ export default {
       let index = 0;
       //为级联选择器添加service
       for (let i in packageDefinition) {
-        this.editableTabs[this.editableTabsValue - 1].options.push({
+        this.editableTabs[0].options.push({
           label: i,
           value: i.split(".")[1],
           children: []
         });
         //为级联选择器添加rpc
         for (let j in packageDefinition[i]) {
-          this.editableTabs[this.editableTabsValue - 1].options[index].children.push({
+          this.editableTabs[0].options[index].children.push({
             label: j,
             value: j
           });
