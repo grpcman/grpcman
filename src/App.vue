@@ -293,8 +293,11 @@
       onCompositeStart () {
         //混合任务的开始
         this.editableTabs[this.editableTabsValue - 1].istesting = true;
-        let list=this.editableTabs[this.editableTabsValue - 1].list
-        console.log(list)
+        let list = this.editableTabs[this.editableTabsValue - 1].list.split('\n');
+        list.pop();
+        for (let i=0;i<list.length;i++){
+          this.onSimpleStart()
+        }
       },
       onCompositeAdd () {
         //混合任务的添加
