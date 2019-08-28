@@ -2,6 +2,7 @@ export let lib = {
   //封装异步调用
   asyncCall(client, funcName, ...args) {
     return new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-unused-vars
       let res = client[funcName](...args, function(err, response) {
         if (err) {
           reject(err);

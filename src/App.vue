@@ -151,7 +151,7 @@
             title: '这是简单任务标题',  //任务的名称，tab的名称
             name: '1',  //任务的索引
             isSimple: true, //是否简单任务
-            delivery: true, //是否异步
+            delivery: false, //是否异步
             log: '这是简单任务的日志', //这是有序列表，存放日志
             value: '',  //级联选择器的已选内容
             options: [],  //级联选择器的选项
@@ -161,7 +161,8 @@
             param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', //请求参数
             address: 'localhost:50301', //任务的端口
             isTesting: false, //任务是否正在进行
-            client: null  //gRPC的client，用来调用rpc
+            client: null,  //gRPC的client，用来调用rpc
+            isEnding:false  //是都已经点了停止
           },
           {
             title: '这是复合任务标题',  //任务的名称，tab的名称
@@ -169,7 +170,8 @@
             isSimple: false, //是否简单任务
             log: '这是复合任务日志', //存放复合任务的日志
             list: '', //这是任务列表
-            isTesting: false  //任务是否正在进行
+            isTesting: false,  //任务是否正在进行
+            isEnding:false  //是都已经点了停止
           }
         ],
         nextTabIndex: 3, //这是标签的索引
@@ -197,7 +199,7 @@
             title: this.form.title, //任务的名称，tab的名称
             name: newTabName, //任务的索引
             isSimple: true, //是否简单任务
-            delivery: true, //是否异步
+            delivery: false, //是否异步
             log: '这是简单任务的日志', //这是有序列表，存放日志
             value: '',
             options: [],
@@ -207,7 +209,8 @@
             param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', //请求参数
             address: 'localhost:50301', //任务的端口
             isTesting: false, //任务是否正在进行
-            client: null  //gRPC的client，用来调用rpc
+            client: null,  //gRPC的client，用来调用rpc
+            isEnding:false  //是都已经点了停止
           })
         } else {
           //创建复合任务
@@ -217,7 +220,8 @@
             isSimple: this.isSimple,
             list: '', //这是任务列表
             log: '这是复合任务日志', //存放复合任务的日志
-            isTesting: false  //任务是否正在进行
+            isTesting: false,  //任务是否正在进行
+            isEnding:false  //是都已经点了停止
           })
         }
         this.currentEditableTabName = newTabName;
@@ -259,11 +263,13 @@
       },
       deleteCurrentTask () {
         //删除当前任务
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding=true;
         this.removeTab(this.currentEditableTabName)
       },
       deleteAllTasks () {
         //删除所有任务
         for (let i = this.editableTabs.length - 1; i >= 0; i--) {
+          this.editableTabs[i].isEnding=true;
           this.removeTab(this.editableTabs[i].name)
         }
       },
@@ -285,37 +291,42 @@
         this.editableTabs = tabs.filter(tab => tab.name !== targetName)
       },
       async onSimpleStart () {
+        let task= this.editableTabs[this.getIndexByName(this.currentEditableTabName)];
+        task.isEnding=false;
         //简单任务的开始
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = true;
-        for (let i = 0; i < this.editableTabs[this.getIndexByName(this.currentEditableTabName)].loop; i++) {
-          let jsonObj = JSON.parse(this.editableTabs[this.getIndexByName(this.currentEditableTabName)].param);
-          if (this.editableTabs[this.getIndexByName(this.currentEditableTabName)].delivery===false){
-            let res = lib.grpcCall(this.editableTabs[this.getIndexByName(this.currentEditableTabName)].client, this.editableTabs[this.getIndexByName(this.currentEditableTabName)].value[1], jsonObj, null);
-            this.editableTabs[this.getIndexByName(this.currentEditableTabName)].log += '\n' + JSON.stringify(res)
-          }else{
-            let res = await lib.grpcCall(this.editableTabs[
-              this.getIndexByName(this.currentEditableTabName)].client, this.editableTabs[this.getIndexByName(this.currentEditableTabName)].value[1], jsonObj, null);
-            this.editableTabs[this.getIndexByName(this.currentEditableTabName)].log += '\n' + JSON.stringify(res)
+        task.isTesting = true;
+        for (let i = 0; i < task.loop; i++) {
+          if (!task.isEnding){
+            let jsonObj = JSON.parse(task.param);
+            if (task.delivery===true){
+              let client=task.client;
+              let funcName=task.value[1];
+              client[funcName](jsonObj, function(err, res) {
+                task.log += '\n' + JSON.stringify(res)
+              })
+            }else{
+              let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null );
+              task.log += '\n' + JSON.stringify(res)
+            }
           }
-
         }
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
       onSimpleEnd () {
         //简单任务的结束
-        //todo
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true;
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
       async startSimpleTask (task,fromCompositeTask) {
-        // eslint-disable-next-line no-console
-        console.log(task);
-        // 开始简单任务
+        task.isEnding = false;
         task.isTesting = true;
         for (let i = 0; i < task.loop; i++) {
-          let jsonObj = JSON.parse(task.param);
-          let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null);
-          task.log += '\n' + JSON.stringify(res);
-          fromCompositeTask.log += '\n' + JSON.stringify(res)
+          if (!task.isEnding) {
+            let jsonObj = JSON.parse(task.param);
+            let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null);
+            task.log += '\n' + JSON.stringify(res);
+            fromCompositeTask.log += '\n' + JSON.stringify(res)
+          }
         }
         task.isTesting = false
       },
@@ -334,12 +345,15 @@
       },
       async onCompositeStart () {
         //混合任务的开始
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = false;
         let fromCompositeTask = this.editableTabs[this.getIndexByName(this.currentEditableTabName)];
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = true;
         let taskNameList = this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list.split('\n');
         taskNameList.pop();
         for (let i = 0; i < taskNameList.length; i++) {
-          await this.startSimpleTaskByName(taskNameList[i],fromCompositeTask)
+          if (!this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding){
+            await this.startSimpleTaskByName(taskNameList[i],fromCompositeTask)
+          }
         }
       },
       onCompositeAdd () {
@@ -353,7 +367,8 @@
         this.addDialogFormVisible = true
       },
       onCompositeEnd () {
-        //混合任务的开始
+        //混合任务的结束
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true;
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
       // eslint-disable-next-line no-unused-vars
