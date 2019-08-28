@@ -245,19 +245,10 @@
       },
       async onSimpleStart () {
         //简单任务的开始
-        // eslint-disable-next-line no-console
-        console.log(this.editableTabsValue - 1);
         this.editableTabs[this.editableTabsValue - 1].istesting = true;
         for (let i = 0; i < this.editableTabs[this.editableTabsValue - 1].loop; i++) {
-          // eslint-disable-next-line no-console
-          console.log(this.editableTabs[this.editableTabsValue - 1].client);
-          // eslint-disable-next-line no-console
-          console.log(this.editableTabs[this.editableTabsValue - 1].value[1]);
-          // eslint-disable-next-line no-console
           let jsonObj = JSON.parse(this.editableTabs[this.editableTabsValue - 1].param);
-          // eslint-disable-next-line no-console
-          console.log(jsonObj);
-          let res = await lib.grpcCall(this.editableTabs[this.editableTabsValue - 1].client, this.editableTabs[this.editableTabsValue - 1].value[1], this.editableTabs[this.editableTabsValue - 1].param, null);
+          let res = await lib.grpcCall(this.editableTabs[this.editableTabsValue - 1].client, this.editableTabs[this.editableTabsValue - 1].value[1], jsonObj, null);
           this.editableTabs[this.editableTabsValue - 1].log1 += '\n' + JSON.stringify(res);
         }
         this.editableTabs[this.editableTabsValue - 1].istesting = false;
