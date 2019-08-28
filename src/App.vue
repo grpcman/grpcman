@@ -83,15 +83,16 @@
           </el-form>
           <el-form v-if="!item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
-              <el-input type="textarea" :rows="10" v-model="item.log2"></el-input>
+              <el-input type="textarea" :rows="20" v-model="item.log2"></el-input>
             </el-form-item>
             <el-col :span="12">
               <el-form-item label="任务">
-                <el-input type="textarea" :rows="10" v-model="item.list"></el-input>
+                <el-input type="textarea" :rows="5" v-model="item.list" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item>
+                <el-button type="success" @click="onCompositeAdd">新增任务</el-button>
                 <el-button type="primary" @click="onCompositeStart">开始测试</el-button>
                 <el-button type="danger" @click="onCompositeEnd">停止测试</el-button>
               </el-form-item>
@@ -111,6 +112,24 @@
         <el-button type="primary" @click="createTask">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="添加新任务" :visible.sync="addDialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="任务名称" :label-width="formLabelWidth">
+          <el-select v-model="selectedSimpleTask" placeholder="请选择" value="">
+            <el-option
+              v-for="item in addDialogFormList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addSimpleTaskCompositeTask">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -118,6 +137,7 @@
   const protoLoader = require('@grpc/proto-loader');
   const grpc = require('grpc');
   const { lib } = require('./lib.js');
+
   export default {
     data () {
       return {
@@ -158,8 +178,11 @@
         },
         formLabelWidth: '120px',  //表单名字的宽度
         dialogFormVisible: false, //创建新任务表单的开启状态
+        addDialogFormVisible:false,
+        addDialogFormList:[],
         isSimple: true, //是否简单任务
         proto: null,  //proto
+        selectedSimpleTask:''
       }
     },
     created: async function () {},
@@ -190,7 +213,10 @@
           this.editableTabs.push({
             title: this.form.title,
             name: newTabName,
-            isSimple: this.isSimple
+            isSimple: this.isSimple,
+            list: '', //这是任务列表
+            log2: '这是复杂任务日志', //存放复合任务的日志
+            isTesting: false  //任务是否正在进行
           })
         }
         this.editableTabsValue = newTabName;
@@ -201,6 +227,11 @@
         this.isSimple = true;
         this.dialogFormVisible = true
         // this.editableTabs[0].log1 += "\n创建简单任务";
+      },
+      addSimpleTaskCompositeTask () {
+        //向复合任务添加简单任务
+        this.editableTabs[this.editableTabsValue - 1].list += this.selectedSimpleTask+"\n";
+        this.addDialogFormVisible = false
       },
       createCompositeTask () {
         //创建组合任务
@@ -213,6 +244,7 @@
         let newTabName = ++this.tabIndex + '';
         let data = { ...this.editableTabs[this.editableTabsValue - 1] };
         data.name = newTabName;
+        data.log1='';
         this.editableTabs.push(data);
         this.editableTabsValue = newTabName
       },
@@ -255,11 +287,23 @@
       },
       onSimpleEnd () {
         //简单任务的结束
-        this.editableTabs[this.editableTabsValue - 1].istesting = false
+        //todo
+        this.editableTabs[this.editableTabsValue - 1].istesting = false;
       },
       onCompositeStart () {
         //混合任务的开始
-        this.editableTabs[this.editableTabsValue - 1].istesting = true
+        this.editableTabs[this.editableTabsValue - 1].istesting = true;
+        let list=this.editableTabs[this.editableTabsValue - 1].list
+        console.log(list)
+      },
+      onCompositeAdd () {
+        //混合任务的添加
+        this.addDialogFormList=[];
+        for(let i=0;i<this.editableTabs.length;i++){
+          if (this.editableTabs[i].isSimple){
+          this.addDialogFormList.push({label:this.editableTabs[i].title,value:this.editableTabs[i].name})}
+        }
+        this.addDialogFormVisible=true
       },
       onCompositeEnd () {
         //混合任务的开始
