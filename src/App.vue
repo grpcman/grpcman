@@ -322,17 +322,17 @@
           if (currentTask.name !== name) {
             continue
           }
-          this.startSimpleTask(currentTask,fromCompositeTask)
+          await this.startSimpleTask(currentTask,fromCompositeTask)
         }
       },
-      onCompositeStart () {
+      async onCompositeStart () {
         //混合任务的开始
         let fromCompositeTask = this.editableTabs[this.getIndexByName(this.currentEditableTabName)];
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = true;
         let taskNameList = this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list.split('\n');
         taskNameList.pop();
         for (let i = 0; i < taskNameList.length; i++) {
-          this.startSimpleTaskByName(taskNameList[i],fromCompositeTask)
+          await this.startSimpleTaskByName(taskNameList[i],fromCompositeTask)
         }
       },
       onCompositeAdd () {
