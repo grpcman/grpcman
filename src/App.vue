@@ -120,52 +120,57 @@ const grpc = require("grpc");
 export default {
   data() {
     return {
+      //当前激活的窗口
       activeName: "first",
+      //当前激活的窗口的索引
       editableTabsValue: "1",
+      //自带的两个tab的内容
       editableTabs: [
         {
-          title: "这是简单任务标题",
-          name: "1",
+          title: "这是简单任务标题",  //任务的名称，tab的名称
+          name: "1",  //任务的索引
           isSimple: true, //是否简单任务
           delivery: false, //是否异步
           log1: "这是简单任务的日志", //这是有序列表，存放日志
-          value: "",
-          options: [],
+          value: "",  //级联选择器的已选内容
+          options: [],  //级联选择器的选项
           task: 0, //多线程
           loop: 0, //循环次数
           timeout: 0, //超时时间
           param: "这是参数", //请求参数
-          address: "localhost:50001",
-          istesting: false,
-          client: null
+          address: "localhost:50001", //任务的端口
+          isTesting: false, //任务是否正在进行
+          client: null  //gRPC的client，用来调用rpc
         },
         {
-          title: "这是复杂任务标题",
-          name: "2",
+          title: "这是复杂任务标题",  //任务的名称，tab的名称
+          name: "2",  //任务的索引
           isSimple: false, //是否简单任务
-          log2: "这是复杂任务日志", //这是有序列表，存放日志
-          list: "", //这是任务列表   这里是一个字符串，不是一个array
-          istesting: false
+          log2: "这是复杂任务日志", //存放复合任务的日志
+          list: "", //这是任务列表
+          isTesting: false  //任务是否正在进行
         }
       ],
       tabIndex: 2, //这是标签的索引
       form: {
-        title: "" //这是标签的名字
+        title: "" //这是新建标签时填写的名字
       },
-      formLabelWidth: "120px",
-      dialogFormVisible: false,
-      isSimple: true,
-      proto: null
+      formLabelWidth: "120px",  //表单名字的宽度
+      dialogFormVisible: false, //创建新任务表单的开启状态
+      isSimple: true, //是否简单任务
+      proto: null,  //proto
     };
   },
   created: async function() {},
   methods: {
     createTask() {
       let newTabName = ++this.tabIndex + "";
+      //判断是否为简单任务
       if (this.isSimple) {
+        //创建简单任务
         this.editableTabs.push({
-          title: this.form.title,
-          name: newTabName,
+          title: this.form.title, //任务的名称，tab的名称
+          name: newTabName, //任务的索引
           isSimple: true, //是否简单任务
           delivery: false, //是否异步
           log1: "这是简单任务的日志", //这是有序列表，存放日志
@@ -175,11 +180,12 @@ export default {
           loop: 0, //循环次数
           timeout: 0, //超时时间
           param: "这是参数", //请求参数
-          address: "localhost:50001",
-          istesting: false,
-          client: null
+          address: "localhost:50001", //任务的端口
+          isTesting: false, //任务是否正在进行
+          client: null  //gRPC的client，用来调用rpc
         });
       } else {
+        //创建复合任务
         this.editableTabs.push({
           title: this.form.title,
           name: newTabName,
@@ -190,32 +196,39 @@ export default {
       this.dialogFormVisible = false;
     },
     createSimpleTask() {
+      //创建简单任务
       this.isSimple = true;
       this.dialogFormVisible = true;
-      this.editableTabs[0].log1 += "\n创建简单任务";
+      // this.editableTabs[0].log1 += "\n创建简单任务";
     },
     createCompositeTask() {
+      //创建组合任务
       this.isSimple = false;
       this.dialogFormVisible = true;
-      this.editableTabs[0].log1 += "\n创建复合任务";
+      // this.editableTabs[0].log1 += "\n创建复合任务";
     },
     copyCurrentTask() {
-      this.editableTabs[0].log1 += "\n复制当前任务";
+      //复制当前任务
+      let newTabName = ++this.tabIndex + "";
+      let data=this.editableTabs[this.editableTabsValue - 1];
+      console.log(data);
+      data.name=newTabName;
+      console.log(data);
+      this.editableTabs.push(data);
+      this.editableTabsValue = newTabName;
     },
     deleteCurrentTask() {
-      // eslint-disable-next-line no-console
-      console.log(this.editableTabsValue);
+      //删除当前任务
       this.removeTab(this.editableTabsValue);
-      // this.editableTabs[0].log1 += "\n删除当前任务";
     },
     deleteAllTasks() {
-      for (let i = 0; i < this.editableTabs.length; i++) {
+      //删除所有任务
+      for (let i = 1; i < this.editableTabs.length+1; i++) {
         this.removeTab(i);
       }
-      // this.editableTabs = [];
-      // this.editableTabs[0].log1 += "\n删除所有任务";
     },
     removeTab(targetName) {
+      //删除tab
       let tabs = this.editableTabs;
       let activeName = this.editableTabsValue;
       if (activeName === targetName) {
@@ -233,15 +246,13 @@ export default {
     },
     onSimpleStart() {
       //简单任务的开始
-      console.log(this.editableTabs[this.editableTabsValue - 1].istesting);
+      // eslint-disable-next-line no-console
+      console.log(this.editableTabsValue - 1);
       this.editableTabs[this.editableTabsValue - 1].istesting = true;
-      console.log(this.editableTabs[this.editableTabsValue - 1].istesting);
     },
     onSimpleEnd() {
       //简单任务的结束
-      console.log(this.editableTabs[this.editableTabsValue - 1].istesting);
       this.editableTabs[this.editableTabsValue - 1].istesting = false;
-      console.log(this.editableTabs[this.editableTabsValue - 1].istesting);
     },
     onCompositeStart() {
       //混合任务的开始
@@ -252,8 +263,7 @@ export default {
       this.editableTabs[this.editableTabsValue - 1].istesting = false;
     },
     elInFile(f, fs) {
-      // eslint-disable-next-line no-console
-      console.log(f);
+      //通过f获取到上传的文件
       let packageDefinition = protoLoader.loadSync(f.raw.path, {
         keepCase: true,
         longs: String,
@@ -261,39 +271,33 @@ export default {
         defaults: true,
         oneofs: true
       });
+      //获取proto文件中的所有service
       this.proto = grpc.loadPackageDefinition(packageDefinition).proto;
-      // eslint-disable-next-line no-console
-      console.log(packageDefinition);
       let index = 0;
+      //为级联选择器添加service
       for (let i in packageDefinition) {
-        // eslint-disable-next-line no-console
-        console.log(i);
         this.editableTabs[0].options.push({
           label: i,
           value: i.split(".")[1],
           children: []
         });
+        //为级联选择器添加rpc
         for (let j in packageDefinition[i]) {
           this.editableTabs[0].options[index].children.push({
             label: j,
             value: j
           });
-          // eslint-disable-next-line no-console
-          console.log("\t" + j);
         }
         index++;
       }
     },
     handleChange(value) {
-      console.log(this.editableTabs[this.editableTabsValue - 1].client);
       this.editableTabs[this.editableTabsValue - 1].client = new this.proto[
         value[0]
       ](
         this.editableTabs[this.editableTabsValue - 1].address,
         grpc.credentials.createInsecure()
       );
-      // eslint-disable-next-line no-console
-      console.log(this.editableTabs[this.editableTabsValue - 1].client);
     }
   }
 };
