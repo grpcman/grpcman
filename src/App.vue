@@ -115,9 +115,9 @@
 </template>
 
 <script>
-  const protoLoader = require('@grpc/proto-loader')
-  const grpc = require('grpc')
-  const { lib } = require('./lib.js')
+  const protoLoader = require('@grpc/proto-loader');
+  const grpc = require('grpc');
+  const { lib } = require('./lib.js');
   export default {
     data () {
       return {
@@ -138,7 +138,7 @@
             task: 1, //多线程
             loop: 1, //循环次数
             timeout: 10000, //超时时间
-            param: '', //请求参数
+            param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', //请求参数
             address: 'localhost:50301', //任务的端口
             isTesting: false, //任务是否正在进行
             client: null  //gRPC的client，用来调用rpc
@@ -165,7 +165,7 @@
     created: async function () {},
     methods: {
       createTask () {
-        let newTabName = ++this.tabIndex + ''
+        let newTabName = ++this.tabIndex + '';
         //判断是否为简单任务
         if (this.isSimple) {
           //创建简单任务
@@ -180,7 +180,7 @@
             task: 1, //多线程
             loop: 1, //循环次数
             timeout: 10000, //超时时间
-            param: '', //请求参数
+            param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', //请求参数
             address: 'localhost:50301', //任务的端口
             isTesting: false, //任务是否正在进行
             client: null  //gRPC的client，用来调用rpc
@@ -193,27 +193,27 @@
             isSimple: this.isSimple
           })
         }
-        this.editableTabsValue = newTabName
+        this.editableTabsValue = newTabName;
         this.dialogFormVisible = false
       },
       createSimpleTask () {
         //创建简单任务
-        this.isSimple = true
+        this.isSimple = true;
         this.dialogFormVisible = true
         // this.editableTabs[0].log1 += "\n创建简单任务";
       },
       createCompositeTask () {
         //创建组合任务
-        this.isSimple = false
+        this.isSimple = false;
         this.dialogFormVisible = true
         // this.editableTabs[0].log1 += "\n创建复合任务";
       },
       copyCurrentTask () {
         //复制当前任务
-        let newTabName = ++this.tabIndex + ''
-        let data = { ...this.editableTabs[this.editableTabsValue - 1] }
-        data.name = newTabName
-        this.editableTabs.push(data)
+        let newTabName = ++this.tabIndex + '';
+        let data = { ...this.editableTabs[this.editableTabsValue - 1] };
+        data.name = newTabName;
+        this.editableTabs.push(data);
         this.editableTabsValue = newTabName
       },
       deleteCurrentTask () {
@@ -228,37 +228,39 @@
       },
       removeTab (targetName) {
         //删除tab
-        let tabs = this.editableTabs
-        let activeName = this.editableTabsValue
+        let tabs = this.editableTabs;
+        let activeName = this.editableTabsValue;
         if (activeName === targetName) {
           tabs.forEach((tab, index) => {
             if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1]
+              let nextTab = tabs[index + 1] || tabs[index - 1];
               if (nextTab) {
                 activeName = nextTab.name
               }
             }
           })
         }
-        this.editableTabsValue = activeName
+        this.editableTabsValue = activeName;
         this.editableTabs = tabs.filter(tab => tab.name !== targetName)
       },
       async onSimpleStart () {
         //简单任务的开始
         // eslint-disable-next-line no-console
-        console.log(this.editableTabsValue - 1)
-        this.editableTabs[this.editableTabsValue - 1].istesting = true
+        console.log(this.editableTabsValue - 1);
+        this.editableTabs[this.editableTabsValue - 1].istesting = true;
         for (let i = 0; i < this.editableTabs[this.editableTabsValue - 1].loop; i++) {
           // eslint-disable-next-line no-console
-          console.log(this.editableTabs[this.editableTabsValue - 1].client)
+          console.log(this.editableTabs[this.editableTabsValue - 1].client);
           // eslint-disable-next-line no-console
-          console.log(this.editableTabs[this.editableTabsValue - 1].value[1])
+          console.log(this.editableTabs[this.editableTabsValue - 1].value[1]);
           // eslint-disable-next-line no-console
-          let jsonObj = JSON.parse(this.editableTabs[this.editableTabsValue - 1].param)
-          console.log(jsonObj)
-          let res = await lib.grpcCall(this.editableTabs[this.editableTabsValue - 1].client, this.editableTabs[this.editableTabsValue - 1].value[1], this.editableTabs[this.editableTabsValue - 1].param, null)
-          this.editableTabs[this.editableTabsValue - 1].log1 += '\n' + res
+          let jsonObj = JSON.parse(this.editableTabs[this.editableTabsValue - 1].param);
+          // eslint-disable-next-line no-console
+          console.log(jsonObj);
+          let res = await lib.grpcCall(this.editableTabs[this.editableTabsValue - 1].client, this.editableTabs[this.editableTabsValue - 1].value[1], this.editableTabs[this.editableTabsValue - 1].param, null);
+          this.editableTabs[this.editableTabsValue - 1].log1 += '\n' + JSON.stringify(res);
         }
+        this.editableTabs[this.editableTabsValue - 1].istesting = false;
       },
       onSimpleEnd () {
         //简单任务的结束
@@ -277,7 +279,7 @@
         this.$message({
           message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
           type: 'warning'
-        })
+        });
         //通过f获取到上传的文件
         let packageDefinition = protoLoader.loadSync(f.raw.path, {
           keepCase: true,
@@ -285,17 +287,17 @@
           enums: String,
           defaults: true,
           oneofs: true
-        })
+        });
         //获取proto文件中的所有service
-        this.proto = grpc.loadPackageDefinition(packageDefinition).proto
-        let index = 0
+        this.proto = grpc.loadPackageDefinition(packageDefinition).proto;
+        let index = 0;
         //为级联选择器添加service
         for (let i in packageDefinition) {
           this.editableTabs[this.editableTabsValue - 1].options.push({
             label: i,
             value: i.split('.')[1],
             children: []
-          })
+          });
           //为级联选择器添加rpc
           for (let j in packageDefinition[i]) {
             this.editableTabs[this.editableTabsValue - 1].options[index].children.push({
