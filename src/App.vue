@@ -266,34 +266,38 @@
         this.editableTabs[this.editableTabsValue - 1].istesting = false
       },
       // eslint-disable-next-line no-unused-vars
-      elInFile (f, fs) {
+      elInFile (file, fileList) {
         this.$message({
           message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
           type: 'warning'
         });
-        //通过f获取到上传的文件
-        let packageDefinition = protoLoader.loadSync(f.raw.path, {
-          keepCase: true,
-          longs: String,
-          enums: String,
-          defaults: true,
-          oneofs: true
-        });
+        // 加载 proto 文件
+        let packageDefinition = protoLoader.loadSync(
+          file.raw.path,
+          {
+            keepCase: true,
+            longs: String,
+            enums: String,
+            defaults: true,
+            oneofs: true
+          }
+        );
+        // 解析 proto
         //获取proto文件中的所有service
         this.proto = grpc.loadPackageDefinition(packageDefinition).proto;
         let index = 0;
-        //为级联选择器添加service
-        for (let i in packageDefinition) {
+        // 为级联选择器添加 service
+        for (let serviceName in packageDefinition) {
           this.editableTabs[this.editableTabsValue - 1].options.push({
-            label: i,
-            value: i.split('.')[1],
+            label: serviceName,
+            value: serviceName.split('.')[1],
             children: []
           });
-          //为级联选择器添加rpc
-          for (let j in packageDefinition[i]) {
+          // 为级联选择器添加 rpc 方法名
+          for (let serviceFunctionName in packageDefinition[serviceName]) {
             this.editableTabs[this.editableTabsValue - 1].options[index].children.push({
-              label: j,
-              value: j
+              label: serviceFunctionName,
+              value: serviceFunctionName
             })
           }
           index++
