@@ -9,7 +9,7 @@
     </el-row>
     <el-divider></el-divider>
     <el-row>
-      <el-tabs v-model="editableTabsValue" type="border-card" closable @tab-remove="removeTab">
+      <el-tabs @tab-remove="removeTab" closable type="border-card" v-model="currentEditableTabIndex">
         <el-tab-pane
                 :key="item.name"
                 :label="item.title"
@@ -117,10 +117,10 @@
         <el-form-item label="任务名称" :label-width="formLabelWidth">
           <el-select v-model="selectedSimpleTask" placeholder="请选择" value="">
             <el-option
-              v-for="item in addDialogFormList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="item in addDialogFormList">
             </el-option>
           </el-select>
         </el-form-item>
@@ -134,9 +134,9 @@
 </template>
 
 <script>
-  const protoLoader = require('@grpc/proto-loader');
-  const grpc = require('grpc');
-  const { lib } = require('./lib.js');
+  const protoLoader = require('@grpc/proto-loader')
+  const grpc = require('grpc')
+  const { lib } = require('./lib.js')
 
   export default {
     data () {
@@ -144,7 +144,7 @@
         //当前激活的窗口
         activeName: 'first',
         //当前激活的窗口的索引
-        editableTabsValue: '1',
+        currentEditableTabIndex: '1',
         //自带的两个tab的内容
         editableTabs: [
           {
@@ -172,23 +172,24 @@
             isTesting: false  //任务是否正在进行
           }
         ],
-        tabIndex: 2, //这是标签的索引
+        nextTabIndex: 3, //这是标签的索引
         form: {
           title: '' //这是新建标签时填写的名字
         },
         formLabelWidth: '120px',  //表单名字的宽度
         dialogFormVisible: false, //创建新任务表单的开启状态
-        addDialogFormVisible:false,
-        addDialogFormList:[],
+        addDialogFormVisible: false,
+        addDialogFormList: [],
         isSimple: true, //是否简单任务
         proto: null,  //proto
-        selectedSimpleTask:''
+        selectedSimpleTask: ''
       }
     },
     created: async function () {},
     methods: {
       createTask () {
-        let newTabName = ++this.tabIndex + '';
+        let newTabName = this.nextTabIndex + ''
+        this.nextTabIndex++
         //判断是否为简单任务
         if (this.isSimple) {
           //创建简单任务
@@ -219,38 +220,39 @@
             isTesting: false  //任务是否正在进行
           })
         }
-        this.editableTabsValue = newTabName;
+        this.currentEditableTabIndex = newTabName
         this.dialogFormVisible = false
       },
       createSimpleTask () {
         //创建简单任务
-        this.isSimple = true;
+        this.isSimple = true
         this.dialogFormVisible = true
         // this.editableTabs[0].log1 += "\n创建简单任务";
       },
       addSimpleTaskCompositeTask () {
         //向复合任务添加简单任务
-        this.editableTabs[this.editableTabsValue - 1].list += this.selectedSimpleTask+"\n";
+        this.editableTabs[this.currentEditableTabIndex - 1].list += this.selectedSimpleTask + '\n'
         this.addDialogFormVisible = false
       },
       createCompositeTask () {
         //创建组合任务
-        this.isSimple = false;
+        this.isSimple = false
         this.dialogFormVisible = true
         // this.editableTabs[0].log1 += "\n创建复合任务";
       },
       copyCurrentTask () {
         //复制当前任务
-        let newTabName = ++this.tabIndex + '';
-        let data = { ...this.editableTabs[this.editableTabsValue - 1] };
-        data.name = newTabName;
-        data.log1='';
-        this.editableTabs.push(data);
-        this.editableTabsValue = newTabName
+        let newTabName = this.nextTabIndex + ''
+        this.nextTabIndex++
+        let data = { ...this.editableTabs[this.currentEditableTabIndex - 1] }
+        data.name = newTabName
+        data.log1 = ''
+        this.editableTabs.push(data)
+        this.currentEditableTabIndex = newTabName
       },
       deleteCurrentTask () {
         //删除当前任务
-        this.removeTab(this.editableTabsValue)
+        this.removeTab(this.currentEditableTabIndex)
       },
       deleteAllTasks () {
         //删除所有任务
@@ -260,64 +262,89 @@
       },
       removeTab (targetName) {
         //删除tab
-        let tabs = this.editableTabs;
-        let activeName = this.editableTabsValue;
+        let tabs = this.editableTabs
+        let activeName = this.currentEditableTabIndex
         if (activeName === targetName) {
           tabs.forEach((tab, index) => {
             if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1];
+              let nextTab = tabs[index + 1] || tabs[index - 1]
               if (nextTab) {
                 activeName = nextTab.name
               }
             }
           })
         }
-        this.editableTabsValue = activeName;
+        this.currentEditableTabIndex = activeName
         this.editableTabs = tabs.filter(tab => tab.name !== targetName)
       },
       async onSimpleStart () {
         //简单任务的开始
-        this.editableTabs[this.editableTabsValue - 1].istesting = true;
-        for (let i = 0; i < this.editableTabs[this.editableTabsValue - 1].loop; i++) {
-          let jsonObj = JSON.parse(this.editableTabs[this.editableTabsValue - 1].param);
-          let res = await lib.grpcCall(this.editableTabs[this.editableTabsValue - 1].client, this.editableTabs[this.editableTabsValue - 1].value[1], jsonObj, null);
-          this.editableTabs[this.editableTabsValue - 1].log1 += '\n' + JSON.stringify(res);
+        this.editableTabs[this.currentEditableTabIndex - 1].isTesting = true
+        for (let i = 0; i < this.editableTabs[this.currentEditableTabIndex - 1].loop; i++) {
+          let jsonObj = JSON.parse(this.editableTabs[this.currentEditableTabIndex - 1].param)
+          let res = await lib.grpcCall(this.editableTabs[this.currentEditableTabIndex - 1].client, this.editableTabs[this.currentEditableTabIndex - 1].value[1], jsonObj, null)
+          this.editableTabs[this.currentEditableTabIndex - 1].log1 += '\n' + JSON.stringify(res)
         }
-        this.editableTabs[this.editableTabsValue - 1].istesting = false;
+        this.editableTabs[this.currentEditableTabIndex - 1].isTesting = false
       },
       onSimpleEnd () {
         //简单任务的结束
         //todo
-        this.editableTabs[this.editableTabsValue - 1].istesting = false;
+        this.editableTabs[this.currentEditableTabIndex - 1].isTesting = false
+      },
+      async startSimpleTask (task) {
+        console.log(task)
+        //简单任务的开始
+        task.isTesting = true
+        for (let i = 0; i < task.loop; i++) {
+          let jsonObj = JSON.parse(task.param)
+          let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
+          task.log1 += '\n' + JSON.stringify(res)
+        }
+        task.isTesting = false
+      },
+      async simpleTaskStartByName (name) {
+        for (let i = 0; i < this.editableTabs.length; i++) {
+          let currentTask = this.editableTabs[i]
+          if (!currentTask.isSimple) {
+            continue
+          }
+          if (currentTask.name !== name) {
+            continue
+          }
+          this.startSimpleTask(currentTask)
+        }
       },
       onCompositeStart () {
         //混合任务的开始
-        this.editableTabs[this.editableTabsValue - 1].istesting = true;
-        let list = this.editableTabs[this.editableTabsValue - 1].list.split('\n');
-        list.pop();
-        for (let i=0;i<list.length;i++){
-          this.onSimpleStart()
+        this.editableTabs[this.currentEditableTabIndex - 1].isTesting = true
+        let list = this.editableTabs[this.currentEditableTabIndex - 1].list.split('\n')
+        list.pop()
+        console.log(list)
+        for (let i = 0; i < list.length; i++) {
+          this.simpleTaskStartByName(list[i])
         }
       },
       onCompositeAdd () {
         //混合任务的添加
-        this.addDialogFormList=[];
-        for(let i=0;i<this.editableTabs.length;i++){
-          if (this.editableTabs[i].isSimple){
-          this.addDialogFormList.push({label:this.editableTabs[i].title,value:this.editableTabs[i].name})}
+        this.addDialogFormList = []
+        for (let i = 0; i < this.editableTabs.length; i++) {
+          if (this.editableTabs[i].isSimple) {
+            this.addDialogFormList.push({ label: this.editableTabs[i].title, value: this.editableTabs[i].name })
+          }
         }
-        this.addDialogFormVisible=true
+        this.addDialogFormVisible = true
       },
       onCompositeEnd () {
         //混合任务的开始
-        this.editableTabs[this.editableTabsValue - 1].istesting = false
+        this.editableTabs[this.currentEditableTabIndex - 1].isTesting = false
       },
       // eslint-disable-next-line no-unused-vars
       elInFile (file, fileList) {
         this.$message({
           message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
           type: 'warning'
-        });
+        })
         // 加载 proto 文件
         let packageDefinition = protoLoader.loadSync(
           file.raw.path,
@@ -328,21 +355,21 @@
             defaults: true,
             oneofs: true
           }
-        );
+        )
         // 解析 proto
         //获取proto文件中的所有service
-        this.proto = grpc.loadPackageDefinition(packageDefinition).proto;
-        let index = 0;
+        this.proto = grpc.loadPackageDefinition(packageDefinition).proto
+        let index = 0
         // 为级联选择器添加 service
         for (let serviceName in packageDefinition) {
-          this.editableTabs[this.editableTabsValue - 1].options.push({
+          this.editableTabs[this.currentEditableTabIndex - 1].options.push({
             label: serviceName,
             value: serviceName.split('.')[1],
             children: []
-          });
+          })
           // 为级联选择器添加 rpc 方法名
           for (let serviceFunctionName in packageDefinition[serviceName]) {
-            this.editableTabs[this.editableTabsValue - 1].options[index].children.push({
+            this.editableTabs[this.currentEditableTabIndex - 1].options[index].children.push({
               label: serviceFunctionName,
               value: serviceFunctionName
             })
@@ -351,10 +378,10 @@
         }
       },
       handleChange (value) {
-        this.editableTabs[this.editableTabsValue - 1].client = new this.proto[
+        this.editableTabs[this.currentEditableTabIndex - 1].client = new this.proto[
           value[0]
           ](
-          this.editableTabs[this.editableTabsValue - 1].address,
+          this.editableTabs[this.currentEditableTabIndex - 1].address,
           grpc.credentials.createInsecure()
         )
       }
