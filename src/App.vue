@@ -151,7 +151,7 @@
             title: '这是简单任务标题',  //任务的名称，tab的名称
             name: '1',  //任务的索引
             isSimple: true, //是否简单任务
-            delivery: false, //是否异步
+            delivery: true, //是否异步
             log: '这是简单任务的日志', //这是有序列表，存放日志
             value: '',  //级联选择器的已选内容
             options: [],  //级联选择器的选项
@@ -197,7 +197,7 @@
             title: this.form.title, //任务的名称，tab的名称
             name: newTabName, //任务的索引
             isSimple: true, //是否简单任务
-            delivery: false, //是否异步
+            delivery: true, //是否异步
             log: '这是简单任务的日志', //这是有序列表，存放日志
             value: '',
             options: [],
@@ -289,8 +289,15 @@
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = true;
         for (let i = 0; i < this.editableTabs[this.getIndexByName(this.currentEditableTabName)].loop; i++) {
           let jsonObj = JSON.parse(this.editableTabs[this.getIndexByName(this.currentEditableTabName)].param);
-          let res = await lib.grpcCall(this.editableTabs[this.getIndexByName(this.currentEditableTabName)].client, this.editableTabs[this.getIndexByName(this.currentEditableTabName)].value[1], jsonObj, null);
-          this.editableTabs[this.getIndexByName(this.currentEditableTabName)].log += '\n' + JSON.stringify(res)
+          if (this.editableTabs[this.getIndexByName(this.currentEditableTabName)].delivery===false){
+            let res = lib.grpcCall(this.editableTabs[this.getIndexByName(this.currentEditableTabName)].client, this.editableTabs[this.getIndexByName(this.currentEditableTabName)].value[1], jsonObj, null);
+            this.editableTabs[this.getIndexByName(this.currentEditableTabName)].log += '\n' + JSON.stringify(res)
+          }else{
+            let res = await lib.grpcCall(this.editableTabs[
+              this.getIndexByName(this.currentEditableTabName)].client, this.editableTabs[this.getIndexByName(this.currentEditableTabName)].value[1], jsonObj, null);
+            this.editableTabs[this.getIndexByName(this.currentEditableTabName)].log += '\n' + JSON.stringify(res)
+          }
+
         }
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
