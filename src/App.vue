@@ -294,7 +294,7 @@
       },
       async startSimpleTask (task) {
         console.log(task)
-        //简单任务的开始
+        // 简单任务的开始
         task.isTesting = true
         for (let i = 0; i < task.loop; i++) {
           let jsonObj = JSON.parse(task.param)
@@ -303,7 +303,7 @@
         }
         task.isTesting = false
       },
-      async simpleTaskStartByName (name) {
+      async startSimpleTaskByName (name) {
         for (let i = 0; i < this.editableTabs.length; i++) {
           let currentTask = this.editableTabs[i]
           if (!currentTask.isSimple) {
@@ -318,11 +318,10 @@
       onCompositeStart () {
         //混合任务的开始
         this.editableTabs[this.currentEditableTabIndex - 1].isTesting = true
-        let list = this.editableTabs[this.currentEditableTabIndex - 1].list.split('\n')
-        list.pop()
-        console.log(list)
-        for (let i = 0; i < list.length; i++) {
-          this.simpleTaskStartByName(list[i])
+        let taskNameList = this.editableTabs[this.currentEditableTabIndex - 1].list.split('\n')
+        taskNameList.pop()
+        for (let i = 0; i < taskNameList.length; i++) {
+          this.startSimpleTaskByName(taskNameList[i])
         }
       },
       onCompositeAdd () {
@@ -357,7 +356,6 @@
           }
         )
         // 解析 proto
-        //获取proto文件中的所有service
         this.proto = grpc.loadPackageDefinition(packageDefinition).proto
         let index = 0
         // 为级联选择器添加 service
