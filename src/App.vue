@@ -210,10 +210,8 @@ export default {
     copyCurrentTask() {
       //复制当前任务
       let newTabName = ++this.tabIndex + "";
-      let data=this.editableTabs[this.editableTabsValue - 1];
-      console.log(data);
+      let data={...this.editableTabs[this.editableTabsValue - 1]};
       data.name=newTabName;
-      console.log(data);
       this.editableTabs.push(data);
       this.editableTabsValue = newTabName;
     },
@@ -223,8 +221,8 @@ export default {
     },
     deleteAllTasks() {
       //删除所有任务
-      for (let i = 1; i < this.editableTabs.length+1; i++) {
-        this.removeTab(i);
+      for (let i=this.editableTabs.length-1; i >=0; i--) {
+        this.removeTab(this.editableTabs[i].name);
       }
     },
     removeTab(targetName) {
