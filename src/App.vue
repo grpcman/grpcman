@@ -18,7 +18,7 @@
         >
           <el-form v-if="item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
-              <el-input type="textarea" :rows="10" v-model="item.log1" style="width: 99%"></el-input>
+              <el-input type="textarea" :rows="20" v-model="item.log1" style="width: 99%"></el-input>
             </el-form-item>
             <el-row>
               <el-col :span="8">
