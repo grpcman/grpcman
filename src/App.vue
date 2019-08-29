@@ -403,14 +403,24 @@
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
       async startSimpleTask (task, compositeTask) {
+        let that = this
         task.isEnding = false
         task.isTesting = true
         for (let i = 0; i < task.loop; i++) {
           if (!task.isEnding && !compositeTask.isEnding) {
             let jsonObj = JSON.parse(task.param)
-            let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
-            task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
-            compositeTask.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
+            if (task.delivery === true) {
+              let client = task.client
+              let funcName = task.value[1]
+              client[funcName](jsonObj, function (err, res) {
+                task.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
+                compositeTask.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
+              })
+            } else {
+              let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
+              task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
+              compositeTask.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
+            }
           }
         }
         task.isTesting = false
