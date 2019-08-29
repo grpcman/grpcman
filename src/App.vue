@@ -18,7 +18,7 @@
         >
           <el-form v-if="item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
-              <el-input type="textarea" :rows="20" v-model="item.log" style="width: 99%"></el-input>
+              <el-input type="textarea" :rows="10" v-model="item.log" style="width: 99%"></el-input>
             </el-form-item>
             <el-row>
               <el-col :span="8">
@@ -27,9 +27,12 @@
                     :auto-upload="false"
                     :on-change="elInFile"
                     accept=".proto"
-                    action
+                    action=""
                     class="upload-demo"
                     ref="upload"
+                    :limit="1"
+                    :on-exceed="handleExceed"
+                    :on-remove="handleRemove"
                   >
                     <el-button slot="trigger" size="mini" type="success" plain>选取文件</el-button>
                     <i slot="tip" class="el-upload__tip el-icon-info">只能选取proto文件，包名必须是proto</i>
@@ -56,7 +59,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="线程">
-                  <el-input v-model="item.task" type="number" style="width: 99%"></el-input>
+                  <el-input v-model="item.task" type="number" style="width: 99%" disabled="disabled"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -66,37 +69,64 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="超时">
-                  <el-input v-model="item.timeout" type="number" style="width: 99%"></el-input>
+                  <el-input v-model="item.timeout" type="number" style="width: 99%" disabled="disabled"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="异步">
+            <el-form-item label="异步（开启异步后按钮状态禁用失效，请等待任务结束再点击）">
               <el-switch v-model="item.delivery" style="width: 99%"></el-switch>
             </el-form-item>
             <el-form-item label="参数">
               <el-input type="textarea" :rows="2" v-model="item.param" style="width: 99%"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSimpleStart">开始测试</el-button>
-              <el-button type="danger" @click="onSimpleEnd">停止测试</el-button>
+              <el-button type="primary" @click="onSimpleStart" :disabled="item.startIsDisabled">开始测试</el-button>
+              <el-button type="danger" @click="onSimpleEnd" :disabled="item.stopIsDisabled">停止测试</el-button>
             </el-form-item>
           </el-form>
           <el-form v-if="!item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
               <el-input type="textarea" :rows="20" v-model="item.log"></el-input>
             </el-form-item>
-            <el-col :span="12">
-              <el-form-item label="任务">
-                <el-input type="textarea" :rows="5" v-model="item.list" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item>
-                <el-button type="success" @click="onCompositeAdd">新增任务</el-button>
-                <el-button type="primary" @click="onCompositeStart">开始测试</el-button>
-                <el-button type="danger" @click="onCompositeEnd">停止测试</el-button>
-              </el-form-item>
-            </el-col>
+            <el-form-item>
+              <el-button type="primary" @click="onCompositeAdd" :disabled="item.addIsDisabled">新增任务</el-button>
+              <el-button type="success" @click="onCompositeStart" :disabled="item.startIsDisabled">开始测试</el-button>
+              <el-button type="danger" @click="onCompositeEnd" :disabled="item.stopIsDisabled">停止测试</el-button>
+            </el-form-item>
+            <el-table
+              :data="item.tableData"
+              border
+              style="width: 100%">
+              <el-table-column
+                prop="title"
+                label="任务名称">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="唯一编号">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="地址">
+              </el-table-column>
+              <el-table-column
+                prop="proto"
+                label="协议">
+              </el-table-column>
+              <el-table-column
+                prop="loop"
+                label="循环">
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="操作">
+                <template slot-scope="scope">
+                  <el-button @click="handleEditClick(scope.row)" type="text" size="small">编辑</el-button>
+                  <el-button @click="handleRemoveClick(scope.$index, item.tableData)" type="text" size="small">删除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-form>
         </el-tab-pane>
       </el-tabs>
@@ -137,7 +167,7 @@
   const protoLoader = require('@grpc/proto-loader')
   const grpc = require('grpc')
   const { lib } = require('./lib.js')
-
+  const dayjs = require('dayjs')
   export default {
     data () {
       return {
@@ -148,11 +178,11 @@
         //自带的两个tab的内容
         editableTabs: [
           {
-            title: '这是简单任务标题',  //任务的名称，tab的名称
+            title: '简单任务',  //任务的名称，tab的名称
             name: '1',  //任务的索引
             isSimple: true, //是否简单任务
             delivery: false, //是否异步
-            log: '这是简单任务的日志', //这是有序列表，存放日志
+            log: '', //这是有序列表，存放日志
             value: '',  //级联选择器的已选内容
             options: [],  //级联选择器的选项
             task: 1, //多线程
@@ -163,15 +193,20 @@
             isTesting: false, //任务是否正在进行
             client: null,  //gRPC的client，用来调用rpc
             isEnding: false,  //是都已经点了停止
+            startIsDisabled: false,  //开始按钮的禁用
+            stopIsDisabled: true,  //结束按钮的禁用
           },
           {
-            title: '这是复合任务标题',  //任务的名称，tab的名称
+            title: '复合任务',  //任务的名称，tab的名称
             name: '2',  //任务的索引
             isSimple: false, //是否简单任务
-            log: '这是复合任务日志', //存放复合任务的日志
-            list: '', //这是任务列表
+            log: '', //存放复合任务的日志
             isTesting: false,  //任务是否正在进行
             isEnding: false,  //是都已经点了停止
+            addIsDisabled: false, //添加按钮的禁用
+            startIsDisabled: false,  //开始按钮的禁用
+            stopIsDisabled: true,  //结束按钮的禁用
+            tableData: [],//这是任务列表
           },
         ],
         nextTabIndex: 3, //这是标签的索引
@@ -200,7 +235,7 @@
             name: newTabName, //任务的索引
             isSimple: true, //是否简单任务
             delivery: false, //是否异步
-            log: '这是简单任务的日志', //这是有序列表，存放日志
+            log: '', //这是有序列表，存放日志
             value: '',
             options: [],
             task: 1, //多线程
@@ -211,6 +246,8 @@
             isTesting: false, //任务是否正在进行
             client: null,  //gRPC的client，用来调用rpc
             isEnding: false,  //是都已经点了停止
+            startIsDisabled: false,  //开始按钮的禁用
+            stopIsDisabled: true,  //结束按钮的禁用
           })
         } else {
           //创建复合任务
@@ -219,9 +256,14 @@
             name: newTabName,
             isSimple: this.isSimple,
             list: '', //这是任务列表
-            log: '这是复合任务日志', //存放复合任务的日志
+            log: '', //存放复合任务的日志
             isTesting: false,  //任务是否正在进行
             isEnding: false,  //是都已经点了停止
+            addIsDisabled: false, //添加按钮的禁用
+            startIsDisabled: false,  //开始按钮的禁用
+            stopIsDisabled: true,  //结束按钮的禁用
+            tableData: [],//这是任务列表
+
           })
         }
         this.currentEditableTabName = newTabName
@@ -233,6 +275,34 @@
         this.dialogFormVisible = true
         // this.editableTabs[0].log += "\n创建简单任务";
       },
+      handleExceed () {
+        //上传文件超出1个
+        this.$message({
+          message: '只能打开一个proto文件，请删除已有的proto文件',
+          type: 'error',
+        })
+      },
+      handleRemove () {
+        //从文件上传栏删除文件
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].log = ''
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].client = null
+        this.$message({
+          message: '当前proto文件删除成功，请选择新的协议',
+          type: 'error',
+        })
+      },
+      handleEditClick (row) {
+        //复合任务中简单任务的编辑
+        this.currentEditableTabName = row.name
+        this.$message({
+          message: '编辑后请到复合任务删除该任务并重新添加',
+          type: 'warning',
+        })
+      },
+      handleRemoveClick (index, rows) {
+        //复合任务中简单任务的删除
+        rows.splice(index, 1)
+      },
       getIndexByName (name) {
         for (let i = 0; i < this.editableTabs.length; i++) {
           if (this.editableTabs[i].name === name) {
@@ -242,14 +312,21 @@
       },
       addSimpleTaskCompositeTask () {
         //向复合任务添加简单任务
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list += this.selectedSimpleTask + '\n'
+        let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+        let simpletask = this.editableTabs[this.getIndexByName(this.selectedSimpleTask)]
+        task.tableData.push({
+          title: simpletask.title,
+          name: simpletask.name,
+          loop: simpletask.loop,
+          address: simpletask.address,
+          proto: simpletask.value,
+        })
         this.addDialogFormVisible = false
       },
       createCompositeTask () {
-        //创建组合任务
+        //创建复合任务
         this.isSimple = false
         this.dialogFormVisible = true
-        // this.editableTabs[0].log += "\n创建复合任务";
       },
       copyCurrentTask () {
         //复制当前任务
@@ -290,11 +367,17 @@
         this.currentEditableTabName = activeName
         this.editableTabs = tabs.filter(tab => tab.name !== targetName)
       },
+      getNowTime () {
+        return dayjs().format('YYYY-MM-DD HH:mm:ss:SSS')
+      },
       async onSimpleStart () {
+        let that = this
         let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
         task.isEnding = false
         //简单任务的开始
         task.isTesting = true
+        task.startIsDisabled = true
+        task.stopIsDisabled = false
         for (let i = 0; i < task.loop; i++) {
           if (!task.isEnding) {
             let jsonObj = JSON.parse(task.param)
@@ -302,14 +385,16 @@
               let client = task.client
               let funcName = task.value[1]
               client[funcName](jsonObj, function (err, res) {
-                task.log += '\n' + JSON.stringify(res)
+                task.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
               })
             } else {
               let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
-              task.log += '\n' + JSON.stringify(res)
+              task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
             }
           }
         }
+        task.startIsDisabled = false
+        task.stopIsDisabled = true
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
       onSimpleEnd () {
@@ -317,20 +402,20 @@
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
-      async startSimpleTask (task, fromCompositeTask) {
+      async startSimpleTask (task, compositeTask) {
         task.isEnding = false
         task.isTesting = true
         for (let i = 0; i < task.loop; i++) {
-          if (!task.isEnding) {
+          if (!task.isEnding && !compositeTask.isEnding) {
             let jsonObj = JSON.parse(task.param)
             let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
-            task.log += '\n' + JSON.stringify(res)
-            fromCompositeTask.log += '\n' + JSON.stringify(res)
+            task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
+            compositeTask.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
           }
         }
         task.isTesting = false
       },
-      async startSimpleTaskByName (name, fromCompositeTask) {
+      async startSimpleTaskByName (name, compositeTask) {
         // 通过TaskName开始简单任务
         for (let i = 0; i < this.editableTabs.length; i++) {
           let currentTask = this.editableTabs[i]
@@ -340,24 +425,33 @@
           if (currentTask.name !== name) {
             continue
           }
-          await this.startSimpleTask(currentTask, fromCompositeTask)
+          await this.startSimpleTask(currentTask, compositeTask)
         }
       },
       async onCompositeStart () {
         //混合任务的开始
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = false
-        let fromCompositeTask = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = true
-        let taskNameList = this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list.split('\n')
-        taskNameList.pop()
-        for (let i = 0; i < taskNameList.length; i++) {
-          if (!this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding) {
-            await this.startSimpleTaskByName(taskNameList[i], fromCompositeTask)
+        let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+        if (task.tableData.length === 0) {
+          this.$message({
+            message: '没有可以执行的任务',
+            type: 'warning',
+          })
+          return 0
+        }
+        task.isEnding = false
+        task.startIsDisabled = true
+        task.stopIsDisabled = false
+        task.isTesting = true
+        for (let i = 0; i < task.tableData.length; i++) {
+          if (!task.isEnding) {
+            await this.startSimpleTaskByName(task.tableData[i].name, task)
           }
         }
+        task.startIsDisabled = false
+        task.stopIsDisabled = true
       },
       onCompositeAdd () {
-        //混合任务的添加
+        //混合任务的添加按钮
         this.addDialogFormList = []
         for (let i = 0; i < this.editableTabs.length; i++) {
           if (this.editableTabs[i].isSimple) {
@@ -368,11 +462,15 @@
       },
       onCompositeEnd () {
         //混合任务的结束
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
+        let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+        task.isEnding = true
+        task.isTesting = false
+        task.startIsDisabled = false
+        task.stopIsDisabled = true
       },
       // eslint-disable-next-line no-unused-vars
       elInFile (file, fileList) {
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options = []
         this.$message({
           message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
           type: 'warning',

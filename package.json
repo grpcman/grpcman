@@ -17,6 +17,7 @@
     "@grpc/proto-loader": "^0.1.0",
     "async": "^1.5.2",
     "core-js": "^2.6.5",
+    "dayjs": "^1.8.16",
     "element-ui": "^2.11.1",
     "google-protobuf": "^3.0.0",
     "grpc": "^1.23.3",
