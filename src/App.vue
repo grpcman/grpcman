@@ -11,10 +11,10 @@
     <el-row>
       <el-tabs @tab-remove="removeTab" closable type="border-card" v-model="currentEditableTabName">
         <el-tab-pane
-                :key="item.name"
-                :label="item.title"
-                :name="item.name"
-                v-for="(item) in editableTabs"
+          :key="item.name"
+          :label="item.title"
+          :name="item.name"
+          v-for="(item) in editableTabs"
         >
           <el-form v-if="item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
@@ -24,12 +24,12 @@
               <el-col :span="8">
                 <el-form-item label="文件">
                   <el-upload
-                          :auto-upload="false"
-                          :on-change="elInFile"
-                          accept=".proto"
-                          action
-                          class="upload-demo"
-                          ref="upload"
+                    :auto-upload="false"
+                    :on-change="elInFile"
+                    accept=".proto"
+                    action
+                    class="upload-demo"
+                    ref="upload"
                   >
                     <el-button slot="trigger" size="mini" type="success" plain>选取文件</el-button>
                     <i slot="tip" class="el-upload__tip el-icon-info">只能选取proto文件，包名必须是proto</i>
@@ -44,11 +44,11 @@
               <el-col :span="8">
                 <el-form-item label="服务和协议">
                   <el-cascader
-                          :options="item.options"
-                          :props="{ expandTrigger: 'hover' }"
-                          @change="handleChange"
-                          style="width: 99%"
-                          v-model="item.value"
+                    :options="item.options"
+                    :props="{ expandTrigger: 'hover' }"
+                    @change="handleChange"
+                    style="width: 99%"
+                    v-model="item.value"
                   ></el-cascader>
                 </el-form-item>
               </el-col>
@@ -117,10 +117,10 @@
         <el-form-item label="任务名称" :label-width="formLabelWidth">
           <el-select v-model="selectedSimpleTask" placeholder="请选择" value="">
             <el-option
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                    v-for="item in addDialogFormList">
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              v-for="item in addDialogFormList">
             </el-option>
           </el-select>
         </el-form-item>
@@ -134,9 +134,9 @@
 </template>
 
 <script>
-  const protoLoader = require('@grpc/proto-loader');
-  const grpc = require('grpc');
-  const { lib } = require('./lib.js');
+  const protoLoader = require('@grpc/proto-loader')
+  const grpc = require('grpc')
+  const { lib } = require('./lib.js')
 
   export default {
     data () {
@@ -162,7 +162,7 @@
             address: 'localhost:50301', //任务的端口
             isTesting: false, //任务是否正在进行
             client: null,  //gRPC的client，用来调用rpc
-            isEnding:false  //是都已经点了停止
+            isEnding: false,  //是都已经点了停止
           },
           {
             title: '这是复合任务标题',  //任务的名称，tab的名称
@@ -171,12 +171,12 @@
             log: '这是复合任务日志', //存放复合任务的日志
             list: '', //这是任务列表
             isTesting: false,  //任务是否正在进行
-            isEnding:false  //是都已经点了停止
-          }
+            isEnding: false,  //是都已经点了停止
+          },
         ],
         nextTabIndex: 3, //这是标签的索引
         form: {
-          title: '' //这是新建标签时填写的名字
+          title: '', //这是新建标签时填写的名字
         },
         formLabelWidth: '120px',  //表单名字的宽度
         dialogFormVisible: false, //创建新任务表单的开启状态
@@ -184,14 +184,14 @@
         addDialogFormList: [],
         isSimple: true, //是否简单任务
         proto: null,  //proto
-        selectedSimpleTask: ''
+        selectedSimpleTask: '',
       }
     },
     created: async function () {},
     methods: {
       createTask () {
-        let newTabName = this.nextTabIndex + '';
-        this.nextTabIndex++;
+        let newTabName = this.nextTabIndex + ''
+        this.nextTabIndex++
         //判断是否为简单任务
         if (this.isSimple) {
           //创建简单任务
@@ -210,7 +210,7 @@
             address: 'localhost:50301', //任务的端口
             isTesting: false, //任务是否正在进行
             client: null,  //gRPC的client，用来调用rpc
-            isEnding:false  //是都已经点了停止
+            isEnding: false,  //是都已经点了停止
           })
         } else {
           //创建复合任务
@@ -221,91 +221,91 @@
             list: '', //这是任务列表
             log: '这是复合任务日志', //存放复合任务的日志
             isTesting: false,  //任务是否正在进行
-            isEnding:false  //是都已经点了停止
+            isEnding: false,  //是都已经点了停止
           })
         }
-        this.currentEditableTabName = newTabName;
+        this.currentEditableTabName = newTabName
         this.dialogFormVisible = false
       },
       createSimpleTask () {
         //创建简单任务
-        this.isSimple = true;
+        this.isSimple = true
         this.dialogFormVisible = true
         // this.editableTabs[0].log += "\n创建简单任务";
       },
-      getIndexByName(name){
-        for(let i =0; i <this.editableTabs.length;i++){
-          if(this.editableTabs[i].name===name){
+      getIndexByName (name) {
+        for (let i = 0; i < this.editableTabs.length; i++) {
+          if (this.editableTabs[i].name === name) {
             return i
           }
         }
       },
       addSimpleTaskCompositeTask () {
         //向复合任务添加简单任务
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list += this.selectedSimpleTask + '\n';
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list += this.selectedSimpleTask + '\n'
         this.addDialogFormVisible = false
       },
       createCompositeTask () {
         //创建组合任务
-        this.isSimple = false;
+        this.isSimple = false
         this.dialogFormVisible = true
         // this.editableTabs[0].log += "\n创建复合任务";
       },
       copyCurrentTask () {
         //复制当前任务
-        let newTabName = this.nextTabIndex + '';
-        this.nextTabIndex++;
-        let data = { ...this.editableTabs[this.getIndexByName(this.currentEditableTabName)] };
-        data.name = newTabName;
-        data.log = '';
-        this.editableTabs.push(data);
+        let newTabName = this.nextTabIndex + ''
+        this.nextTabIndex++
+        let data = { ...this.editableTabs[this.getIndexByName(this.currentEditableTabName)] }
+        data.name = newTabName
+        data.log = ''
+        this.editableTabs.push(data)
         this.currentEditableTabName = newTabName
       },
       deleteCurrentTask () {
         //删除当前任务
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding=true;
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true
         this.removeTab(this.currentEditableTabName)
       },
       deleteAllTasks () {
         //删除所有任务
         for (let i = this.editableTabs.length - 1; i >= 0; i--) {
-          this.editableTabs[i].isEnding=true;
+          this.editableTabs[i].isEnding = true
           this.removeTab(this.editableTabs[i].name)
         }
       },
       removeTab (targetName) {
         //删除tab
-        let tabs = this.editableTabs;
-        let activeName = this.currentEditableTabName;
+        let tabs = this.editableTabs
+        let activeName = this.currentEditableTabName
         if (activeName === targetName) {
           tabs.forEach((tab, index) => {
             if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1];
+              let nextTab = tabs[index + 1] || tabs[index - 1]
               if (nextTab) {
                 activeName = nextTab.name
               }
             }
           })
         }
-        this.currentEditableTabName = activeName;
+        this.currentEditableTabName = activeName
         this.editableTabs = tabs.filter(tab => tab.name !== targetName)
       },
       async onSimpleStart () {
-        let task= this.editableTabs[this.getIndexByName(this.currentEditableTabName)];
-        task.isEnding=false;
+        let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+        task.isEnding = false
         //简单任务的开始
-        task.isTesting = true;
+        task.isTesting = true
         for (let i = 0; i < task.loop; i++) {
-          if (!task.isEnding){
-            let jsonObj = JSON.parse(task.param);
-            if (task.delivery===true){
-              let client=task.client;
-              let funcName=task.value[1];
-              client[funcName](jsonObj, function(err, res) {
+          if (!task.isEnding) {
+            let jsonObj = JSON.parse(task.param)
+            if (task.delivery === true) {
+              let client = task.client
+              let funcName = task.value[1]
+              client[funcName](jsonObj, function (err, res) {
                 task.log += '\n' + JSON.stringify(res)
               })
-            }else{
-              let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null );
+            } else {
+              let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
               task.log += '\n' + JSON.stringify(res)
             }
           }
@@ -314,51 +314,51 @@
       },
       onSimpleEnd () {
         //简单任务的结束
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true;
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
-      async startSimpleTask (task,fromCompositeTask) {
-        task.isEnding = false;
-        task.isTesting = true;
+      async startSimpleTask (task, fromCompositeTask) {
+        task.isEnding = false
+        task.isTesting = true
         for (let i = 0; i < task.loop; i++) {
           if (!task.isEnding) {
-            let jsonObj = JSON.parse(task.param);
-            let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null);
-            task.log += '\n' + JSON.stringify(res);
+            let jsonObj = JSON.parse(task.param)
+            let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
+            task.log += '\n' + JSON.stringify(res)
             fromCompositeTask.log += '\n' + JSON.stringify(res)
           }
         }
         task.isTesting = false
       },
-      async startSimpleTaskByName (name,fromCompositeTask) {
+      async startSimpleTaskByName (name, fromCompositeTask) {
         // 通过TaskName开始简单任务
         for (let i = 0; i < this.editableTabs.length; i++) {
-          let currentTask = this.editableTabs[i];
+          let currentTask = this.editableTabs[i]
           if (!currentTask.isSimple) {
             continue
           }
           if (currentTask.name !== name) {
             continue
           }
-          await this.startSimpleTask(currentTask,fromCompositeTask)
+          await this.startSimpleTask(currentTask, fromCompositeTask)
         }
       },
       async onCompositeStart () {
         //混合任务的开始
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = false;
-        let fromCompositeTask = this.editableTabs[this.getIndexByName(this.currentEditableTabName)];
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = true;
-        let taskNameList = this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list.split('\n');
-        taskNameList.pop();
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = false
+        let fromCompositeTask = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = true
+        let taskNameList = this.editableTabs[this.getIndexByName(this.currentEditableTabName)].list.split('\n')
+        taskNameList.pop()
         for (let i = 0; i < taskNameList.length; i++) {
-          if (!this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding){
-            await this.startSimpleTaskByName(taskNameList[i],fromCompositeTask)
+          if (!this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding) {
+            await this.startSimpleTaskByName(taskNameList[i], fromCompositeTask)
           }
         }
       },
       onCompositeAdd () {
         //混合任务的添加
-        this.addDialogFormList = [];
+        this.addDialogFormList = []
         for (let i = 0; i < this.editableTabs.length; i++) {
           if (this.editableTabs[i].isSimple) {
             this.addDialogFormList.push({ label: this.editableTabs[i].title, value: this.editableTabs[i].name })
@@ -368,15 +368,15 @@
       },
       onCompositeEnd () {
         //混合任务的结束
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true;
+        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
       },
       // eslint-disable-next-line no-unused-vars
       elInFile (file, fileList) {
         this.$message({
           message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
-          type: 'warning'
-        });
+          type: 'warning',
+        })
         // 加载 proto 文件
         let packageDefinition = protoLoader.loadSync(
           file.raw.path,
@@ -385,24 +385,24 @@
             longs: String,
             enums: String,
             defaults: true,
-            oneofs: true
-          }
-        );
+            oneofs: true,
+          },
+        )
         // 解析 proto
-        this.proto = grpc.loadPackageDefinition(packageDefinition).proto;
-        let index = 0;
+        this.proto = grpc.loadPackageDefinition(packageDefinition).proto
+        let index = 0
         // 为级联选择器添加 service
         for (let serviceName in packageDefinition) {
           this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options.push({
             label: serviceName,
             value: serviceName.split('.')[1],
-            children: []
-          });
+            children: [],
+          })
           // 为级联选择器添加 rpc 方法名
           for (let serviceFunctionName in packageDefinition[serviceName]) {
             this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options[index].children.push({
               label: serviceFunctionName,
-              value: serviceFunctionName
+              value: serviceFunctionName,
             })
           }
           index++
@@ -413,9 +413,9 @@
           value[0]
           ](
           this.editableTabs[this.getIndexByName(this.currentEditableTabName)].address,
-          grpc.credentials.createInsecure()
+          grpc.credentials.createInsecure(),
         )
-      }
-    }
+      },
+    },
   }
 </script>
