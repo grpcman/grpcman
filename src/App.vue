@@ -430,7 +430,10 @@ export default {
     getNowTime () {
       return dayjs().format('YYYY-MM-DD HH:mm:ss:SSS')
     },
-    replaceRamdomWord (message) {
+    getTimestamp () {
+      return Date.now()
+    },
+    replaceRandomWord (message) {
       message.replace(RegExp, '111')
     },
     async onSimpleStart () {
@@ -442,6 +445,7 @@ export default {
       task.startIsDisabled = true
       task.stopIsDisabled = false
       let beforeParam = JSON.parse(JSON.stringify(task.param))
+      let startTimestamp = this.getTimestamp()
       for (let i = 0; i < task.loop; i++) {
         task.param = beforeParam.replace(/%i/g, i)
         if (!task.isEnding) {
@@ -458,6 +462,8 @@ export default {
           }
         }
       }
+      this.getTimestamp()
+      task.log += `总耗时：${this.getTimestamp() - startTimestamp}\n`
       task.startIsDisabled = false
       task.stopIsDisabled = true
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
@@ -472,6 +478,7 @@ export default {
       task.isEnding = false
       task.isTesting = true
       let beforeParam = JSON.parse(JSON.stringify(task.param))
+      let startTimestamp = this.getTimestamp()
       for (let i = 0; i < task.loop; i++) {
         task.param = beforeParam.replace(/%i/g, i)
         if (!task.isEnding && !compositeTask.isEnding) {
@@ -490,6 +497,7 @@ export default {
           }
         }
       }
+      task.log += `总耗时：${this.getTimestamp() - startTimestamp}\n`
       task.isTesting = false
     },
     async startSimpleTaskByName (name, compositeTask) {
