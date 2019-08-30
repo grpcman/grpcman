@@ -1,6 +1,6 @@
 {
-  "name": "hello-world",
-  "version": "1.2.0",
+  "name": "grpcman",
+  "version": "1.2.2",
   "private": true,
   "scripts": {
     "rebuild": "npm install grpc --runtime=electron --target=6.0.4 && npm install --save-dev electron-rebuild && npm install && npm start",

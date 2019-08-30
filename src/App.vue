@@ -393,6 +393,9 @@
       getNowTime () {
         return dayjs().format('YYYY-MM-DD HH:mm:ss:SSS')
       },
+      replaceRamdomWord(message){
+        message.replace(RegExp,'111')
+      },
       async onSimpleStart () {
         let that = this
         let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
@@ -402,6 +405,9 @@
         task.startIsDisabled = true
         task.stopIsDisabled = false
         for (let i = 0; i < task.loop; i++) {
+          let before = {...task.param}
+          task.param = before.replace(/%i/g,i)
+          console.log(task.param)
           if (!task.isEnding) {
             let jsonObj = JSON.parse(task.param)
             if (task.delivery === true) {
@@ -430,6 +436,9 @@
         task.isEnding = false
         task.isTesting = true
         for (let i = 0; i < task.loop; i++) {
+          let before = JSON.parse(JSON.stringify(task.param));
+          task.param = before.replace(/%i/g,i)
+          console.log(task.param)
           if (!task.isEnding && !compositeTask.isEnding) {
             let jsonObj = JSON.parse(task.param)
             if (task.delivery === true) {
