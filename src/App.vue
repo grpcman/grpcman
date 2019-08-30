@@ -228,13 +228,11 @@ export default {
   },
   created: async function () {
     let filepath = path.join(process.cwd(), 'data.json')
-    console.log(filepath)
 
     let file
     ipcRenderer.on('action', (event, arg) => {
       switch (arg) {
         case 'exiting':
-          console.log('ipcRenderer', event, arg)
 
           file = fs.openSync(filepath, 'w')
           fs.writeFileSync(file, JSON.stringify(this.$data))

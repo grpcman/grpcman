@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow, ipcMain, protocol } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+const path = require('path')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -15,11 +16,12 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: tru
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 950,
+    width: 1000,
+    height: 1000,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    icon: path.join(__static, 'logo.png')
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
