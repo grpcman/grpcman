@@ -168,6 +168,8 @@
   const grpc = require('grpc')
   const { lib } = require('./lib.js')
   const dayjs = require('dayjs')
+  const fs = require('fs')
+  const { app } = require('electron').remote
   export default {
     data () {
       return {
@@ -222,7 +224,24 @@
         selectedSimpleTask: '',
       }
     },
-    created: async function () {},
+    created: async function () {
+      // 重写 app 关闭生命周期
+      app.on('window-all-closed', () => {
+        let file = fs.openSync('./data.json', 'w')
+        fs.writeFileSync(file, JSON.stringify(this.$data))
+        if (process.platform !== 'darwin') {
+          app.quit()
+        }
+      })
+
+      // 读取 data.json
+      let file = fs.openSync('./data.json', 'rs')
+      let dataFromFile = fs.readFileSync(file).toString()
+      dataFromFile = JSON.parse(dataFromFile)
+      for (let prop in dataFromFile) {
+        this[prop] = dataFromFile[prop]
+      }
+    },
     methods: {
       createTask () {
         let newTabName = this.nextTabIndex + ''
