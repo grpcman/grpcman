@@ -9,7 +9,7 @@
     </el-row>
     <el-divider></el-divider>
     <el-row>
-      <el-tabs @tab-remove="removeTab" closable type="border-card" v-model="currentEditableTabName">
+      <el-tabs @tab-remove="removeTab" closable type="border-card" v-model="currentEditableTabName" @tab-click="handleTabClick">
         <el-tab-pane
           :key="item.name"
           :label="item.title"
@@ -303,6 +303,25 @@
         //复合任务中简单任务的删除
         rows.splice(index, 1)
       },
+      handleTabClick () {
+        let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+        let refreshTable = []
+        if (task.isSimple === false) {
+          task.tableData.map((item) => {
+            refreshTable.push(item.name)
+          })
+          task.tableData = []
+          refreshTable.map((item)=>{
+            task.tableData.push({
+              title: this.editableTabs[this.getIndexByName(item)].title,
+              name:this.editableTabs[this.getIndexByName(item)].name,
+              loop: this.editableTabs[this.getIndexByName(item)].loop,
+              address: this.editableTabs[this.getIndexByName(item)].address,
+              proto: this.editableTabs[this.getIndexByName(item)].value,
+            })
+          })
+        }
+      },
       getIndexByName (name) {
         for (let i = 0; i < this.editableTabs.length; i++) {
           if (this.editableTabs[i].name === name) {
@@ -313,13 +332,13 @@
       addSimpleTaskCompositeTask () {
         //向复合任务添加简单任务
         let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
-        let simpletask = this.editableTabs[this.getIndexByName(this.selectedSimpleTask)]
+        let simpleTask = this.editableTabs[this.getIndexByName(this.selectedSimpleTask)]
         task.tableData.push({
-          title: simpletask.title,
-          name: simpletask.name,
-          loop: simpletask.loop,
-          address: simpletask.address,
-          proto: simpletask.value,
+          title: simpleTask.title,
+          name: simpleTask.name,
+          loop: simpleTask.loop,
+          address: simpleTask.address,
+          proto: simpleTask.value,
         })
         this.addDialogFormVisible = false
       },
@@ -335,6 +354,10 @@
         let data = { ...this.editableTabs[this.getIndexByName(this.currentEditableTabName)] }
         data.name = newTabName
         data.log = ''
+        data.isTesting = false
+        data.isEnding = false
+        data.startIsDisabled = false
+        data.stopIsDisabled = true
         this.editableTabs.push(data)
         this.currentEditableTabName = newTabName
       },
