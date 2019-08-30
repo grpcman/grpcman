@@ -452,6 +452,7 @@ export default {
             let client = task.client
             let funcName = task.value[1]
             client[funcName](jsonObj, function (err, res) {
+              console.log(err)
               task.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
             })
           } else {
@@ -485,6 +486,7 @@ export default {
             let client = task.client
             let funcName = task.value[1]
             client[funcName](jsonObj, function (err, res) {
+              console.log(err)
               task.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
               compositeTask.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
             })
@@ -591,9 +593,7 @@ export default {
     },
     handleChange (value) {
       let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
-      task.client = new this.proto[
-        value[0]
-      ](
+      task.client = new this.proto[value[0]](
         task.address,
         grpc.credentials.createInsecure()
       )

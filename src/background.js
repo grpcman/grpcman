@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow, ipcMain, protocol } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+
 const path = require('path')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -21,6 +22,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true
     },
+    // eslint-disable-next-line no-undef
     icon: path.join(__static, 'logo.png')
   })
 
