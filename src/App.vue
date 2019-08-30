@@ -175,55 +175,55 @@ const path = require('path')
 export default {
   data () {
     return {
-      //默认当前激活的窗口
+      // 默认当前激活的窗口
       activeName: 'first',
-      //当前激活的窗口的名字
+      // 当前激活的窗口的名字
       currentEditableTabName: '1',
-      //自带的两个tab的内容
+      // 自带的两个tab的内容
       editableTabs: [
         {
-          title: '简单任务',  //任务的名称，tab的名称
-          name: '1',  //任务的索引
-          isSimple: true, //是否简单任务
-          delivery: false, //是否异步
-          log: '', //这是有序列表，存放日志
-          value: '',  //级联选择器的已选内容
-          options: [],  //级联选择器的选项
-          task: 1, //多线程
-          loop: 1, //循环次数
-          timeout: 10000, //超时时间
-          param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', //请求参数
-          address: 'localhost:50301', //任务的端口
-          isTesting: false, //任务是否正在进行
-          client: null,  //gRPC的client，用来调用rpc
-          isEnding: false,  //是都已经点了停止
-          startIsDisabled: false,  //开始按钮的禁用
-          stopIsDisabled: true,  //结束按钮的禁用
+          title: '简单任务', // 任务的名称，tab的名称
+          name: '1', // 任务的索引
+          isSimple: true, // 是否简单任务
+          delivery: false, // 是否异步
+          log: '', // 这是有序列表，存放日志
+          value: '', // 级联选择器的已选内容
+          options: [], // 级联选择器的选项
+          task: 1, // 多线程
+          loop: 1, // 循环次数
+          timeout: 10000, // 超时时间
+          param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', // 请求参数
+          address: 'localhost:50301', // 任务的端口
+          isTesting: false, // 任务是否正在进行
+          client: null, // gRPC的client，用来调用rpc
+          isEnding: false, // 是都已经点了停止
+          startIsDisabled: false, // 开始按钮的禁用
+          stopIsDisabled: true // 结束按钮的禁用
         },
         {
-          title: '复合任务',  //任务的名称，tab的名称
-          name: '2',  //任务的索引
-          isSimple: false, //是否简单任务
-          log: '', //存放复合任务的日志
-          isTesting: false,  //任务是否正在进行
-          isEnding: false,  //是都已经点了停止
-          addIsDisabled: false, //添加按钮的禁用
-          startIsDisabled: false,  //开始按钮的禁用
-          stopIsDisabled: true,  //结束按钮的禁用
-          tableData: [],//这是任务列表
-        },
+          title: '复合任务', // 任务的名称，tab的名称
+          name: '2', // 任务的索引
+          isSimple: false, // 是否简单任务
+          log: '', // 存放复合任务的日志
+          isTesting: false, // 任务是否正在进行
+          isEnding: false, // 是都已经点了停止
+          addIsDisabled: false, // 添加按钮的禁用
+          startIsDisabled: false, // 开始按钮的禁用
+          stopIsDisabled: true, // 结束按钮的禁用
+          tableData: []// 这是任务列表
+        }
       ],
-      nextTabIndex: 3, //这是标签的索引
+      nextTabIndex: 3, // 这是标签的索引
       form: {
-        title: '', //这是新建标签时填写的名字
+        title: '' // 这是新建标签时填写的名字
       },
-      formLabelWidth: '120px',  //表单名字的宽度
-      dialogFormVisible: false, //创建新任务表单的开启状态
+      formLabelWidth: '120px', // 表单名字的宽度
+      dialogFormVisible: false, // 创建新任务表单的开启状态
       addDialogFormVisible: false,
       addDialogFormList: [],
-      isSimple: true, //是否简单任务
-      proto: null,  //proto
-      selectedSimpleTask: '',
+      isSimple: true, // 是否简单任务
+      proto: null, // proto
+      selectedSimpleTask: ''
     }
   },
   created: async function () {
@@ -262,42 +262,42 @@ export default {
     createTask () {
       let newTabName = this.nextTabIndex + ''
       this.nextTabIndex++
-      //判断是否为简单任务
+      // 判断是否为简单任务
       if (this.isSimple) {
-        //创建简单任务
+        // 创建简单任务
         this.editableTabs.push({
-          title: this.form.title, //任务的名称，tab的名称
-          name: newTabName, //任务的索引
-          isSimple: true, //是否简单任务
-          delivery: false, //是否异步
-          log: '', //这是有序列表，存放日志
+          title: this.form.title, // 任务的名称，tab的名称
+          name: newTabName, // 任务的索引
+          isSimple: true, // 是否简单任务
+          delivery: false, // 是否异步
+          log: '', // 这是有序列表，存放日志
           value: '',
           options: [],
-          task: 1, //多线程
-          loop: 1, //循环次数
-          timeout: 10000, //超时时间
-          param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', //请求参数
-          address: 'localhost:50301', //任务的端口
-          isTesting: false, //任务是否正在进行
-          client: null,  //gRPC的client，用来调用rpc
-          isEnding: false,  //是都已经点了停止
-          startIsDisabled: false,  //开始按钮的禁用
-          stopIsDisabled: true,  //结束按钮的禁用
+          task: 1, // 多线程
+          loop: 1, // 循环次数
+          timeout: 10000, // 超时时间
+          param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', // 请求参数
+          address: 'localhost:50301', // 任务的端口
+          isTesting: false, // 任务是否正在进行
+          client: null, // gRPC的client，用来调用rpc
+          isEnding: false, // 是都已经点了停止
+          startIsDisabled: false, // 开始按钮的禁用
+          stopIsDisabled: true // 结束按钮的禁用
         })
       } else {
-        //创建复合任务
+        // 创建复合任务
         this.editableTabs.push({
           title: this.form.title,
           name: newTabName,
           isSimple: this.isSimple,
-          list: '', //这是任务列表
-          log: '', //存放复合任务的日志
-          isTesting: false,  //任务是否正在进行
-          isEnding: false,  //是都已经点了停止
-          addIsDisabled: false, //添加按钮的禁用
-          startIsDisabled: false,  //开始按钮的禁用
-          stopIsDisabled: true,  //结束按钮的禁用
-          tableData: [],//这是任务列表
+          list: '', // 这是任务列表
+          log: '', // 存放复合任务的日志
+          isTesting: false, // 任务是否正在进行
+          isEnding: false, // 是都已经点了停止
+          addIsDisabled: false, // 添加按钮的禁用
+          startIsDisabled: false, // 开始按钮的禁用
+          stopIsDisabled: true, // 结束按钮的禁用
+          tableData: []// 这是任务列表
 
         })
       }
@@ -305,37 +305,37 @@ export default {
       this.dialogFormVisible = false
     },
     createSimpleTask () {
-      //创建简单任务
+      // 创建简单任务
       this.isSimple = true
       this.dialogFormVisible = true
       // this.editableTabs[0].log += "\n创建简单任务";
     },
     handleExceed () {
-      //上传文件超出1个
+      // 上传文件超出1个
       this.$message({
         message: '只能打开一个proto文件，请删除已有的proto文件',
-        type: 'error',
+        type: 'error'
       })
     },
     handleRemove () {
-      //从文件上传栏删除文件
+      // 从文件上传栏删除文件
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].log = ''
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].client = null
       this.$message({
         message: '当前proto文件删除成功，请选择新的协议',
-        type: 'error',
+        type: 'error'
       })
     },
     handleEditClick (row) {
-      //复合任务中简单任务的编辑
+      // 复合任务中简单任务的编辑
       this.currentEditableTabName = row.name
       this.$message({
         message: '编辑后请到复合任务删除该任务并重新添加',
-        type: 'warning',
+        type: 'warning'
       })
     },
     handleRemoveClick (index, rows) {
-      //复合任务中简单任务的删除
+      // 复合任务中简单任务的删除
       rows.splice(index, 1)
     },
     handleTabClick () {
@@ -352,7 +352,7 @@ export default {
             name: this.editableTabs[this.getIndexByName(item)].name,
             loop: this.editableTabs[this.getIndexByName(item)].loop,
             address: this.editableTabs[this.getIndexByName(item)].address,
-            proto: this.editableTabs[this.getIndexByName(item)].value,
+            proto: this.editableTabs[this.getIndexByName(item)].value
           })
         })
       }
@@ -365,7 +365,7 @@ export default {
       }
     },
     addSimpleTaskCompositeTask () {
-      //向复合任务添加简单任务
+      // 向复合任务添加简单任务
       let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       let simpleTask = this.editableTabs[this.getIndexByName(this.selectedSimpleTask)]
       task.tableData.push({
@@ -373,17 +373,17 @@ export default {
         name: simpleTask.name,
         loop: simpleTask.loop,
         address: simpleTask.address,
-        proto: simpleTask.value,
+        proto: simpleTask.value
       })
       this.addDialogFormVisible = false
     },
     createCompositeTask () {
-      //创建复合任务
+      // 创建复合任务
       this.isSimple = false
       this.dialogFormVisible = true
     },
     copyCurrentTask () {
-      //复制当前任务
+      // 复制当前任务
       let newTabName = this.nextTabIndex + ''
       this.nextTabIndex++
       let data = { ...this.editableTabs[this.getIndexByName(this.currentEditableTabName)] }
@@ -397,19 +397,19 @@ export default {
       this.currentEditableTabName = newTabName
     },
     deleteCurrentTask () {
-      //删除当前任务
+      // 删除当前任务
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true
       this.removeTab(this.currentEditableTabName)
     },
     deleteAllTasks () {
-      //删除所有任务
+      // 删除所有任务
       for (let i = this.editableTabs.length - 1; i >= 0; i--) {
         this.editableTabs[i].isEnding = true
         this.removeTab(this.editableTabs[i].name)
       }
     },
     removeTab (targetName) {
-      //删除tab
+      // 删除tab
       let tabs = this.editableTabs
       let activeName = this.currentEditableTabName
       if (activeName === targetName) {
@@ -438,7 +438,7 @@ export default {
       let that = this
       let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       task.isEnding = false
-      //简单任务的开始
+      // 简单任务的开始
       task.isTesting = true
       task.startIsDisabled = true
       task.stopIsDisabled = false
@@ -467,7 +467,7 @@ export default {
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
     },
     onSimpleEnd () {
-      //简单任务的结束
+      // 简单任务的结束
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isEnding = true
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
     },
@@ -512,12 +512,12 @@ export default {
       }
     },
     async onCompositeStart () {
-      //混合任务的开始
+      // 混合任务的开始
       let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       if (task.tableData.length === 0) {
         this.$message({
           message: '没有可以执行的任务',
-          type: 'warning',
+          type: 'warning'
         })
         return 0
       }
@@ -534,7 +534,7 @@ export default {
       task.stopIsDisabled = true
     },
     onCompositeAdd () {
-      //混合任务的添加按钮
+      // 混合任务的添加按钮
       this.addDialogFormList = []
       for (let i = 0; i < this.editableTabs.length; i++) {
         if (this.editableTabs[i].isSimple) {
@@ -544,7 +544,7 @@ export default {
       this.addDialogFormVisible = true
     },
     onCompositeEnd () {
-      //混合任务的结束
+      // 混合任务的结束
       let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       task.isEnding = true
       task.isTesting = false
@@ -556,7 +556,7 @@ export default {
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options = []
       this.$message({
         message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
-        type: 'warning',
+        type: 'warning'
       })
       // 加载 proto 文件
       let packageDefinition = protoLoader.loadSync(
@@ -566,8 +566,8 @@ export default {
           longs: String,
           enums: String,
           defaults: true,
-          oneofs: true,
-        },
+          oneofs: true
+        }
       )
       // 解析 proto
       this.proto = grpc.loadPackageDefinition(packageDefinition).proto
@@ -577,26 +577,27 @@ export default {
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options.push({
           label: serviceName,
           value: serviceName.split('.')[1],
-          children: [],
+          children: []
         })
         // 为级联选择器添加 rpc 方法名
         for (let serviceFunctionName in packageDefinition[serviceName]) {
           this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options[index].children.push({
             label: serviceFunctionName,
-            value: serviceFunctionName,
+            value: serviceFunctionName
           })
         }
         index++
       }
     },
     handleChange (value) {
-      this.editableTabs[this.getIndexByName(this.currentEditableTabName)].client = new this.proto[
+      let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      task.client = new this.proto[
         value[0]
-        ](
-        this.editableTabs[this.getIndexByName(this.currentEditableTabName)].address,
-        grpc.credentials.createInsecure(),
+      ](
+        task.address,
+        grpc.credentials.createInsecure()
       )
-    },
-  },
+    }
+  }
 }
 </script>
