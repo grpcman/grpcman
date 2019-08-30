@@ -404,9 +404,9 @@
         task.isTesting = true
         task.startIsDisabled = true
         task.stopIsDisabled = false
+        let beforeParam = JSON.parse(JSON.stringify(task.param));
         for (let i = 0; i < task.loop; i++) {
-          let before = {...task.param}
-          task.param = before.replace(/%i/g,i)
+          task.param = beforeParam.replace(/%i/g,i)
           console.log(task.param)
           if (!task.isEnding) {
             let jsonObj = JSON.parse(task.param)
@@ -435,9 +435,9 @@
         let that = this
         task.isEnding = false
         task.isTesting = true
+        let beforeParam = JSON.parse(JSON.stringify(task.param));
         for (let i = 0; i < task.loop; i++) {
-          let before = JSON.parse(JSON.stringify(task.param));
-          task.param = before.replace(/%i/g,i)
+          task.param = beforeParam.replace(/%i/g,i)
           console.log(task.param)
           if (!task.isEnding && !compositeTask.isEnding) {
             let jsonObj = JSON.parse(task.param)
