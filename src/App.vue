@@ -236,6 +236,9 @@
       })
 
       // 读取 data.json
+      if (!fs.existsSync('./data.json')) {
+        return
+      }
       let file = fs.openSync('./data.json', 'rs')
       let dataFromFile = fs.readFileSync(file).toString()
       dataFromFile = JSON.parse(dataFromFile)
