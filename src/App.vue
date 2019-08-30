@@ -231,26 +231,25 @@
       app.on('window-all-closed', () => {
         let file = fs.openSync('./data.json', 'w')
         fs.writeFileSync(file, JSON.stringify(this.$data))
+        fs.closeSync(file)
+
         if (process.platform !== 'darwin') {
           app.quit()
         }
-        fs.closeSync(file)
       })
 
       // 读取 data.json
-      if (!fs.existsSync('./data.json')) {
-        return
+      try {
+        let file = fs.openSync('./data.json', 'rs')
+        let dataFromFile = fs.readFileSync(file).toString()
+        dataFromFile = JSON.parse(dataFromFile)
+        for (let prop in dataFromFile) {
+          this[prop] = dataFromFile[prop]
+        }
+        fs.closeSync(file)
+      } catch (e) {
+        console.log(e.message)
       }
-      let file = fs.openSync('./data.json', 'rs')
-      let dataFromFile = fs.readFileSync(file).toString()
-      if (!dataFromFile){
-        return
-      }
-      dataFromFile = JSON.parse(dataFromFile)
-      for (let prop in dataFromFile) {
-        this[prop] = dataFromFile[prop]
-      }
-      fs.closeSync(file)
     },
     methods: {
       createTask () {
