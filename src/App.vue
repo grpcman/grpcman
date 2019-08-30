@@ -1,25 +1,25 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" @click="createSimpleTask">创建简单任务</el-button>
-      <el-button type="success" @click="createCompositeTask">创建复合任务</el-button>
-      <el-button type="info" @click="copyCurrentTask">复制当前任务</el-button>
-      <el-button type="warning" @click="deleteCurrentTask">删除当前任务</el-button>
-      <el-button type="danger" @click="deleteAllTasks">删除所有任务</el-button>
+      <el-button @click="createSimpleTask" type="primary">创建简单任务</el-button>
+      <el-button @click="createCompositeTask" type="success">创建复合任务</el-button>
+      <el-button @click="copyCurrentTask" type="info">复制当前任务</el-button>
+      <el-button @click="deleteCurrentTask" type="warning">删除当前任务</el-button>
+      <el-button @click="deleteAllTasks" type="danger">删除所有任务</el-button>
     </el-row>
     <el-divider></el-divider>
     <el-row>
-      <el-tabs @tab-remove="removeTab" closable type="border-card" v-model="currentEditableTabName"
-               @tab-click="handleTabClick">
+      <el-tabs @tab-click="handleTabClick" @tab-remove="removeTab" closable type="border-card"
+               v-model="currentEditableTabName">
         <el-tab-pane
                 :key="item.name"
                 :label="item.title"
                 :name="item.name"
                 v-for="(item) in editableTabs"
         >
-          <el-form v-if="item.isSimple" ref="form" :model="form">
+          <el-form :model="form" ref="form" v-if="item.isSimple">
             <el-form-item label="日志">
-              <el-input type="textarea" :rows="10" v-model="item.log" style="width: 99%"></el-input>
+              <el-input :rows="10" style="width: 99%" type="textarea" v-model="item.log"></el-input>
             </el-form-item>
             <el-row>
               <el-col :span="8">
@@ -35,14 +35,14 @@
                           class="upload-demo"
                           ref="upload"
                   >
-                    <el-button slot="trigger" size="mini" type="success" plain>选取文件</el-button>
-                    <i slot="tip" class="el-upload__tip el-icon-info">只能选取proto文件，包名必须是proto</i>
+                    <el-button plain size="mini" slot="trigger" type="success">选取文件</el-button>
+                    <i class="el-upload__tip el-icon-info" slot="tip">只能选取proto文件，包名必须是proto</i>
                   </el-upload>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="地址">
-                  <el-input v-model="item.address" style="width: 99%"></el-input>
+                  <el-input style="width: 99%" v-model="item.address"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -60,39 +60,39 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="线程">
-                  <el-input v-model="item.task" type="number" style="width: 99%" disabled="disabled"></el-input>
+                  <el-input disabled="disabled" style="width: 99%" type="number" v-model="item.task"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="循环">
-                  <el-input v-model="item.loop" type="number" style="width: 99%"></el-input>
+                  <el-input style="width: 99%" type="number" v-model="item.loop"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="超时">
-                  <el-input v-model="item.timeout" type="number" style="width: 99%" disabled="disabled"></el-input>
+                  <el-input disabled="disabled" style="width: 99%" type="number" v-model="item.timeout"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item label="异步（开启异步后按钮状态禁用失效，请等待任务结束再点击）">
-              <el-switch v-model="item.delivery" style="width: 99%"></el-switch>
+              <el-switch style="width: 99%" v-model="item.delivery"></el-switch>
             </el-form-item>
             <el-form-item label="参数">
-              <el-input type="textarea" :rows="2" v-model="item.param" style="width: 99%"></el-input>
+              <el-input :rows="2" style="width: 99%" type="textarea" v-model="item.param"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSimpleStart" :disabled="item.startIsDisabled">开始测试</el-button>
-              <el-button type="danger" @click="onSimpleEnd" :disabled="item.stopIsDisabled">停止测试</el-button>
+              <el-button :disabled="item.startIsDisabled" @click="onSimpleStart" type="primary">开始测试</el-button>
+              <el-button :disabled="item.stopIsDisabled" @click="onSimpleEnd" type="danger">停止测试</el-button>
             </el-form-item>
           </el-form>
-          <el-form v-if="!item.isSimple" ref="form" :model="form">
+          <el-form :model="form" ref="form" v-if="!item.isSimple">
             <el-form-item label="日志">
-              <el-input type="textarea" :rows="20" v-model="item.log"></el-input>
+              <el-input :rows="20" type="textarea" v-model="item.log"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onCompositeAdd" :disabled="item.addIsDisabled">新增任务</el-button>
-              <el-button type="success" @click="onCompositeStart" :disabled="item.startIsDisabled">开始测试</el-button>
-              <el-button type="danger" @click="onCompositeEnd" :disabled="item.stopIsDisabled">停止测试</el-button>
+              <el-button :disabled="item.addIsDisabled" @click="onCompositeAdd" type="primary">新增任务</el-button>
+              <el-button :disabled="item.startIsDisabled" @click="onCompositeStart" type="success">开始测试</el-button>
+              <el-button :disabled="item.stopIsDisabled" @click="onCompositeEnd" type="danger">停止测试</el-button>
             </el-form-item>
             <el-table
                     :data="item.tableData"
@@ -122,8 +122,8 @@
                       fixed="right"
                       label="操作">
                 <template slot-scope="scope">
-                  <el-button @click="handleEditClick(scope.row)" type="text" size="small">编辑</el-button>
-                  <el-button @click="handleRemoveClick(scope.$index, item.tableData)" type="text" size="small">删除
+                  <el-button @click="handleEditClick(scope.row)" size="small" type="text">编辑</el-button>
+                  <el-button @click="handleRemoveClick(scope.$index, item.tableData)" size="small" type="text">删除
                   </el-button>
                 </template>
               </el-table-column>
@@ -132,21 +132,21 @@
         </el-tab-pane>
       </el-tabs>
     </el-row>
-    <el-dialog title="创建新任务" :visible.sync="dialogFormVisible">
+    <el-dialog :visible.sync="dialogFormVisible" title="创建新任务">
       <el-form :model="form">
-        <el-form-item label="任务名称" :label-width="formLabelWidth">
-          <el-input v-model="form.title" autocomplete="off"></el-input>
+        <el-form-item :label-width="formLabelWidth" label="任务名称">
+          <el-input autocomplete="off" v-model="form.title"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div class="dialog-footer" slot="footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="createTask">确 定</el-button>
+        <el-button @click="createTask" type="primary">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="添加新任务" :visible.sync="addDialogFormVisible">
+    <el-dialog :visible.sync="addDialogFormVisible" title="添加新任务">
       <el-form :model="form">
-        <el-form-item label="任务名称" :label-width="formLabelWidth">
-          <el-select v-model="selectedSimpleTask" placeholder="请选择" value="">
+        <el-form-item :label-width="formLabelWidth" label="任务名称">
+          <el-select placeholder="请选择" v-model="selectedSimpleTask" value="">
             <el-option
                     :key="item.value"
                     :label="item.label"
@@ -156,9 +156,9 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div class="dialog-footer" slot="footer">
         <el-button @click="addDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSimpleTaskCompositeTask">确 定</el-button>
+        <el-button @click="addSimpleTaskCompositeTask" type="primary">确 定</el-button>
       </div>
     </el-dialog>
   </div>

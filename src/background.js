@@ -15,7 +15,9 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: tru
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800, height: 600, webPreferences: {
+    width: 800,
+    height: 950,
+    webPreferences: {
       nodeIntegration: true
     }
   })
@@ -29,6 +31,8 @@ function createWindow () {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+
+  win.setMenuBarVisibility(false)
 
   win.on('close', (e) => {
     e.preventDefault()
