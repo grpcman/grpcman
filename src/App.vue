@@ -9,7 +9,8 @@
     </el-row>
     <el-divider></el-divider>
     <el-row>
-      <el-tabs @tab-remove="removeTab" closable type="border-card" v-model="currentEditableTabName" @tab-click="handleTabClick">
+      <el-tabs @tab-remove="removeTab" closable type="border-card" v-model="currentEditableTabName"
+               @tab-click="handleTabClick">
         <el-tab-pane
           :key="item.name"
           :label="item.title"
@@ -170,6 +171,7 @@
   const dayjs = require('dayjs')
   const fs = require('fs')
   const { app } = require('electron').remote
+
   export default {
     data () {
       return {
@@ -241,6 +243,9 @@
       }
       let file = fs.openSync('./data.json', 'rs')
       let dataFromFile = fs.readFileSync(file).toString()
+      if (!dataFromFile){
+        return
+      }
       dataFromFile = JSON.parse(dataFromFile)
       for (let prop in dataFromFile) {
         this[prop] = dataFromFile[prop]
@@ -335,10 +340,10 @@
             refreshTable.push(item.name)
           })
           task.tableData = []
-          refreshTable.map((item)=>{
+          refreshTable.map((item) => {
             task.tableData.push({
               title: this.editableTabs[this.getIndexByName(item)].title,
-              name:this.editableTabs[this.getIndexByName(item)].name,
+              name: this.editableTabs[this.getIndexByName(item)].name,
               loop: this.editableTabs[this.getIndexByName(item)].loop,
               address: this.editableTabs[this.getIndexByName(item)].address,
               proto: this.editableTabs[this.getIndexByName(item)].value,
@@ -417,8 +422,8 @@
       getNowTime () {
         return dayjs().format('YYYY-MM-DD HH:mm:ss:SSS')
       },
-      replaceRamdomWord(message){
-        message.replace(RegExp,'111')
+      replaceRamdomWord (message) {
+        message.replace(RegExp, '111')
       },
       async onSimpleStart () {
         let that = this
@@ -428,10 +433,9 @@
         task.isTesting = true
         task.startIsDisabled = true
         task.stopIsDisabled = false
-        let beforeParam = JSON.parse(JSON.stringify(task.param));
+        let beforeParam = JSON.parse(JSON.stringify(task.param))
         for (let i = 0; i < task.loop; i++) {
-          task.param = beforeParam.replace(/%i/g,i)
-          console.log(task.param)
+          task.param = beforeParam.replace(/%i/g, i)
           if (!task.isEnding) {
             let jsonObj = JSON.parse(task.param)
             if (task.delivery === true) {
@@ -459,10 +463,9 @@
         let that = this
         task.isEnding = false
         task.isTesting = true
-        let beforeParam = JSON.parse(JSON.stringify(task.param));
+        let beforeParam = JSON.parse(JSON.stringify(task.param))
         for (let i = 0; i < task.loop; i++) {
-          task.param = beforeParam.replace(/%i/g,i)
-          console.log(task.param)
+          task.param = beforeParam.replace(/%i/g, i)
           if (!task.isEnding && !compositeTask.isEnding) {
             let jsonObj = JSON.parse(task.param)
             if (task.delivery === true) {

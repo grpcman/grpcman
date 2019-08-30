@@ -1,6 +1,6 @@
 {
   "name": "grpcman",
-  "version": "1.2.2",
+  "version": "1.4.0",
   "private": true,
   "scripts": {
     "rebuild": "npm install grpc --runtime=electron --target=6.0.4 && npm install --save-dev electron-rebuild && npm install && npm start",
