@@ -232,6 +232,7 @@
         if (process.platform !== 'darwin') {
           app.quit()
         }
+        fs.closeSync(file)
       })
 
       // 读取 data.json
@@ -241,6 +242,7 @@
       for (let prop in dataFromFile) {
         this[prop] = dataFromFile[prop]
       }
+      fs.closeSync(file)
     },
     methods: {
       createTask () {
