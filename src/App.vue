@@ -170,8 +170,8 @@ const grpc = require('grpc')
 const { lib } = require('./lib.js')
 const dayjs = require('dayjs')
 const fs = require('fs')
-const { app } = require('electron').remote
-const path =require('path')
+const { ipcRenderer } = require('electron')
+const path = require('path')
 export default {
   data () {
     return {
@@ -229,14 +229,21 @@ export default {
   created: async function () {
     let filepath = path.join(process.cwd(), 'data.json')
     console.log(filepath)
-    // 重写 app 关闭生命周期
-    app.on('before-quit', () => {
-      let file = fs.openSync(filepath, 'w')
-      fs.writeFileSync(file, JSON.stringify(this.$data))
-      fs.closeSync(file)
 
-      if (process.platform !== 'darwin') {
-        app.quit()
+    let file
+    ipcRenderer.on('action', (event, arg) => {
+      switch (arg) {
+        case 'exiting':
+          console.log('ipcRenderer', event, arg)
+
+          file = fs.openSync(filepath, 'w')
+          fs.writeFileSync(file, JSON.stringify(this.$data))
+          fs.closeSync(file)
+
+          ipcRenderer.sendSync('reqaction', 'exit')
+          break
+        default:
+          break
       }
     })
 
