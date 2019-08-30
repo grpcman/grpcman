@@ -171,7 +171,7 @@ const { lib } = require('./lib.js')
 const dayjs = require('dayjs')
 const fs = require('fs')
 const { app } = require('electron').remote
-
+const path =require('path')
 export default {
   data () {
     return {
@@ -227,9 +227,10 @@ export default {
     }
   },
   created: async function () {
-    let filepath = process.cwd() + '/data.json'
+    let filepath = path.join(process.cwd(), 'data.json')
+    console.log(filepath)
     // 重写 app 关闭生命周期
-    app.on('window-all-closed', () => {
+    app.on('before-quit', () => {
       let file = fs.openSync(filepath, 'w')
       fs.writeFileSync(file, JSON.stringify(this.$data))
       fs.closeSync(file)
