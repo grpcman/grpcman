@@ -12,10 +12,10 @@
       <el-tabs @tab-click="handleTabClick" @tab-remove="removeTab" closable type="border-card"
                v-model="currentEditableTabName">
         <el-tab-pane
-                :key="item.name"
-                :label="item.title"
-                :name="item.name"
-                v-for="(item) in editableTabs"
+          :key="item.name"
+          :label="item.title"
+          :name="item.name"
+          v-for="(item) in editableTabs"
         >
           <el-form :model="form" ref="form" v-if="item.isSimple">
             <el-form-item label="日志">
@@ -25,15 +25,15 @@
               <el-col :span="8">
                 <el-form-item label="文件">
                   <el-upload
-                          :auto-upload="false"
-                          :limit="1"
-                          :on-change="elInFile"
-                          :on-exceed="handleExceed"
-                          :on-remove="handleRemove"
-                          accept=".proto"
-                          action=""
-                          class="upload-demo"
-                          ref="upload"
+                    :auto-upload="false"
+                    :limit="1"
+                    :on-change="elInFile"
+                    :on-exceed="handleExceed"
+                    :on-remove="handleRemove"
+                    accept=".proto"
+                    action=""
+                    class="upload-demo"
+                    ref="upload"
                   >
                     <el-button plain size="mini" slot="trigger" type="success">选取文件</el-button>
                     <i class="el-upload__tip el-icon-info" slot="tip">只能选取proto文件，包名必须是proto</i>
@@ -48,11 +48,11 @@
               <el-col :span="8">
                 <el-form-item label="服务和协议">
                   <el-cascader
-                          :options="item.options"
-                          :props="{ expandTrigger: 'hover' }"
-                          @change="handleChange"
-                          style="width: 99%"
-                          v-model="item.value"
+                    :options="item.options"
+                    :props="{ expandTrigger: 'hover' }"
+                    @change="handleChange"
+                    style="width: 99%"
+                    v-model="item.value"
                   ></el-cascader>
                 </el-form-item>
               </el-col>
@@ -95,32 +95,32 @@
               <el-button :disabled="item.stopIsDisabled" @click="onCompositeEnd" type="danger">停止测试</el-button>
             </el-form-item>
             <el-table
-                    :data="item.tableData"
-                    border
-                    style="width: 100%">
+              :data="item.tableData"
+              border
+              style="width: 100%">
               <el-table-column
-                      label="任务名称"
-                      prop="title">
+                label="任务名称"
+                prop="title">
               </el-table-column>
               <el-table-column
-                      label="唯一编号"
-                      prop="name">
+                label="唯一编号"
+                prop="name">
               </el-table-column>
               <el-table-column
-                      label="地址"
-                      prop="address">
+                label="地址"
+                prop="address">
               </el-table-column>
               <el-table-column
-                      label="协议"
-                      prop="proto">
+                label="协议"
+                prop="proto">
               </el-table-column>
               <el-table-column
-                      label="循环"
-                      prop="loop">
+                label="循环"
+                prop="loop">
               </el-table-column>
               <el-table-column
-                      fixed="right"
-                      label="操作">
+                fixed="right"
+                label="操作">
                 <template slot-scope="scope">
                   <el-button @click="handleEditClick(scope.row)" size="small" type="text">编辑</el-button>
                   <el-button @click="handleRemoveClick(scope.$index, item.tableData)" size="small" type="text">删除
@@ -148,10 +148,10 @@
         <el-form-item :label-width="formLabelWidth" label="任务名称">
           <el-select placeholder="请选择" v-model="selectedSimpleTask" value="">
             <el-option
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                    v-for="item in addDialogFormList">
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              v-for="item in addDialogFormList">
             </el-option>
           </el-select>
         </el-form-item>
@@ -462,7 +462,7 @@ export default {
         }
       }
       this.getTimestamp()
-      task.log += `总耗时：${this.getTimestamp() - startTimestamp}\n`
+      task.log += `总耗时：${(this.getTimestamp() - startTimestamp) / 1000}秒\n`
       task.startIsDisabled = false
       task.stopIsDisabled = true
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false

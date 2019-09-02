@@ -1,5 +1,5 @@
 export let lib = {
-  //封装异步调用
+  // 封装异步调用
   asyncCall (client, funcName, ...args) {
     return new Promise((resolve, reject) => {
       // eslint-disable-next-line no-unused-vars
@@ -13,8 +13,8 @@ export let lib = {
     })
   },
 
-  //统一定义grpc调用函数
+  // 统一定义grpc调用函数
   async grpcCall (client, funcName, data, meta) {
     return await this.asyncCall(client, funcName, data, meta)
-  },
+  }
 }
