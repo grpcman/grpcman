@@ -497,7 +497,8 @@ export default {
           }
         }
       }
-      task.log += `总耗时：${this.getTimestamp() - startTimestamp}\n`
+      task.log += `总耗时：${(this.getTimestamp() - startTimestamp) / 1000}秒\n`
+      compositeTask.log += `总耗时：${(this.getTimestamp() - startTimestamp) / 1000}秒\n`
       task.isTesting = false
     },
     async startSimpleTaskByName (name, compositeTask) {
