@@ -7,8 +7,7 @@ grpc 测试工具
 ## 项目初始化
 
 ```bash
-npm install grpc --runtime=electron --target=6.0.4
-npm install
+npm install --runtime=electron --target=6.0.4
 ```
 
 ## 项目启动
