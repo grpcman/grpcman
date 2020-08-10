@@ -3,7 +3,7 @@
   "version": "1.5.2",
   "private": true,
   "scripts": {
-    "rebuild": "npm install grpc --runtime=electron --target=6.0.4 && npm install --save-dev electron-rebuild && npm install && npm start",
+    "rebuild": "npm install grpc --runtime=electron --target=7.3.2 && npm install --save-dev electron-rebuild && npm install && npm start",
     "start": "npm run electron:serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -40,7 +40,7 @@
     "babel-eslint": "^10.0.1",
     "babel-plugin-component": "^1.1.1",
     "css-loader": "^3.2.0",
-    "electron": "6.1.12",
+    "electron": "7.3.2",
     "electron-builder": "^21.2.0",
     "electron-icon-builder": "^1.0.1",
     "electron-rebuild": "^1.8.8",
