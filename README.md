@@ -1,8 +1,10 @@
 # grpcman
 
-grpc 测试工具
+![grpcman](https://socialify.git.ci/grpcman/grpcman/image?description=1&forks=1&issues=1&language=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Dark)
 
-![grpcman.png](./img/grpcman.png)
+## Screenshot
+
+![screenshot](./img/grpcman.png)
 
 ## 项目初始化
 
@@ -22,6 +24,8 @@ npm run electron:serve
 npm run electron:build
 ```
 
-<img title="" src="./img/jetbrains.png" alt="jetbrains.png" width="168"><img title="" src="./img/webstorm.png" alt="webstorm.png" width="106">
+## 感谢
+
+<img title="" src="./img/jetbrains.png" alt="jetbrains.png" width="168"><img title="" src="./img/webstorm.png" alt="webstorm.png" width="168">
 
 [本项目由 JetBrains 赞助，使用优秀的前端开发工具 Webstorm 开发 ](https://www.jetbrains.com/?from=grpcman)
