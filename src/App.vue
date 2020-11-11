@@ -58,17 +58,12 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="线程">
-                  <el-input disabled="disabled" style="width: 99%" type="number" v-model="item.task"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="循环">
                   <el-input style="width: 99%" type="number" v-model="item.loop"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="超时">
                   <el-input disabled="disabled" style="width: 99%" type="number" v-model="item.timeout"></el-input>
                 </el-form-item>
