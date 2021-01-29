@@ -1,9 +1,8 @@
 {
   "name": "grpcman",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "private": true,
   "scripts": {
-    "rebuild": "npm install grpc --runtime=electron --target=7.3.2 && npm install --save-dev electron-rebuild && npm install && npm start",
     "start": "npm run electron:serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -12,7 +11,11 @@
     "electron:serve": "vue-cli-service electron:serve",
     "electron:generate-icons": "electron-icon-builder --input=./public/logo.png --output=build --flatten",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "package:all": "npm run package:win && npm run package:linux && npm run package:mac",
+    "package:win": "npm run electron:build -- --win 7z --x64",
+    "package:linux": "npm run electron:build -- --linux 7z AppImage --x64",
+    "package:mac": "npm run electron:build -- --mac 7z dmg"
   },
   "main": "background.js",
   "dependencies": {
