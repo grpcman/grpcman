@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-button @click="createSimpleTask" type="primary">创建简单任务</el-button>
-      <el-button @click="createCompositeTask" type="success">创建复合任务</el-button>
+      <el-button @click="createCompositeTask" type="success">创建组合任务</el-button>
       <el-button @click="copyCurrentTask" type="info">复制当前任务</el-button>
       <el-button @click="deleteCurrentTask" type="warning">删除当前任务</el-button>
       <el-button @click="deleteAllTasks" type="danger">删除所有任务</el-button>
@@ -69,10 +69,10 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="异步（开启异步后按钮状态禁用失效，请等待任务结束再点击）">
+            <el-form-item label="异步（开启异步后程序将无法停止，直至循环结束）">
               <el-switch style="width: 99%" v-model="item.delivery"></el-switch>
             </el-form-item>
-            <el-form-item label="参数">
+            <el-form-item label="参数（请根据您的服务填写，例如 json 字符串）">
               <el-input :rows="2" style="width: 99%" type="textarea" v-model="item.param"></el-input>
             </el-form-item>
             <el-form-item>
@@ -196,10 +196,10 @@ export default {
           stopIsDisabled: true // 结束按钮的禁用
         },
         {
-          title: '复合任务', // 任务的名称，tab的名称
+          title: '组合任务', // 任务的名称，tab的名称
           name: '2', // 任务的索引
           isSimple: false, // 是否简单任务
-          log: '', // 存放复合任务的日志
+          log: '', // 存放组合任务的日志
           isTesting: false, // 任务是否正在进行
           isEnding: false, // 是都已经点了停止
           addIsDisabled: false, // 添加按钮的禁用
@@ -280,13 +280,13 @@ export default {
           stopIsDisabled: true // 结束按钮的禁用
         })
       } else {
-        // 创建复合任务
+        // 创建组合任务
         this.editableTabs.push({
           title: this.form.title,
           name: newTabName,
           isSimple: this.isSimple,
           list: '', // 这是任务列表
-          log: '', // 存放复合任务的日志
+          log: '', // 存放组合任务的日志
           isTesting: false, // 任务是否正在进行
           isEnding: false, // 是都已经点了停止
           addIsDisabled: false, // 添加按钮的禁用
@@ -322,15 +322,15 @@ export default {
       })
     },
     handleEditClick (row) {
-      // 复合任务中简单任务的编辑
+      // 组合任务中简单任务的编辑
       this.currentEditableTabName = row.name
       this.$message({
-        message: '编辑后请到复合任务删除该任务并重新添加',
+        message: '编辑后请到组合任务删除该任务并重新添加',
         type: 'warning'
       })
     },
     handleRemoveClick (index, rows) {
-      // 复合任务中简单任务的删除
+      // 组合任务中简单任务的删除
       rows.splice(index, 1)
     },
     handleTabClick () {
@@ -360,7 +360,7 @@ export default {
       }
     },
     addSimpleTaskCompositeTask () {
-      // 向复合任务添加简单任务
+      // 向组合任务添加简单任务
       let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       let simpleTask = this.editableTabs[this.getIndexByName(this.selectedSimpleTask)]
       task.tableData.push({
@@ -373,7 +373,7 @@ export default {
       this.addDialogFormVisible = false
     },
     createCompositeTask () {
-      // 创建复合任务
+      // 创建组合任务
       this.isSimple = false
       this.dialogFormVisible = true
     },
