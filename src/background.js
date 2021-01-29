@@ -3,6 +3,8 @@
 import { app, BrowserWindow, ipcMain, protocol } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 
+app.allowRendererProcessReuse = false
+
 const path = require('path')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -15,7 +17,7 @@ let win
 protocol.registerSchemesAsPrivileged(
   [{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1000,
