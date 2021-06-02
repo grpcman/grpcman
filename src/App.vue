@@ -161,7 +161,7 @@
 
 <script>
 const protoLoader = require('@grpc/proto-loader')
-const grpc = require('grpc')
+const grpc = require('@grpc/grpc-js')
 const { lib } = require('./lib.js')
 const dayjs = require('dayjs')
 const fs = require('fs')
