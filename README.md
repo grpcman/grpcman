@@ -9,19 +9,19 @@
 ## 项目初始化
 
 ```bash
-npm install
+yarn
 ```
 
 ## 项目启动
 
 ```bash
-npm run electron:serve
+yarn run electron:serve
 ```
 
 ## 项目编译
 
 ```bash
-npm run electron:build
+yarn run electron:build
 ```
 
 ## 感谢
