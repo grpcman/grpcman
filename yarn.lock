@@ -1384,10 +1384,10 @@
   resolved "https://registry.nlark.com/@types/node/download/@types/node-16.9.6.tgz?cache=0&sync_timestamp=1632251068300&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-16.9.6.tgz#040a64d7faf9e5d9e940357125f0963012e66f04"
   integrity sha1-BApk1/r55dnpQDVxJfCWMBLmbwQ=
 
-"@types/node@^12.0.12":
-  version "12.20.26"
-  resolved "https://registry.nlark.com/@types/node/download/@types/node-12.20.26.tgz?cache=0&sync_timestamp=1632251068300&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.20.26.tgz#a6db0d0577e40844f0b28c2a9289c09e5b44b541"
-  integrity sha1-ptsNBXfkCETwsowqkonAnltEtUE=
+"@types/node@^14.6.2":
+  version "14.17.18"
+  resolved "https://registry.nlark.com/@types/node/download/@types/node-14.17.18.tgz?cache=0&sync_timestamp=1632251068300&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-14.17.18.tgz#0198489a751005f71217744aa966cd1f29447c81"
+  integrity sha1-AZhImnUQBfcSF3RKqWbNHylEfIE=
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -2522,12 +2522,12 @@ babel-plugin-polyfill-corejs2@^0.2.2:
     semver "^6.1.1"
 
 babel-plugin-polyfill-corejs3@^0.2.2:
-  version "0.2.4"
-  resolved "https://registry.nlark.com/babel-plugin-polyfill-corejs3/download/babel-plugin-polyfill-corejs3-0.2.4.tgz?cache=0&sync_timestamp=1627502231082&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fbabel-plugin-polyfill-corejs3%2Fdownload%2Fbabel-plugin-polyfill-corejs3-0.2.4.tgz#68cb81316b0e8d9d721a92e0009ec6ecd4cd2ca9"
-  integrity sha1-aMuBMWsOjZ1yGpLgAJ7G7NTNLKk=
+  version "0.2.5"
+  resolved "https://registry.npmmirror.com/babel-plugin-polyfill-corejs3/download/babel-plugin-polyfill-corejs3-0.2.5.tgz#2779846a16a1652244ae268b1e906ada107faf92"
+  integrity sha1-J3mEahahZSJEriaLHpBq2hB/r5I=
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.2.2"
-    core-js-compat "^3.14.0"
+    core-js-compat "^3.16.2"
 
 babel-plugin-polyfill-regenerator@^0.2.2:
   version "0.2.2"
@@ -3689,7 +3689,7 @@ copy-webpack-plugin@^5.1.1:
     serialize-javascript "^4.0.0"
     webpack-log "^2.0.0"
 
-core-js-compat@^3.14.0:
+core-js-compat@^3.16.2:
   version "3.18.0"
   resolved "https://registry.nlark.com/core-js-compat/download/core-js-compat-3.18.0.tgz?cache=0&sync_timestamp=1632078338818&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcore-js-compat%2Fdownload%2Fcore-js-compat-3.18.0.tgz#fb360652201e8ac8da812718c008cd0482ed9b42"
   integrity sha1-+zYGUiAeisjagScYwAjNBILtm0I=
@@ -4616,13 +4616,13 @@ electron-to-chromium@^1.3.846:
   resolved "https://registry.nlark.com/electron-to-chromium/download/electron-to-chromium-1.3.846.tgz?cache=0&sync_timestamp=1632261859388&other_urls=https%3A%2F%2Fregistry.nlark.com%2Felectron-to-chromium%2Fdownload%2Felectron-to-chromium-1.3.846.tgz#a55fd59613dbcaed609e965e3e88f42b08c401d3"
   integrity sha1-pV/VlhPbyu1gnpZePoj0KwjEAdM=
 
-electron@9.4.0:
-  version "9.4.0"
-  resolved "https://registry.nlark.com/electron/download/electron-9.4.0.tgz#c3c607e3598226ddbaaff8babcdffa8bb2210936"
-  integrity sha1-w8YH41mCJt26r/i6vN/6i7IhCTY=
+electron@^13.4.0:
+  version "13.4.0"
+  resolved "https://registry.nlark.com/electron/download/electron-13.4.0.tgz#f9f9e518d8c6bf23bfa8b69580447eea3ca0f880"
+  integrity sha1-+fnlGNjGvyO/qLaVgER+6jyg+IA=
   dependencies:
     "@electron/get" "^1.0.1"
-    "@types/node" "^12.0.12"
+    "@types/node" "^14.6.2"
     extract-zip "^1.0.3"
 
 element-ui@^2.11.1:

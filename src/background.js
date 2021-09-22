@@ -23,7 +23,9 @@ function createWindow() {
     width: 1000,
     height: 1000,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      contextIsolation: false,
     },
     // eslint-disable-next-line no-undef
     icon: path.join(__static, 'logo.png')
