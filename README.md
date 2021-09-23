@@ -15,17 +15,17 @@ yarn
 ## 项目启动
 
 ```bash
-yarn run electron:serve
+yarn electron:serve
 ```
 
 ## 项目编译
 
 ```bash
-yarn run electron:build
+yarn electron:build
 ```
 
-## 感谢
+## 特别感谢
 
-<img title="" src="./img/jetbrains.png" alt="jetbrains.png" width="168"><img title="" src="./img/webstorm.png" alt="webstorm.png" width="168">
+<img title="" src="./img/jetbrains.png" alt="jetbrains.png" width="50"><img title="" src="./img/webstorm.png" alt="webstorm.png" width="50">
 
-[本项目由 JetBrains 赞助，使用优秀的前端开发工具 Webstorm 开发 ](https://www.jetbrains.com/?from=grpcman)
+[感谢 JetBrains 提供免费的开发工具 ](https://www.jetbrains.com/?from=grpcman)
