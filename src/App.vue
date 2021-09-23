@@ -174,9 +174,8 @@ const protoLoader = require('@grpc/proto-loader')
 const grpc = require('@grpc/grpc-js')
 const { lib } = require('./lib.js')
 const dayjs = require('dayjs')
-const fs = require('fs')
 const { ipcRenderer } = require('electron')
-const path = require('path')
+
 export default {
   data () {
     return {
@@ -232,17 +231,10 @@ export default {
     }
   },
   created: async function () {
-    const filepath = path.join(process.cwd(), 'data.json')
-
-    let file
     ipcRenderer.on('action', (event, arg) => {
       switch (arg) {
         case 'exiting':
-
-          file = fs.openSync(filepath, 'w')
-          fs.writeFileSync(file, JSON.stringify(this.$data))
-          fs.closeSync(file)
-
+          localStorage.setItem('data', JSON.stringify(this.$data))
           ipcRenderer.sendSync('reqaction', 'exit')
           break
         default:
@@ -250,15 +242,12 @@ export default {
       }
     })
 
-    // 读取 data.json
     try {
-      const file = fs.openSync(filepath, 'rs')
-      let dataFromFile = fs.readFileSync(file).toString()
+      let dataFromFile = localStorage.getItem('data')
       dataFromFile = JSON.parse(dataFromFile)
       for (const prop in dataFromFile) {
         this[prop] = dataFromFile[prop]
       }
-      fs.closeSync(file)
     } catch (e) {
       console.log(e.message)
     }
