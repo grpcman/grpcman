@@ -1,58 +1,60 @@
 <template>
   <div>
     <el-row>
-      <el-button @click="createSimpleTask" type="primary">创建简单任务</el-button>
-      <el-button @click="createCompositeTask" type="success">创建组合任务</el-button>
-      <el-button @click="copyCurrentTask" type="info">复制当前任务</el-button>
-      <el-button @click="deleteCurrentTask" type="warning">删除当前任务</el-button>
-      <el-button @click="deleteAllTasks" type="danger">删除所有任务</el-button>
+      <el-button type="primary" @click="createSimpleTask">创建简单任务</el-button>
+      <el-button type="success" @click="createCompositeTask">创建组合任务</el-button>
+      <el-button type="info" @click="copyCurrentTask">复制当前任务</el-button>
+      <el-button type="warning" @click="deleteCurrentTask">删除当前任务</el-button>
+      <el-button type="danger" @click="deleteAllTasks">删除所有任务</el-button>
     </el-row>
     <el-divider></el-divider>
     <el-row>
-      <el-tabs @tab-click="handleTabClick" @tab-remove="removeTab" closable type="border-card"
-               v-model="currentEditableTabName">
+      <el-tabs
+          v-model="currentEditableTabName" closable type="border-card" @tab-click="handleTabClick"
+          @tab-remove="removeTab"
+      >
         <el-tab-pane
-          :key="item.name"
-          :label="item.title"
-          :name="item.name"
-          v-for="(item) in editableTabs"
+            v-for="(item) in editableTabs"
+            :key="item.name"
+            :label="item.title"
+            :name="item.name"
         >
-          <el-form :model="form" ref="form" v-if="item.isSimple">
+          <el-form v-if="item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
-              <el-input :rows="10" style="width: 99%" type="textarea" v-model="item.log"></el-input>
+              <el-input v-model="item.log" :rows="10" style="width: 99%" type="textarea"></el-input>
             </el-form-item>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="文件">
                   <el-upload
-                    :auto-upload="false"
-                    :limit="1"
-                    :on-change="elInFile"
-                    :on-exceed="handleExceed"
-                    :on-remove="handleRemove"
-                    accept=".proto"
-                    action=""
-                    class="upload-demo"
-                    ref="upload"
+                      ref="upload"
+                      :auto-upload="false"
+                      :limit="1"
+                      :on-change="elInFile"
+                      :on-exceed="handleExceed"
+                      :on-remove="handleRemove"
+                      accept=".proto"
+                      action=""
+                      class="upload-demo"
                   >
-                    <el-button plain size="mini" slot="trigger" type="success">选取文件</el-button>
-                    <i class="el-upload__tip el-icon-info" slot="tip">只能选取proto文件，包名必须是proto</i>
+                    <el-button slot="trigger" plain size="mini" type="success">选取文件</el-button>
+                    <i slot="tip" class="el-upload__tip el-icon-info">只能选取proto文件，包名必须是proto</i>
                   </el-upload>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="地址">
-                  <el-input style="width: 99%" v-model="item.address"></el-input>
+                  <el-input v-model="item.address" style="width: 99%"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="服务和协议">
                   <el-cascader
-                    :options="item.options"
-                    :props="{ expandTrigger: 'hover' }"
-                    @change="handleChange"
-                    style="width: 99%"
-                    v-model="item.value"
+                      v-model="item.value"
+                      :options="item.options"
+                      :props="{ expandTrigger: 'hover' }"
+                      style="width: 99%"
+                      @change="handleChange"
                   ></el-cascader>
                 </el-form-item>
               </el-col>
@@ -60,65 +62,72 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="循环">
-                  <el-input style="width: 99%" type="number" v-model="item.loop"></el-input>
+                  <el-input v-model="item.loop" style="width: 99%" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="超时">
-                  <el-input disabled="disabled" style="width: 99%" type="number" v-model="item.timeout"></el-input>
+                  <el-input v-model="item.timeout" disabled="disabled" style="width: 99%" type="number"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item label="异步（开启异步后程序将无法停止，直至循环结束）">
-              <el-switch style="width: 99%" v-model="item.delivery"></el-switch>
+              <el-switch v-model="item.delivery" style="width: 99%"></el-switch>
             </el-form-item>
             <el-form-item label="参数（请根据您的服务填写，例如 json 字符串）">
-              <el-input :rows="2" style="width: 99%" type="textarea" v-model="item.param"></el-input>
+              <el-input v-model="item.param" :rows="2" style="width: 99%" type="textarea"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button :disabled="item.startIsDisabled" @click="onSimpleStart" type="primary">开始测试</el-button>
-              <el-button :disabled="item.stopIsDisabled" @click="onSimpleEnd" type="danger">停止测试</el-button>
+              <el-button :disabled="item.startIsDisabled" type="primary" @click="onSimpleStart">开始测试</el-button>
+              <el-button :disabled="item.stopIsDisabled" type="danger" @click="onSimpleEnd">停止测试</el-button>
             </el-form-item>
           </el-form>
-          <el-form :model="form" ref="form" v-if="!item.isSimple">
+          <el-form v-if="!item.isSimple" ref="form" :model="form">
             <el-form-item label="日志">
-              <el-input :rows="20" type="textarea" v-model="item.log"></el-input>
+              <el-input v-model="item.log" :rows="20" type="textarea"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button :disabled="item.addIsDisabled" @click="onCompositeAdd" type="primary">新增任务</el-button>
-              <el-button :disabled="item.startIsDisabled" @click="onCompositeStart" type="success">开始测试</el-button>
-              <el-button :disabled="item.stopIsDisabled" @click="onCompositeEnd" type="danger">停止测试</el-button>
+              <el-button :disabled="item.addIsDisabled" type="primary" @click="onCompositeAdd">新增任务</el-button>
+              <el-button :disabled="item.startIsDisabled" type="success" @click="onCompositeStart">开始测试</el-button>
+              <el-button :disabled="item.stopIsDisabled" type="danger" @click="onCompositeEnd">停止测试</el-button>
             </el-form-item>
             <el-table
-              :data="item.tableData"
-              border
-              style="width: 100%">
+                :data="item.tableData"
+                border
+                style="width: 100%"
+            >
               <el-table-column
-                label="任务名称"
-                prop="title">
+                  label="任务名称"
+                  prop="title"
+              >
               </el-table-column>
               <el-table-column
-                label="唯一编号"
-                prop="name">
+                  label="唯一编号"
+                  prop="name"
+              >
               </el-table-column>
               <el-table-column
-                label="地址"
-                prop="address">
+                  label="地址"
+                  prop="address"
+              >
               </el-table-column>
               <el-table-column
-                label="协议"
-                prop="proto">
+                  label="协议"
+                  prop="proto"
+              >
               </el-table-column>
               <el-table-column
-                label="循环"
-                prop="loop">
+                  label="循环"
+                  prop="loop"
+              >
               </el-table-column>
               <el-table-column
-                fixed="right"
-                label="操作">
+                  fixed="right"
+                  label="操作"
+              >
                 <template slot-scope="scope">
-                  <el-button @click="handleEditClick(scope.row)" size="small" type="text">编辑</el-button>
-                  <el-button @click="handleRemoveClick(scope.$index, item.tableData)" size="small" type="text">删除
+                  <el-button size="small" type="text" @click="handleEditClick(scope.row)">编辑</el-button>
+                  <el-button size="small" type="text" @click="handleRemoveClick(scope.$index, item.tableData)">删除
                   </el-button>
                 </template>
               </el-table-column>
@@ -130,30 +139,31 @@
     <el-dialog :visible.sync="dialogFormVisible" title="创建新任务">
       <el-form :model="form">
         <el-form-item :label-width="formLabelWidth" label="任务名称">
-          <el-input autocomplete="off" v-model="form.title"></el-input>
+          <el-input v-model="form.title" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
-      <div class="dialog-footer" slot="footer">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button @click="createTask" type="primary">确 定</el-button>
+        <el-button type="primary" @click="createTask">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="addDialogFormVisible" title="添加新任务">
       <el-form :model="form">
         <el-form-item :label-width="formLabelWidth" label="任务名称">
-          <el-select placeholder="请选择" v-model="selectedSimpleTask" value="">
+          <el-select v-model="selectedSimpleTask" placeholder="请选择" value="">
             <el-option
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              v-for="item in addDialogFormList">
+                v-for="item in addDialogFormList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <div class="dialog-footer" slot="footer">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="addDialogFormVisible = false">取 消</el-button>
-        <el-button @click="addSimpleTaskCompositeTask" type="primary">确 定</el-button>
+        <el-button type="primary" @click="addSimpleTaskCompositeTask">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -222,7 +232,7 @@ export default {
     }
   },
   created: async function () {
-    let filepath = path.join(process.cwd(), 'data.json')
+    const filepath = path.join(process.cwd(), 'data.json')
 
     let file
     ipcRenderer.on('action', (event, arg) => {
@@ -242,10 +252,10 @@ export default {
 
     // 读取 data.json
     try {
-      let file = fs.openSync(filepath, 'rs')
+      const file = fs.openSync(filepath, 'rs')
       let dataFromFile = fs.readFileSync(file).toString()
       dataFromFile = JSON.parse(dataFromFile)
-      for (let prop in dataFromFile) {
+      for (const prop in dataFromFile) {
         this[prop] = dataFromFile[prop]
       }
       fs.closeSync(file)
@@ -255,7 +265,7 @@ export default {
   },
   methods: {
     createTask () {
-      let newTabName = this.nextTabIndex + ''
+      const newTabName = this.nextTabIndex + ''
       this.nextTabIndex++
       // 判断是否为简单任务
       if (this.isSimple) {
@@ -334,8 +344,8 @@ export default {
       rows.splice(index, 1)
     },
     handleTabClick () {
-      let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
-      let refreshTable = []
+      const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      const refreshTable = []
       if (task.isSimple === false) {
         task.tableData.map((item) => {
           refreshTable.push(item.name)
@@ -361,8 +371,8 @@ export default {
     },
     addSimpleTaskCompositeTask () {
       // 向组合任务添加简单任务
-      let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
-      let simpleTask = this.editableTabs[this.getIndexByName(this.selectedSimpleTask)]
+      const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      const simpleTask = this.editableTabs[this.getIndexByName(this.selectedSimpleTask)]
       task.tableData.push({
         title: simpleTask.title,
         name: simpleTask.name,
@@ -379,9 +389,9 @@ export default {
     },
     copyCurrentTask () {
       // 复制当前任务
-      let newTabName = this.nextTabIndex + ''
+      const newTabName = this.nextTabIndex + ''
       this.nextTabIndex++
-      let data = { ...this.editableTabs[this.getIndexByName(this.currentEditableTabName)] }
+      const data = { ...this.editableTabs[this.getIndexByName(this.currentEditableTabName)] }
       data.name = newTabName
       data.log = ''
       data.isTesting = false
@@ -405,12 +415,12 @@ export default {
     },
     removeTab (targetName) {
       // 删除tab
-      let tabs = this.editableTabs
+      const tabs = this.editableTabs
       let activeName = this.currentEditableTabName
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
-            let nextTab = tabs[index + 1] || tabs[index - 1]
+            const nextTab = tabs[index + 1] || tabs[index - 1]
             if (nextTab) {
               activeName = nextTab.name
             }
@@ -430,28 +440,28 @@ export default {
       message.replace(RegExp, '111')
     },
     async onSimpleStart () {
-      let that = this
-      let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      const that = this
+      const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       task.isEnding = false
       // 简单任务的开始
       task.isTesting = true
       task.startIsDisabled = true
       task.stopIsDisabled = false
-      let beforeParam = JSON.parse(JSON.stringify(task.param))
-      let startTimestamp = this.getTimestamp()
+      const beforeParam = JSON.parse(JSON.stringify(task.param))
+      const startTimestamp = this.getTimestamp()
       for (let i = 0; i < task.loop; i++) {
         task.param = beforeParam.replace(/%i/g, i)
         if (!task.isEnding) {
-          let jsonObj = JSON.parse(task.param)
+          const jsonObj = JSON.parse(task.param)
           if (task.delivery === true) {
-            let client = task.client
-            let funcName = task.value[1]
+            const client = task.client
+            const funcName = task.value[1]
             client[funcName](jsonObj, function (err, res) {
               console.log(err)
               task.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
             })
           } else {
-            let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
+            const res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
             task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
           }
         }
@@ -468,25 +478,25 @@ export default {
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].isTesting = false
     },
     async startSimpleTask (task, compositeTask) {
-      let that = this
+      const that = this
       task.isEnding = false
       task.isTesting = true
-      let beforeParam = JSON.parse(JSON.stringify(task.param))
-      let startTimestamp = this.getTimestamp()
+      const beforeParam = JSON.parse(JSON.stringify(task.param))
+      const startTimestamp = this.getTimestamp()
       for (let i = 0; i < task.loop; i++) {
         task.param = beforeParam.replace(/%i/g, i)
         if (!task.isEnding && !compositeTask.isEnding) {
-          let jsonObj = JSON.parse(task.param)
+          const jsonObj = JSON.parse(task.param)
           if (task.delivery === true) {
-            let client = task.client
-            let funcName = task.value[1]
+            const client = task.client
+            const funcName = task.value[1]
             client[funcName](jsonObj, function (err, res) {
               console.log(err)
               task.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
               compositeTask.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
             })
           } else {
-            let res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
+            const res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
             task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
             compositeTask.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
           }
@@ -499,7 +509,7 @@ export default {
     async startSimpleTaskByName (name, compositeTask) {
       // 通过TaskName开始简单任务
       for (let i = 0; i < this.editableTabs.length; i++) {
-        let currentTask = this.editableTabs[i]
+        const currentTask = this.editableTabs[i]
         if (!currentTask.isSimple) {
           continue
         }
@@ -511,7 +521,7 @@ export default {
     },
     async onCompositeStart () {
       // 混合任务的开始
-      let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       if (task.tableData.length === 0) {
         this.$message({
           message: '没有可以执行的任务',
@@ -536,14 +546,17 @@ export default {
       this.addDialogFormList = []
       for (let i = 0; i < this.editableTabs.length; i++) {
         if (this.editableTabs[i].isSimple) {
-          this.addDialogFormList.push({ label: this.editableTabs[i].title, value: this.editableTabs[i].name })
+          this.addDialogFormList.push({
+            label: this.editableTabs[i].title,
+            value: this.editableTabs[i].name
+          })
         }
       }
       this.addDialogFormVisible = true
     },
     onCompositeEnd () {
       // 混合任务的结束
-      let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
       task.isEnding = true
       task.isTesting = false
       task.startIsDisabled = false
@@ -557,7 +570,7 @@ export default {
         type: 'warning'
       })
       // 加载 proto 文件
-      let packageDefinition = protoLoader.loadSync(
+      const packageDefinition = protoLoader.loadSync(
         file.raw.path,
         {
           keepCase: true,
@@ -571,14 +584,14 @@ export default {
       this.proto = grpc.loadPackageDefinition(packageDefinition).proto
       let index = 0
       // 为级联选择器添加 service
-      for (let serviceName in packageDefinition) {
+      for (const serviceName in packageDefinition) {
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options.push({
           label: serviceName,
           value: serviceName.split('.')[1],
           children: []
         })
         // 为级联选择器添加 rpc 方法名
-        for (let serviceFunctionName in packageDefinition[serviceName]) {
+        for (const serviceFunctionName in packageDefinition[serviceName]) {
           this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options[index].children.push({
             label: serviceFunctionName,
             value: serviceFunctionName
@@ -588,11 +601,8 @@ export default {
       }
     },
     handleChange (value) {
-      let task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
-      task.client = new this.proto[value[0]](
-        task.address,
-        grpc.credentials.createInsecure()
-      )
+      const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      task.client = new this.proto[value[0]](task.address, grpc.credentials.createInsecure())
     }
   }
 }
