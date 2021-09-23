@@ -197,8 +197,8 @@ export default {
           task: 1, // 多线程
           loop: 1, // 循环次数
           timeout: 10000, // 超时时间
-          param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', // 请求参数
-          address: 'localhost:50301', // 任务的端口
+          param: '{ "name": "grpcman" }', // 请求参数
+          address: 'grpcmantest.d8s.fun:50051', // 任务的端口
           isTesting: false, // 任务是否正在进行
           client: null, // gRPC的client，用来调用rpc
           isEnding: false, // 是都已经点了停止
@@ -281,8 +281,8 @@ export default {
           task: 1, // 多线程
           loop: 1, // 循环次数
           timeout: 10000, // 超时时间
-          param: '{ "userName": "robot2", "password": "cc3e7bb5ad6f13c65f0bb97da5c35f7c" }', // 请求参数
-          address: 'localhost:50301', // 任务的端口
+          param: '{ "name": "grpcman" }', // 请求参数
+          address: 'grpcmantest.d8s.fun:50051', // 任务的端口
           isTesting: false, // 任务是否正在进行
           client: null, // gRPC的client，用来调用rpc
           isEnding: false, // 是都已经点了停止
@@ -442,27 +442,42 @@ export default {
     async onSimpleStart () {
       const that = this
       const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      console.log('onSimpleStart() task', task)
       task.isEnding = false
       // 简单任务的开始
       task.isTesting = true
       task.startIsDisabled = true
       task.stopIsDisabled = false
       const beforeParam = JSON.parse(JSON.stringify(task.param))
+      console.log('onSimpleStart() beforeParam', beforeParam)
       const startTimestamp = this.getTimestamp()
+      console.log('onSimpleStart() startTimestamp', startTimestamp)
       for (let i = 0; i < task.loop; i++) {
         task.param = beforeParam.replace(/%i/g, i)
+        console.log('onSimpleStart() task.param', task.param)
         if (!task.isEnding) {
           const jsonObj = JSON.parse(task.param)
+          console.log('onSimpleStart() jsonObj', jsonObj)
+          const client = task.client
+          console.log('onSimpleStart() client', client)
+          const funcName = task.value[1]
+          console.log('onSimpleStart() funcName', funcName)
           if (task.delivery === true) {
-            const client = task.client
-            const funcName = task.value[1]
             client[funcName](jsonObj, function (err, res) {
-              console.log(err)
+              console.log('client func err', err)
               task.log += '[' + that.getNowTime() + ']' + JSON.stringify(res) + '\n'
             })
           } else {
-            const res = await lib.grpcCall(task.client, task.value[1], jsonObj, null)
-            task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
+            // const res = await lib.grpcCall(client, funcName, jsonObj, null)
+            console.log('onSimpleStart() jsonObj 2', jsonObj)
+            client[funcName](jsonObj, (err, res) => {
+              if (err) {
+                console.error(err)
+                return
+              }
+              console.log('res', res)
+              task.log += '[' + this.getNowTime() + ']' + JSON.stringify(res) + '\n'
+            })
           }
         }
       }
@@ -580,8 +595,16 @@ export default {
           oneofs: true
         }
       )
+      console.log('elInFile() packageDefinition', packageDefinition)
       // 解析 proto
-      this.proto = grpc.loadPackageDefinition(packageDefinition).proto
+      const grpcObject = grpc.loadPackageDefinition(packageDefinition)
+      console.log('elInFile() grpcObject', grpcObject)
+      for (const packageName in grpcObject) {
+        console.log('elInFile() packageName', packageName)
+        this.proto = grpcObject[packageName]
+        break
+      }
+      console.log('elInFile() this.proto', this.proto)
       let index = 0
       // 为级联选择器添加 service
       for (const serviceName in packageDefinition) {
@@ -601,7 +624,12 @@ export default {
       }
     },
     handleChange (value) {
+      console.log('handleChange() value', value)
       const task = this.editableTabs[this.getIndexByName(this.currentEditableTabName)]
+      console.log('handleChange() task', task)
+      console.log('handleChange() this.proto', this.proto)
+      console.log('handleChange() value[0]', value[0])
+      console.log('handleChange() this.proto[value[0]]', this.proto[value[0]])
       task.client = new this.proto[value[0]](task.address, grpc.credentials.createInsecure())
     }
   }
