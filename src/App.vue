@@ -596,17 +596,17 @@ export default {
         }
       )
       console.log('elInFile() packageDefinition', packageDefinition)
+
       // 解析 proto
       const grpcObject = grpc.loadPackageDefinition(packageDefinition)
       console.log('elInFile() grpcObject', grpcObject)
-      for (const packageName in grpcObject) {
-        console.log('elInFile() packageName', packageName)
-        this.proto = grpcObject[packageName]
-        break
-      }
+      const grpcObjectKeys = Object.keys(grpcObject)
+      console.log('elInFile() grpcObjectKeys', grpcObjectKeys)
+      this.proto = grpcObject[grpcObjectKeys[0]]
       console.log('elInFile() this.proto', this.proto)
-      let index = 0
+
       // 为级联选择器添加 service
+      let index = 0
       for (const serviceName in packageDefinition) {
         this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options.push({
           label: serviceName,
