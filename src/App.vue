@@ -38,12 +38,12 @@
                       class="upload-demo"
                   >
                     <el-button slot="trigger" plain size="mini" type="success">选取文件</el-button>
-                    <i slot="tip" class="el-upload__tip el-icon-info">只能选取proto文件，包名必须是proto</i>
+                    <i slot="tip" class="el-upload__tip el-icon-info">限proto文件</i>
                   </el-upload>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="地址">
+                <el-form-item label="服务器地址">
                   <el-input v-model="item.address" style="width: 99%"></el-input>
                 </el-form-item>
               </el-col>
@@ -61,17 +61,17 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="循环">
+                <el-form-item label="请求次数（异步模式下不要设置太大！）">
                   <el-input v-model="item.loop" style="width: 99%" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="超时">
+                <el-form-item label="超时（暂时不可用）">
                   <el-input v-model="item.timeout" disabled="disabled" style="width: 99%" type="number"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-form-item label="异步（开启异步后程序将无法停止，直至循环结束）">
+            <el-form-item label="异步模式（直接按请求次数全部发完，一旦开始无法停止，压测专用！！！）">
               <el-switch v-model="item.delivery" style="width: 99%"></el-switch>
             </el-form-item>
             <el-form-item label="参数（请根据您的服务填写，例如 json 字符串）">
@@ -570,8 +570,9 @@ export default {
     elInFile (file, fileList) {
       this.editableTabs[this.getIndexByName(this.currentEditableTabName)].options = []
       this.$message({
-        message: '请先填写这个服务的地址，再选择服务中的协议，否则创建的client有错误！',
-        type: 'warning'
+        message: '先填写服务器地址，再选择服务和协议，否则client有错误！',
+        type: 'warning',
+        duration: 5000
       })
       // 加载 proto 文件
       const packageDefinition = protoLoader.loadSync(
