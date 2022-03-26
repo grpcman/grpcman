@@ -6,6 +6,7 @@ import './plugins/element.js'
 
 Vue.use(ElementUI)
 
+// eslint-disable-next-line no-new
 new Vue({
   el: '#app',
   render: h => h(App)
