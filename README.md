@@ -2,6 +2,10 @@
 
 ![grpcman](https://socialify.git.ci/grpcman/grpcman/image?description=1&forks=1&issues=1&language=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Dark)
 
+## 重要信息 ‼️ 此项目将在近期重写
+
+详情请看：[https://github.com/grpcman/grpcman/issues/10](https://github.com/grpcman/grpcman/issues/10)
+
 ## Screenshot
 
 ![screenshot](./img/grpcman.png)
