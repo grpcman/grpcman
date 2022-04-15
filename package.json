@@ -2,10 +2,12 @@
   "name": "grpcman",
   "private": true,
   "version": "0.0.0",
+  "main": "main.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:start": "npm run build && electron ."
   },
   "dependencies": {
     "react": "^18.0.0",
@@ -15,6 +17,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^1.3.0",
+    "electron": "^18.0.4",
     "typescript": "^4.6.3",
     "vite": "^2.9.2"
   }
