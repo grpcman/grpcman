@@ -2,17 +2,23 @@ import './App.css'
 import {useEffect, useState} from 'react'
 
 const protoLoader = require('@grpc/proto-loader')
+const grpc = require('@grpc/grpc-js')
 
 function App() {
-    const [serverAddress, setServerAddress] = useState('localhost:50051')
+    const [serverAddress, setServerAddress] = useState('grpcmantest.d8s.fun:50051')
 
     const [protoFilePath, setProtoFilePath] = useState<string>('')
 
     const [protoPackageDefinition, setProtoPackageDefinition] = useState<any>()
+    const [grpcObject, setGrpcObject] = useState<any>()
     useEffect(() => {
         const protoPackageDefinition = protoLoader.loadSync(protoFilePath)
         console.log('protoPackageDefinition', protoPackageDefinition)
         setProtoPackageDefinition(protoPackageDefinition)
+
+        const grpcObject = grpc.loadPackageDefinition(protoPackageDefinition)
+        console.log('grpcObject', grpcObject)
+        setGrpcObject(grpcObject)
     }, [protoFilePath])
 
     const [protoServiceDefinitionKeyList, setProtoServiceDefinitionKeyList] = useState<string[]>([])
@@ -48,6 +54,40 @@ function App() {
             setCurrentProtoMethodDefinitionKey(protoMethodDefinitionKeyList[0])
         }
     }, [protoMethodDefinitionKeyList])
+
+    const [requestDataStr, setRequestDataStr] = useState<string>('{"name": "grpcman"}')
+
+    const [responseDataStr, setResponseDataStr] = useState<string>('')
+
+    const [requestErrorStr, setRequestErrorStr] = useState<string>('')
+
+    const handleSendButtonClick = () => {
+        console.log('grpcObject', grpcObject)
+        console.log('currentProtoServiceDefinitionKey', currentProtoServiceDefinitionKey)
+
+        const packageName = currentProtoServiceDefinitionKey.split('.')[0]
+        console.log('packageName', packageName)
+
+        const serviceName = currentProtoServiceDefinitionKey.split('.')[1]
+        console.log('serviceName', serviceName)
+
+        const client = new grpcObject[packageName][serviceName](serverAddress, grpc.credentials.createInsecure())
+        console.log('client', client)
+
+        const requestDataJson = JSON.parse(requestDataStr)
+        console.log('requestDataJson', requestDataJson)
+
+        client[currentProtoMethodDefinitionKey](requestDataJson, (err: any, response: any) => {
+            console.log('err', err)
+            if (err) {
+                setRequestErrorStr(requestErrorStr + '\n' + JSON.stringify(err))
+            }
+            console.log('response', response)
+            if (response) {
+                setResponseDataStr(responseDataStr + '\n' + JSON.stringify(response))
+            }
+        })
+    }
 
     return (
         <div>
@@ -98,6 +138,32 @@ function App() {
                         <option key={k} value={k}>{k}</option>
                     ))}
                 </select>
+            </fieldset>
+
+            <fieldset>
+                <legend>Request Data</legend>
+                <textarea
+                    value={requestDataStr}
+                    onChange={e => setRequestDataStr(e.target.value)}
+                />
+            </fieldset>
+
+            <button onClick={handleSendButtonClick}>Send</button>
+
+            <fieldset>
+                <legend>Response Data</legend>
+                <textarea
+                    value={responseDataStr}
+                    onChange={e => setResponseDataStr(e.target.value)}
+                />
+            </fieldset>
+
+            <fieldset>
+                <legend>Request Error</legend>
+                <textarea
+                    value={requestErrorStr}
+                    onChange={e => setRequestErrorStr(e.target.value)}
+                />
             </fieldset>
 
         </div>
