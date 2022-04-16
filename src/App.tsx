@@ -60,16 +60,20 @@ function App() {
     }
 
     return (
-        <>
+        <div style={ { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 } }>
             <ServerAddress/>
             <SelectProtoFile/>
             <ServiceDefinition/>
             <MethodDefinition/>
-            <RequestData/>
-            <button disabled={ !currentProtoMethodDefinitionKey } onClick={ handleSendButtonClick }>Send</button>
+            <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
+                <RequestData/>
+            </div>
+            <button style={ { gridColumnStart: 1, gridColumnEnd: 3 } } disabled={ !currentProtoMethodDefinitionKey }
+                    onClick={ handleSendButtonClick }>Send
+            </button>
             <ResponseData/>
             <RequestError/>
-        </>
+        </div>
     )
 }
 
