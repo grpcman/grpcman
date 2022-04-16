@@ -10,7 +10,6 @@ function App() {
     const [protoFilePath, setProtoFilePath] = useState<string>('')
 
     const [protoPackageDefinition, setProtoPackageDefinition] = useState<any>()
-    const [grpcObject, setGrpcObject] = useState<any>()
     useEffect(() => {
         console.log('protoFilePath', protoFilePath)
         // 空文件路径直接返回
@@ -33,7 +32,10 @@ function App() {
             setRequestErrorStr(requestErrorStr === '' ? '文件解析错误，请检查 proto 文件' : requestErrorStr + '\n' + '文件解析错误，请检查 proto 文件')
             return
         }
+    }, [protoFilePath])
 
+    const [grpcObject, setGrpcObject] = useState<any>()
+    useEffect(() => {
         // grpc 加载错误直接返回
         try {
             const grpcObject = grpc.loadPackageDefinition(protoPackageDefinition)
@@ -43,8 +45,7 @@ function App() {
             setRequestErrorStr(requestErrorStr === '' ? 'grpc 加载错误，请检查 proto 文件' : requestErrorStr + '\n' + 'grpc 加载错误，请检查 proto 文件')
             return
         }
-
-    }, [protoFilePath])
+    }, [protoPackageDefinition])
 
     const [protoServiceDefinitionKeyList, setProtoServiceDefinitionKeyList] = useState<string[]>([])
     useEffect(() => {
@@ -116,7 +117,6 @@ function App() {
 
     return (
         <div>
-            <h1>grpcman</h1>
 
             <fieldset>
                 <legend>Server Address</legend>
