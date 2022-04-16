@@ -6,7 +6,7 @@ const RequestError = () => {
 
     return (
         <fieldset>
-            <legend>Request Error</legend>
+            <legend>Error Message</legend>
             <textarea
                 value={ requestErrorStr }
                 onChange={ e => setRequestErrorStr(e.target.value) }

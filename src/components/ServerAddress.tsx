@@ -10,6 +10,7 @@ const ServerAddress = () => {
             <input
                 type="text"
                 value={ serverAddress }
+                style={ { width: '95%' } }
                 onChange={ e => setServerAddress(e.target.value) }
             />
         </fieldset>
