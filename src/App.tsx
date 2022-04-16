@@ -20,7 +20,7 @@ function App() {
 
         // 文件类型错误直接返回
         if (protoFilePath.split('.').pop() !== 'proto') {
-            setRequestErrorStr(requestErrorStr === '' ? "文件类型错误，请选择 proto 文件" : requestErrorStr + '\n' + "文件类型错误，请选择 proto 文件")
+            setRequestErrorStr(requestErrorStr === '' ? '文件类型错误，请选择 proto 文件' : requestErrorStr + '\n' + '文件类型错误，请选择 proto 文件')
             return
         }
 
@@ -30,7 +30,7 @@ function App() {
             console.log('protoPackageDefinition', protoPackageDefinition)
             setProtoPackageDefinition(protoPackageDefinition)
         } catch (err: any) {
-            setRequestErrorStr(requestErrorStr === '' ? "文件解析错误，请检查 proto 文件" : requestErrorStr + '\n' + "文件解析错误，请检查 proto 文件")
+            setRequestErrorStr(requestErrorStr === '' ? '文件解析错误，请检查 proto 文件' : requestErrorStr + '\n' + '文件解析错误，请检查 proto 文件')
             return
         }
 
@@ -40,7 +40,7 @@ function App() {
             console.log('grpcObject', grpcObject)
             setGrpcObject(grpcObject)
         } catch (err: any) {
-            setRequestErrorStr(requestErrorStr === '' ? "grpc 加载错误，请检查 proto 文件" : requestErrorStr + '\n' + "grpc 加载错误，请检查 proto 文件")
+            setRequestErrorStr(requestErrorStr === '' ? 'grpc 加载错误，请检查 proto 文件' : requestErrorStr + '\n' + 'grpc 加载错误，请检查 proto 文件')
             return
         }
 
