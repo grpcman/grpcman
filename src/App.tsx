@@ -4,6 +4,8 @@ import {useEffect, useState} from 'react'
 const protoLoader = require('@grpc/proto-loader')
 
 function App() {
+    const [serverAddress, setServerAddress] = useState('localhost:50051')
+
     const [protoFilePath, setProtoFilePath] = useState<string>('')
 
     const [protoPackageDefinition, setProtoPackageDefinition] = useState<any>()
@@ -50,21 +52,29 @@ function App() {
     return (
         <div>
             <h1>grpcman</h1>
-            <p>🚀 正在施工中 🚀</p>
-            <input
-                type="file"
-                onChange={e => {
-                    if (e.target.files) {
-                        const f = e.target.files[0]
-                        // @ts-ignore
-                        const fp = f['path']
-                        console.log('fp', fp)
-                        if (fp) {
-                            setProtoFilePath(fp)
+
+            <fieldset>
+                <legend>Server Address</legend>
+                <input type="text" value={serverAddress} onChange={e => setServerAddress(e.target.value)}/>
+            </fieldset>
+
+            <fieldset>
+                <legend>Select Proto File</legend>
+                <input
+                    type="file"
+                    onChange={e => {
+                        if (e.target.files) {
+                            const f = e.target.files[0]
+                            // @ts-ignore
+                            const fp = f['path']
+                            console.log('fp', fp)
+                            if (fp) {
+                                setProtoFilePath(fp)
+                            }
                         }
-                    }
-                }}
-            />
+                    }}
+                />
+            </fieldset>
 
             <fieldset>
                 <legend>Service Definition</legend>
