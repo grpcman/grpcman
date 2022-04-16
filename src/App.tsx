@@ -1,8 +1,15 @@
 import './App.css'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
+
+const protoLoader = require('@grpc/proto-loader')
 
 function App() {
-    const [f, setF] = useState<File>()
+    const [protoFilePath, setProtoFilePath] = useState<string>('')
+    useEffect(() => {
+        const protoPackageDefinition = protoLoader.loadSync(protoFilePath)
+        console.log('protoPackageDefinition', protoPackageDefinition)
+    }, [protoFilePath])
+
     return (
         <div>
             <h1>grpcman</h1>
@@ -12,8 +19,12 @@ function App() {
                 onChange={e => {
                     if (e.target.files) {
                         const f = e.target.files[0]
-                        console.log('f', f)
-                        setF(f)
+                        // @ts-ignore
+                        const fp = f['path']
+                        console.log('fp', fp)
+                        if (fp) {
+                            setProtoFilePath(fp)
+                        }
                     }
                 }}
             />
