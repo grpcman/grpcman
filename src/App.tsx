@@ -1,5 +1,5 @@
 import './App.css'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 
 const protoLoader = require('@grpc/proto-loader')
 const grpc = require('@grpc/grpc-js')
@@ -12,6 +12,11 @@ function App() {
     const [protoPackageDefinition, setProtoPackageDefinition] = useState<any>()
     const [grpcObject, setGrpcObject] = useState<any>()
     useEffect(() => {
+        console.log('protoFilePath', protoFilePath)
+        if (protoFilePath !== '' && protoFilePath.split('.').pop() !== 'proto') {
+            setRequestErrorStr(requestErrorStr === '' ? "文件类型错误，请选择 proto 文件" : requestErrorStr + '\n' + "文件类型错误，请选择 proto 文件")
+            return
+        }
         const protoPackageDefinition = protoLoader.loadSync(protoFilePath)
         console.log('protoPackageDefinition', protoPackageDefinition)
         setProtoPackageDefinition(protoPackageDefinition)
@@ -80,11 +85,11 @@ function App() {
         client[currentProtoMethodDefinitionKey](requestDataJson, (err: any, response: any) => {
             console.log('err', err)
             if (err) {
-                setRequestErrorStr(requestErrorStr + '\n' + JSON.stringify(err))
+                setRequestErrorStr(requestErrorStr === '' ? JSON.stringify(err.stack) : requestErrorStr + '\n' + JSON.stringify(err.stack))
             }
             console.log('response', response)
             if (response) {
-                setResponseDataStr(responseDataStr + '\n' + JSON.stringify(response))
+                setResponseDataStr(responseDataStr === '' ? JSON.stringify(response) : responseDataStr + '\n' + JSON.stringify(response))
             }
         })
     }
@@ -97,8 +102,8 @@ function App() {
                 <legend>Server Address</legend>
                 <input
                     type="text"
-                    value={serverAddress}
-                    onChange={e => setServerAddress(e.target.value)}
+                    value={ serverAddress }
+                    onChange={ e => setServerAddress(e.target.value) }
                 />
             </fieldset>
 
@@ -106,7 +111,7 @@ function App() {
                 <legend>Select Proto File</legend>
                 <input
                     type="file"
-                    onChange={e => {
+                    onChange={ e => {
                         if (e.target.files) {
                             const f = e.target.files[0]
                             // @ts-ignore
@@ -116,57 +121,57 @@ function App() {
                                 setProtoFilePath(fp)
                             }
                         }
-                    }}
+                    } }
                 />
             </fieldset>
 
             <fieldset>
                 <legend>Service Definition</legend>
                 <select
-                    value={currentProtoServiceDefinitionKey}
-                    onChange={e => setCurrentProtoServiceDefinitionKey(e.target.value)}
+                    value={ currentProtoServiceDefinitionKey }
+                    onChange={ e => setCurrentProtoServiceDefinitionKey(e.target.value) }
                 >
-                    {protoServiceDefinitionKeyList.map(k => (
-                        <option key={k} value={k}>{k}</option>
-                    ))}
+                    { protoServiceDefinitionKeyList.map(k => (
+                        <option key={ k } value={ k }>{ k }</option>
+                    )) }
                 </select>
             </fieldset>
 
             <fieldset>
                 <legend>Method Definition</legend>
                 <select
-                    value={currentProtoMethodDefinitionKey}
-                    onChange={e => setCurrentProtoMethodDefinitionKey(e.target.value)}
+                    value={ currentProtoMethodDefinitionKey }
+                    onChange={ e => setCurrentProtoMethodDefinitionKey(e.target.value) }
                 >
-                    {protoMethodDefinitionKeyList.map(k => (
-                        <option key={k} value={k}>{k}</option>
-                    ))}
+                    { protoMethodDefinitionKeyList.map(k => (
+                        <option key={ k } value={ k }>{ k }</option>
+                    )) }
                 </select>
             </fieldset>
 
             <fieldset>
                 <legend>Request Data</legend>
                 <textarea
-                    value={requestDataStr}
-                    onChange={e => setRequestDataStr(e.target.value)}
+                    value={ requestDataStr }
+                    onChange={ e => setRequestDataStr(e.target.value) }
                 />
             </fieldset>
 
-            <button disabled={!currentProtoMethodDefinitionKey} onClick={handleSendButtonClick}>Send</button>
+            <button disabled={ !currentProtoMethodDefinitionKey } onClick={ handleSendButtonClick }>Send</button>
 
             <fieldset>
                 <legend>Response Data</legend>
                 <textarea
-                    value={responseDataStr}
-                    onChange={e => setResponseDataStr(e.target.value)}
+                    value={ responseDataStr }
+                    onChange={ e => setResponseDataStr(e.target.value) }
                 />
             </fieldset>
 
             <fieldset>
                 <legend>Request Error</legend>
                 <textarea
-                    value={requestErrorStr}
-                    onChange={e => setRequestErrorStr(e.target.value)}
+                    value={ requestErrorStr }
+                    onChange={ e => setRequestErrorStr(e.target.value) }
                 />
             </fieldset>
 
