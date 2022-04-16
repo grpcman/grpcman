@@ -34,7 +34,7 @@ function App() {
             return
         }
 
-        // 加载 proto 服务错误直接返回
+        // grpc 加载错误直接返回
         try {
             const grpcObject = grpc.loadPackageDefinition(protoPackageDefinition)
             console.log('grpcObject', grpcObject)
