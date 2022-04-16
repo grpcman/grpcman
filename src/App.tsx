@@ -8,6 +8,7 @@ import MethodDefinition from './components/MethodDefinition'
 import RequestData from './components/RequestData'
 import ResponseData from './components/ResponseData'
 import RequestError from './components/RequestError'
+import { useState } from "react";
 
 const grpc = require('@grpc/grpc-js')
 
@@ -21,6 +22,8 @@ function App() {
     const [currentProtoMethodDefinitionKey, setCurrentProtoMethodDefinitionKey] = useRecoilState(atoms.currentProtoMethodDefinitionKey)
 
     const [requestDataStr, setRequestDataStr] = useRecoilState(atoms.requestDataStr)
+
+    const [requestTimes, setRequestTimes] = useState(1)
 
     const [responseDataStr, setResponseDataStr] = useRecoilState(atoms.responseDataStr)
 
@@ -68,9 +71,14 @@ function App() {
             <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
                 <RequestData/>
             </div>
-            <button style={ { gridColumnStart: 1, gridColumnEnd: 3 } } disabled={ !currentProtoMethodDefinitionKey }
-                    onClick={ handleSendButtonClick }>Send
-            </button>
+            <div style={ { gridColumnStart: 1, gridColumnEnd: 3, display: "flex", alignItems: "center", gap: 10 } }>
+                <div>Request Times</div>
+                <input type="text" value={ requestTimes } style={ { margin: 0, flexGrow: 1 } }
+                       onChange={ (e) => setRequestTimes(Number.parseInt(e.target.value)) }/>
+                <button disabled={ !currentProtoMethodDefinitionKey } style={ { margin: 0, flexBasis: 395 } }
+                        onClick={ handleSendButtonClick }>Send
+                </button>
+            </div>
             <ResponseData/>
             <RequestError/>
         </div>
