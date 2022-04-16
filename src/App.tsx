@@ -1,15 +1,17 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import atoms from './atoms'
 
 const protoLoader = require('@grpc/proto-loader')
 const grpc = require('@grpc/grpc-js')
 
 function App() {
-    const [serverAddress, setServerAddress] = useState('grpcmantest.d8s.fun:50051')
+    const [serverAddress, setServerAddress] = useRecoilState(atoms.serverAddress)
 
-    const [protoFilePath, setProtoFilePath] = useState<string>('')
+    const [protoFilePath, setProtoFilePath] = useRecoilState(atoms.protoFilePath)
 
-    const [protoPackageDefinition, setProtoPackageDefinition] = useState<any>()
+    const [protoPackageDefinition, setProtoPackageDefinition] = useRecoilState(atoms.protoPackageDefinition)
     useEffect(() => {
         console.log('protoFilePath', protoFilePath)
         // 空文件路径直接返回
@@ -34,7 +36,7 @@ function App() {
         }
     }, [protoFilePath])
 
-    const [grpcObject, setGrpcObject] = useState<any>()
+    const [grpcObject, setGrpcObject] = useRecoilState(atoms.grpcObject)
     useEffect(() => {
         // grpc 加载错误直接返回
         try {
@@ -47,7 +49,7 @@ function App() {
         }
     }, [protoPackageDefinition])
 
-    const [protoServiceDefinitionKeyList, setProtoServiceDefinitionKeyList] = useState<string[]>([])
+    const [protoServiceDefinitionKeyList, setProtoServiceDefinitionKeyList] = useRecoilState(atoms.protoServiceDefinitionKeyList)
     useEffect(() => {
         if (!protoPackageDefinition) {
             return
@@ -57,14 +59,14 @@ function App() {
         setProtoServiceDefinitionKeyList(protoServiceDefinitionKeyList)
     }, [protoPackageDefinition])
 
-    const [currentProtoServiceDefinitionKey, setCurrentProtoServiceDefinitionKey] = useState<string>('')
+    const [currentProtoServiceDefinitionKey, setCurrentProtoServiceDefinitionKey] = useRecoilState(atoms.currentProtoServiceDefinitionKey)
     useEffect(() => {
         if (protoServiceDefinitionKeyList) {
             setCurrentProtoServiceDefinitionKey(protoServiceDefinitionKeyList[0])
         }
     }, [protoServiceDefinitionKeyList])
 
-    const [protoMethodDefinitionKeyList, setProtoMethodDefinitionKeyList] = useState<string[]>([])
+    const [protoMethodDefinitionKeyList, setProtoMethodDefinitionKeyList] = useRecoilState(atoms.protoMethodDefinitionKeyList)
     useEffect(() => {
         if (!currentProtoServiceDefinitionKey) {
             return
@@ -74,18 +76,18 @@ function App() {
         setProtoMethodDefinitionKeyList(protoMethodDefinitionKeys)
     }, [currentProtoServiceDefinitionKey])
 
-    const [currentProtoMethodDefinitionKey, setCurrentProtoMethodDefinitionKey] = useState<string>('')
+    const [currentProtoMethodDefinitionKey, setCurrentProtoMethodDefinitionKey] = useRecoilState(atoms.currentProtoMethodDefinitionKey)
     useEffect(() => {
         if (protoMethodDefinitionKeyList) {
             setCurrentProtoMethodDefinitionKey(protoMethodDefinitionKeyList[0])
         }
     }, [protoMethodDefinitionKeyList])
 
-    const [requestDataStr, setRequestDataStr] = useState<string>('{"name": "grpcman"}')
+    const [requestDataStr, setRequestDataStr] = useRecoilState(atoms.requestDataStr)
 
-    const [responseDataStr, setResponseDataStr] = useState<string>('')
+    const [responseDataStr, setResponseDataStr] = useRecoilState(atoms.responseDataStr)
 
-    const [requestErrorStr, setRequestErrorStr] = useState<string>('')
+    const [requestErrorStr, setRequestErrorStr] = useRecoilState(atoms.requestErrorStr)
 
     const handleSendButtonClick = () => {
         console.log('grpcObject', grpcObject)

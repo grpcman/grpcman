@@ -17,7 +17,8 @@
     "@grpc/proto-loader": "^0.6.9",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "recoil": "^0.7.2"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
