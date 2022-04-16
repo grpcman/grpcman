@@ -13,17 +13,37 @@ function App() {
     const [grpcObject, setGrpcObject] = useState<any>()
     useEffect(() => {
         console.log('protoFilePath', protoFilePath)
-        if (protoFilePath !== '' && protoFilePath.split('.').pop() !== 'proto') {
+        // 空文件路径直接返回
+        if (protoFilePath === '') {
+            return
+        }
+
+        // 文件类型错误直接返回
+        if (protoFilePath.split('.').pop() !== 'proto') {
             setRequestErrorStr(requestErrorStr === '' ? "文件类型错误，请选择 proto 文件" : requestErrorStr + '\n' + "文件类型错误，请选择 proto 文件")
             return
         }
-        const protoPackageDefinition = protoLoader.loadSync(protoFilePath)
-        console.log('protoPackageDefinition', protoPackageDefinition)
-        setProtoPackageDefinition(protoPackageDefinition)
 
-        const grpcObject = grpc.loadPackageDefinition(protoPackageDefinition)
-        console.log('grpcObject', grpcObject)
-        setGrpcObject(grpcObject)
+        // 解析 proto 文件错误直接返回
+        try {
+            const protoPackageDefinition = protoLoader.loadSync(protoFilePath)
+            console.log('protoPackageDefinition', protoPackageDefinition)
+            setProtoPackageDefinition(protoPackageDefinition)
+        } catch (err: any) {
+            setRequestErrorStr(requestErrorStr === '' ? "文件解析错误，请检查 proto 文件" : requestErrorStr + '\n' + "文件解析错误，请检查 proto 文件")
+            return
+        }
+
+        // 加载 proto 服务错误直接返回
+        try {
+            const grpcObject = grpc.loadPackageDefinition(protoPackageDefinition)
+            console.log('grpcObject', grpcObject)
+            setGrpcObject(grpcObject)
+        } catch (err: any) {
+            setRequestErrorStr(requestErrorStr === '' ? "grpc 加载错误，请检查 proto 文件" : requestErrorStr + '\n' + "grpc 加载错误，请检查 proto 文件")
+            return
+        }
+
     }, [protoFilePath])
 
     const [protoServiceDefinitionKeyList, setProtoServiceDefinitionKeyList] = useState<string[]>([])
