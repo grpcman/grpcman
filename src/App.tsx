@@ -95,7 +95,11 @@ function App() {
 
             <fieldset>
                 <legend>Server Address</legend>
-                <input type="text" value={serverAddress} onChange={e => setServerAddress(e.target.value)}/>
+                <input
+                    type="text"
+                    value={serverAddress}
+                    onChange={e => setServerAddress(e.target.value)}
+                />
             </fieldset>
 
             <fieldset>
@@ -148,7 +152,7 @@ function App() {
                 />
             </fieldset>
 
-            <button onClick={handleSendButtonClick}>Send</button>
+            <button disabled={!currentProtoMethodDefinitionKey} onClick={handleSendButtonClick}>Send</button>
 
             <fieldset>
                 <legend>Response Data</legend>
