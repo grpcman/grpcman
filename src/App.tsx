@@ -13,15 +13,39 @@ function App() {
         setProtoPackageDefinition(protoPackageDefinition)
     }, [protoFilePath])
 
-    const [protoPackageDefinitionKeys, setProtoPackageDefinitionKeys] = useState<string[]>([])
+    const [protoServiceDefinitionKeyList, setProtoServiceDefinitionKeyList] = useState<string[]>([])
     useEffect(() => {
         if (!protoPackageDefinition) {
             return
         }
-        const protoPackageDefinitionKeys = Object.keys(protoPackageDefinition)
-        console.log('protoPackageDefinitionKeys', protoPackageDefinitionKeys)
-        setProtoPackageDefinitionKeys(protoPackageDefinitionKeys)
+        const protoServiceDefinitionKeyList = Object.keys(protoPackageDefinition)
+        console.log('protoServiceDefinitionKeyList', protoServiceDefinitionKeyList)
+        setProtoServiceDefinitionKeyList(protoServiceDefinitionKeyList)
     }, [protoPackageDefinition])
+
+    const [currentProtoServiceDefinitionKey, setCurrentProtoServiceDefinitionKey] = useState<string>('')
+    useEffect(() => {
+        if (protoServiceDefinitionKeyList) {
+            setCurrentProtoServiceDefinitionKey(protoServiceDefinitionKeyList[0])
+        }
+    }, [protoServiceDefinitionKeyList])
+
+    const [protoMethodDefinitionKeyList, setProtoMethodDefinitionKeyList] = useState<string[]>([])
+    useEffect(() => {
+        if (!currentProtoServiceDefinitionKey) {
+            return
+        }
+        const protoMethodDefinitionKeys = Object.keys(protoPackageDefinition[currentProtoServiceDefinitionKey])
+        console.log('protoMethodDefinitionKeyList', protoMethodDefinitionKeys)
+        setProtoMethodDefinitionKeyList(protoMethodDefinitionKeys)
+    }, [currentProtoServiceDefinitionKey])
+
+    const [currentProtoMethodDefinitionKey, setCurrentProtoMethodDefinitionKey] = useState<string>('')
+    useEffect(() => {
+        if (protoMethodDefinitionKeyList) {
+            setCurrentProtoMethodDefinitionKey(protoMethodDefinitionKeyList[0])
+        }
+    }, [protoMethodDefinitionKeyList])
 
     return (
         <div>
@@ -41,11 +65,31 @@ function App() {
                     }
                 }}
             />
-            <select>
-                {protoPackageDefinitionKeys.map(k => (
-                    <option key={k}>{k}</option>
-                ))}
-            </select>
+
+            <fieldset>
+                <legend>Service Definition</legend>
+                <select
+                    value={currentProtoServiceDefinitionKey}
+                    onChange={e => setCurrentProtoServiceDefinitionKey(e.target.value)}
+                >
+                    {protoServiceDefinitionKeyList.map(k => (
+                        <option key={k} value={k}>{k}</option>
+                    ))}
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <legend>Method Definition</legend>
+                <select
+                    value={currentProtoMethodDefinitionKey}
+                    onChange={e => setCurrentProtoMethodDefinitionKey(e.target.value)}
+                >
+                    {protoMethodDefinitionKeyList.map(k => (
+                        <option key={k} value={k}>{k}</option>
+                    ))}
+                </select>
+            </fieldset>
+
         </div>
     )
 }
