@@ -8,6 +8,7 @@ import MethodDefinition from './components/MethodDefinition'
 import RequestData from './components/RequestData'
 import ResponseData from './components/ResponseData'
 import RequestError from './components/RequestError'
+import { useState } from 'react'
 
 const grpc = require('@grpc/grpc-js')
 
@@ -22,11 +23,13 @@ function App() {
 
     const [requestDataStr, setRequestDataStr] = useRecoilState(atoms.requestDataStr)
 
+    const [requestTimes, setRequestTimes] = useState(1)
+
     const [responseDataStr, setResponseDataStr] = useRecoilState(atoms.responseDataStr)
 
     const [requestErrorStr, setRequestErrorStr] = useRecoilState(atoms.requestErrorStr)
 
-    const handleSendButtonClick = () => {
+    const send = () => {
         console.log('grpcObject', grpcObject)
         console.log('currentProtoServiceDefinitionKey', currentProtoServiceDefinitionKey)
 
@@ -46,11 +49,11 @@ function App() {
             client[currentProtoMethodDefinitionKey](requestDataJson, (err: any, response: any) => {
                 console.log('err', err)
                 if (err) {
-                    setRequestErrorStr(requestErrorStr === '' ? JSON.stringify(err.stack) : requestErrorStr + '\n' + JSON.stringify(err.stack))
+                    setRequestErrorStr(requestErrorStr => (requestErrorStr + '\n' + JSON.stringify(err.stack)).trim())
                 }
                 console.log('response', response)
                 if (response) {
-                    setResponseDataStr(responseDataStr === '' ? JSON.stringify(response) : responseDataStr + '\n' + JSON.stringify(response))
+                    setResponseDataStr(responseDataStr => (responseDataStr + '\n' + JSON.stringify(response)).trim())
                 }
             })
         } catch (e: any) {
@@ -60,19 +63,45 @@ function App() {
     }
 
     return (
-        <div style={ { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 } }>
+        <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 } }>
+
             <ServerAddress/>
+
             <SelectProtoFile/>
+
             <ServiceDefinition/>
+
             <MethodDefinition/>
+
             <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
                 <RequestData/>
             </div>
-            <button style={ { gridColumnStart: 1, gridColumnEnd: 3 } } disabled={ !currentProtoMethodDefinitionKey }
-                    onClick={ handleSendButtonClick }>Send
-            </button>
+
+            <div style={ { gridColumnStart: 1, gridColumnEnd: 3, display: 'flex', alignItems: 'center', gap: 10 } }>
+                <div>Request Times</div>
+                <input
+                    type="text"
+                    value={ requestTimes }
+                    style={ { margin: 0, flexGrow: 1 } }
+                    onChange={ (e) => setRequestTimes(Number.parseInt(e.target.value)) }
+                />
+                <button
+                    disabled={ !currentProtoMethodDefinitionKey }
+                    style={ { margin: 0, flexBasis: 395 } }
+                    onClick={ () => {
+                        for (let i = 0; i < requestTimes; i++) {
+                            send()
+                        }
+                    } }
+                >
+                    Send
+                </button>
+            </div>
+
             <ResponseData/>
+
             <RequestError/>
+
         </div>
     )
 }

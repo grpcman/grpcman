@@ -14,7 +14,10 @@ const ServiceDefinition = () => {
                 onChange={ e => setCurrentProtoServiceDefinitionKey(e.target.value) }
             >
                 { protoServiceDefinitionKeyList.map(k => (
-                    <option key={ k } value={ k }>{ k }</option>
+                    <option
+                        key={ k }
+                        value={ k }
+                    >{ k }</option>
                 )) }
             </select>
         </fieldset>

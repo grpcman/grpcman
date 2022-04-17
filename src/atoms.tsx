@@ -37,6 +37,10 @@ export default {
         key: 'requestDataStr',
         default: '{"name": "grpcman"}',
     }),
+    requestTimes: atom<number>({
+        key: 'requestTimes',
+        default: 1,
+    }),
     responseDataStr: atom<string>({
         key: 'responseDataStr',
         default: '',
