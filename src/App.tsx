@@ -29,7 +29,7 @@ function App() {
 
     const [requestErrorStr, setRequestErrorStr] = useRecoilState(atoms.requestErrorStr)
 
-    const handleSendButtonClick = () => {
+    const send = () => {
         console.log('grpcObject', grpcObject)
         console.log('currentProtoServiceDefinitionKey', currentProtoServiceDefinitionKey)
 
@@ -49,11 +49,11 @@ function App() {
             client[currentProtoMethodDefinitionKey](requestDataJson, (err: any, response: any) => {
                 console.log('err', err)
                 if (err) {
-                    setRequestErrorStr(requestErrorStr === '' ? JSON.stringify(err.stack) : requestErrorStr + '\n' + JSON.stringify(err.stack))
+                    setRequestErrorStr(requestErrorStr => (requestErrorStr + '\n' + JSON.stringify(err.stack)).trim())
                 }
                 console.log('response', response)
                 if (response) {
-                    setResponseDataStr(responseDataStr === '' ? JSON.stringify(response) : responseDataStr + '\n' + JSON.stringify(response))
+                    setResponseDataStr(responseDataStr => (responseDataStr + '\n' + JSON.stringify(response)).trim())
                 }
             })
         } catch (e: any) {
@@ -88,7 +88,11 @@ function App() {
                 <button
                     disabled={ !currentProtoMethodDefinitionKey }
                     style={ { margin: 0, flexBasis: 395 } }
-                    onClick={ handleSendButtonClick }
+                    onClick={ () => {
+                        for (let i = 0; i < requestTimes; i++) {
+                            send()
+                        }
+                    } }
                 >
                     Send
                 </button>
