@@ -81,7 +81,7 @@ function App() {
 
             <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
                 <fieldset style={ { display: 'flex', alignItems: 'center', gap: 10 } }>
-                    <legend>6.Change Request Option</legend>
+                    <legend>6.Change Options And Send Requests</legend>
                     <div style={ { display: "flex", alignItems: 'center' } }>
                         <div>Preserve Response:</div>
                         <input
