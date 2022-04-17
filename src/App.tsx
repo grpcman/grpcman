@@ -8,7 +8,7 @@ import MethodDefinition from './components/MethodDefinition'
 import RequestData from './components/RequestData'
 import ResponseData from './components/ResponseData'
 import RequestError from './components/RequestError'
-import { useState } from "react";
+import { useState } from 'react'
 
 const grpc = require('@grpc/grpc-js')
 
@@ -63,24 +63,41 @@ function App() {
     }
 
     return (
-        <div style={ { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 } }>
+        <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 } }>
+
             <ServerAddress/>
+
             <SelectProtoFile/>
+
             <ServiceDefinition/>
+
             <MethodDefinition/>
+
             <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
                 <RequestData/>
             </div>
-            <div style={ { gridColumnStart: 1, gridColumnEnd: 3, display: "flex", alignItems: "center", gap: 10 } }>
+
+            <div style={ { gridColumnStart: 1, gridColumnEnd: 3, display: 'flex', alignItems: 'center', gap: 10 } }>
                 <div>Request Times</div>
-                <input type="text" value={ requestTimes } style={ { margin: 0, flexGrow: 1 } }
-                       onChange={ (e) => setRequestTimes(Number.parseInt(e.target.value)) }/>
-                <button disabled={ !currentProtoMethodDefinitionKey } style={ { margin: 0, flexBasis: 395 } }
-                        onClick={ handleSendButtonClick }>Send
+                <input
+                    type="text"
+                    value={ requestTimes }
+                    style={ { margin: 0, flexGrow: 1 } }
+                    onChange={ (e) => setRequestTimes(Number.parseInt(e.target.value)) }
+                />
+                <button
+                    disabled={ !currentProtoMethodDefinitionKey }
+                    style={ { margin: 0, flexBasis: 395 } }
+                    onClick={ handleSendButtonClick }
+                >
+                    Send
                 </button>
             </div>
+
             <ResponseData/>
+
             <RequestError/>
+
         </div>
     )
 }

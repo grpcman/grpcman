@@ -14,7 +14,10 @@ const MethodDefinition = () => {
                 onChange={ e => setCurrentProtoMethodDefinitionKey(e.target.value) }
             >
                 { protoMethodDefinitionKeyList.map(k => (
-                    <option key={ k } value={ k }>{ k }</option>
+                    <option
+                        key={ k }
+                        value={ k }
+                    >{ k }</option>
                 )) }
             </select>
         </fieldset>
