@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil'
 import atoms from '../atoms'
+import SelectProtoFile from "./SelectProtoFile";
 
 const ServiceDefinition = () => {
     const [currentProtoServiceDefinitionKey, setCurrentProtoServiceDefinitionKey] = useRecoilState(atoms.currentProtoServiceDefinitionKey)
@@ -8,7 +9,7 @@ const ServiceDefinition = () => {
 
     return (
         <fieldset>
-            <legend>Service Definition</legend>
+            <legend>3.Select Service</legend>
             <select
                 value={ currentProtoServiceDefinitionKey }
                 onChange={ e => setCurrentProtoServiceDefinitionKey(e.target.value) }

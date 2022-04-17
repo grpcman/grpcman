@@ -84,7 +84,7 @@ const SelectProtoFile = () => {
 
     return (
         <fieldset>
-            <legend>Select Proto File</legend>
+            <legend>2.Select Proto File</legend>
             <input
                 type="file"
                 onChange={ e => {

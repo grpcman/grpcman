@@ -25,6 +25,8 @@ function App() {
 
     const [requestTimes, setRequestTimes] = useState(1)
 
+    const [preserveLog, setPreserveLog] = useState(false)
+
     const [responseDataStr, setResponseDataStr] = useRecoilState(atoms.responseDataStr)
 
     const [requestErrorStr, setRequestErrorStr] = useRecoilState(atoms.requestErrorStr)
@@ -77,25 +79,54 @@ function App() {
                 <RequestData/>
             </div>
 
-            <div style={ { gridColumnStart: 1, gridColumnEnd: 3, display: 'flex', alignItems: 'center', gap: 10 } }>
-                <div>Request Times</div>
-                <input
-                    type="text"
-                    value={ requestTimes }
-                    style={ { margin: 0, flexGrow: 1 } }
-                    onChange={ (e) => setRequestTimes(Number.parseInt(e.target.value)) }
-                />
-                <button
-                    disabled={ !currentProtoMethodDefinitionKey }
-                    style={ { margin: 0, flexBasis: 395 } }
-                    onClick={ () => {
-                        for (let i = 0; i < requestTimes; i++) {
-                            send()
-                        }
-                    } }
-                >
-                    Send
-                </button>
+            <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
+                <fieldset style={ { display: 'flex', alignItems: 'center', gap: 10 } }>
+                    <legend>6.Change Request Option</legend>
+                    <div style={ { display: "flex", alignItems: 'center' } }>
+                        <div>Preserve Response:</div>
+                        <input
+                            type={ "checkbox" }
+                            checked={ preserveLog }
+                            style={ { margin: 0 } }
+                            onChange={ (e) => setPreserveLog(!preserveLog) }
+                        />
+                    </div>
+                    <div style={ { display: "flex", alignItems: 'center' } }>
+                        <div>Request Times:</div>
+                        <input
+                            type="number"
+                            min={ 1 }
+                            value={ requestTimes }
+                            style={ { margin: 0, width: 80 } }
+                            onChange={ (e) => setRequestTimes(Number.parseInt(e.target.value)) }
+                        />
+                    </div>
+                    <div style={ { display: "flex", alignItems: 'center', flexGrow: 1 } }>
+                        <button
+                            disabled={ !currentProtoMethodDefinitionKey }
+                            style={ { margin: 0, flexGrow: 1 } }
+                            onClick={ () => {
+                                // Request Times 必须大于 0 且不为空
+                                if (!(requestTimes > 0)) {
+                                    setRequestErrorStr(requestErrorStr => (requestErrorStr + '\n' + 'Request Times 须大于0且不为空').trim())
+                                    return
+                                }
+
+                                // Response Data 是否保留
+                                if (!preserveLog) {
+                                    setResponseDataStr('')
+                                }
+
+                                // 异步发送请求
+                                for (let i = 0; i < requestTimes; i++) {
+                                    send()
+                                }
+                            } }
+                        >
+                            Send Requests
+                        </button>
+                    </div>
+                </fieldset>
             </div>
 
             <ResponseData/>

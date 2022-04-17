@@ -6,7 +6,7 @@ const ServerAddress = () => {
 
     return (
         <fieldset>
-            <legend>Server Address</legend>
+            <legend>1.Input Server Address</legend>
             <input
                 type="text"
                 value={ serverAddress }

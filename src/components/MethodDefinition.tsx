@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil'
 import atoms from '../atoms'
+import SelectProtoFile from "./SelectProtoFile";
 
 const MethodDefinition = () => {
     const [currentProtoMethodDefinitionKey, setCurrentProtoMethodDefinitionKey] = useRecoilState(atoms.currentProtoMethodDefinitionKey)
@@ -8,7 +9,7 @@ const MethodDefinition = () => {
 
     return (
         <fieldset>
-            <legend>Method Definition</legend>
+            <legend>4.Select Method</legend>
             <select
                 value={ currentProtoMethodDefinitionKey }
                 onChange={ e => setCurrentProtoMethodDefinitionKey(e.target.value) }
