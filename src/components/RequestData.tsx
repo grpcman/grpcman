@@ -6,7 +6,7 @@ const RequestData = () => {
 
     return (
         <fieldset>
-            <legend>Request Data</legend>
+            <legend>5.Input Request Data</legend>
             <textarea
                 value={ requestDataStr }
                 onChange={ e => setRequestDataStr(e.target.value) }
