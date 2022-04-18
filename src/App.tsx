@@ -82,16 +82,16 @@ function App() {
             <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
                 <fieldset style={ { display: 'flex', alignItems: 'center', gap: 10 } }>
                     <legend>6.Change Options And Send Requests</legend>
-                    <div style={ { display: "flex", alignItems: 'center' } }>
+                    <div style={ { display: 'flex', alignItems: 'center' } }>
                         <div>Preserve Response:</div>
                         <input
-                            type={ "checkbox" }
+                            type={ 'checkbox' }
                             checked={ preserveLog }
                             style={ { margin: 0 } }
                             onChange={ (e) => setPreserveLog(!preserveLog) }
                         />
                     </div>
-                    <div style={ { display: "flex", alignItems: 'center' } }>
+                    <div style={ { display: 'flex', alignItems: 'center' } }>
                         <div>Request Times:</div>
                         <input
                             type="number"
@@ -101,7 +101,7 @@ function App() {
                             onChange={ (e) => setRequestTimes(Number.parseInt(e.target.value)) }
                         />
                     </div>
-                    <div style={ { display: "flex", alignItems: 'center', flexGrow: 1 } }>
+                    <div style={ { display: 'flex', alignItems: 'center', flexGrow: 1 } }>
                         <button
                             disabled={ !currentProtoMethodDefinitionKey }
                             style={ { margin: 0, flexGrow: 1 } }

@@ -1,6 +1,5 @@
 import { useRecoilState } from 'recoil'
 import atoms from '../atoms'
-import SelectProtoFile from "./SelectProtoFile";
 
 const MethodDefinition = () => {
     const [currentProtoMethodDefinitionKey, setCurrentProtoMethodDefinitionKey] = useRecoilState(atoms.currentProtoMethodDefinitionKey)
