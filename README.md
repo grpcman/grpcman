@@ -28,8 +28,6 @@ yarn make
 
 ## Thanks
 
-<img title="" src="./img/jetbrains.png" alt="jetbrains.png" width="50">
-
-<img title="" src="./img/webstorm.png" alt="webstorm.png" width="50">
+<img title="" src="./img/jetbrains.png" alt="jetbrains.png" width="50"><img title="" src="./img/webstorm.png" alt="webstorm.png" width="50">
 
 [Develop with JetBrains WebStorm](https://www.jetbrains.com/?from=grpcman)
