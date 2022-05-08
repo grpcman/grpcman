@@ -551,14 +551,14 @@
     "@grpc/proto-loader" "^0.6.4"
     "@types/node" ">=12.12.47"
 
-"@grpc/proto-loader@^0.6.10":
-  version "0.6.10"
-  resolved "https://registry.npmmirror.com/@grpc/proto-loader/-/proto-loader-0.6.10.tgz#ba5852d35556f53942124edebcb4bffa0b30386e"
-  integrity sha512-TM2ghLt8pchK+XAlytMJ7RQvSqAb75c8kdizk6PuscNOT8aLYUL/CWESGLvp5GiDsWb6Gzs/VEen1M0e43ggZw==
+"@grpc/proto-loader@^0.6.12":
+  version "0.6.12"
+  resolved "https://registry.npmmirror.com/@grpc/proto-loader/-/proto-loader-0.6.12.tgz#459b619b8b9b67794bf0d1cb819653a38c63e164"
+  integrity sha512-filTVbETFnxb9CyRX98zN18ilChTuf/C5scZ2xyaOTp0EHGq0/ufX8rjqXUcSb1Gpv7eZq4M2jDvbh9BogKnrg==
   dependencies:
     "@types/long" "^4.0.1"
     lodash.camelcase "^4.3.0"
-    long "^5.2.0"
+    long "^4.0.0"
     protobufjs "^6.10.0"
     yargs "^16.2.0"
 
@@ -828,10 +828,10 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^18.0.8":
-  version "18.0.8"
-  resolved "https://registry.npmmirror.com/@types/react/-/react-18.0.8.tgz#a051eb380a9fbcaa404550543c58e1cf5ce4ab87"
-  integrity sha512-+j2hk9BzCOrrOSJASi5XiOyBbERk9jG5O73Ya4M0env5Ixi6vUNli4qy994AINcEF+1IEHISYFfIT4zwr++LKw==
+"@types/react@^18.0.9":
+  version "18.0.9"
+  resolved "https://registry.npmmirror.com/@types/react/-/react-18.0.9.tgz#d6712a38bd6cd83469603e7359511126f122e878"
+  integrity sha512-9bjbg1hJHUm4De19L1cHiW0Jvx3geel6Qczhjd0qY5VKVE2X5+x77YxAepuCwVh4vrgZJdgEJw48zrhRIeF4Nw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2788,11 +2788,6 @@ long@^4.0.0:
   resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
   integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
 
-long@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.npmmirror.com/long/-/long-5.2.0.tgz#2696dadf4b4da2ce3f6f6b89186085d94d52fd61"
-  integrity sha512-9RTUNjK60eJbx3uz+TEGF7fUr29ZDxR5QzXcyDpeSfeH28S9ycINflOgOlppit5U+4kNTe83KQnMEerw7GmE8w==
-
 loose-envify@^1.1.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
@@ -3584,10 +3579,10 @@ readable-stream@~1.1.9:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-recoil@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/recoil/-/recoil-0.7.2.tgz#37aafc9e0674abae639263354a11c910e71bf78a"
-  integrity sha512-OT4pI7FOUHcIoRtjsL5Lqq+lFFzQfir4MIbUkqyJ3nqv3WfBP1pHepyurqTsK5gw+T+I2R8+uOD28yH+Lg5o4g==
+recoil@^0.7.3-alpha.1:
+  version "0.7.3-alpha.1"
+  resolved "https://registry.npmmirror.com/recoil/-/recoil-0.7.3-alpha.1.tgz#2b21d732c8d5eaa17e2228dfc63b8cb731f194b1"
+  integrity sha512-jIcHieOD2F8pStmBCtAVqQPlKKAYkBF4lM5hXrrZrN83+uvdyJIXgBLz1iZ0ozkUqibN65Z8OsBUnB2nQM9q5g==
   dependencies:
     hamt_plus "1.0.2"
 
@@ -4272,10 +4267,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite@^2.9.7:
-  version "2.9.7"
-  resolved "https://registry.npmmirror.com/vite/-/vite-2.9.7.tgz#210c328e08ed206ab0953eb1ca00860042cd0a77"
-  integrity sha512-5hH7aNQe8rJiTTqCtPNX/6mIKlGw+1wg8UXwAxDIIN8XaSR+Zx3GT2zSu7QKa1vIaBqfUODGh3vpwY8r0AW/jw==
+vite@^2.9.8:
+  version "2.9.8"
+  resolved "https://registry.npmmirror.com/vite/-/vite-2.9.8.tgz#2c2cb0790beb0fbe4b8c0995b80fe691a91c2545"
+  integrity sha512-zsBGwn5UT3YS0NLSJ7hnR54+vUKfgzMUh/Z9CxF1YKEBVIe213+63jrFLmZphgGI5zXwQCSmqIdbPuE8NJywPw==
   dependencies:
     esbuild "^0.14.27"
     postcss "^8.4.13"
