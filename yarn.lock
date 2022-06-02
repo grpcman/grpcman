@@ -485,7 +485,7 @@
     "@electron-forge/template-base" "6.0.0-beta.63"
     fs-extra "^10.0.0"
 
-"@electron/get@^1.13.0", "@electron/get@^1.6.0", "@electron/get@^1.9.0":
+"@electron/get@^1.14.1", "@electron/get@^1.6.0", "@electron/get@^1.9.0":
   version "1.14.1"
   resolved "https://registry.npmmirror.com/@electron/get/-/get-1.14.1.tgz#16ba75f02dffb74c23965e72d617adc721d27f40"
   integrity sha512-BrZYyL/6m0ZXz/lDxy/nlVhQz+WF+iPS6qXolEU8atw7h6v1aYkjwJZ63m+bJMBTxDE66X+r2tPS4a/8C82sZw==
@@ -777,17 +777,26 @@
   resolved "https://registry.npmmirror.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
-"@types/react-dom@^18.0.4":
-  version "18.0.4"
-  resolved "https://registry.npmmirror.com/@types/react-dom/-/react-dom-18.0.4.tgz#dcbcadb277bcf6c411ceff70069424c57797d375"
-  integrity sha512-FgTtbqPOCI3dzZPZoC2T/sx3L34qxy99ITWn4eoSA95qPyXDMH0ALoAqUp49ITniiJFsXUVBtalh/KffMpg21Q==
+"@types/react-dom@^18.0.5":
+  version "18.0.5"
+  resolved "https://registry.npmmirror.com/@types/react-dom/-/react-dom-18.0.5.tgz#330b2d472c22f796e5531446939eacef8378444a"
+  integrity sha512-OWPWTUrY/NIrjsAPkAk1wW9LZeIjSvkXRhclsFO8CZcZGCOg2G0YZy4ft+rOyYxy8B7ui5iZzi9OkDebZ7/QSA==
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.0.9":
+"@types/react@*":
   version "18.0.9"
   resolved "https://registry.npmmirror.com/@types/react/-/react-18.0.9.tgz#d6712a38bd6cd83469603e7359511126f122e878"
   integrity sha512-9bjbg1hJHUm4De19L1cHiW0Jvx3geel6Qczhjd0qY5VKVE2X5+x77YxAepuCwVh4vrgZJdgEJw48zrhRIeF4Nw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^18.0.10":
+  version "18.0.10"
+  resolved "https://registry.npmmirror.com/@types/react/-/react-18.0.10.tgz#5692944d4a45e204fb7a981eb1388afe919cf4d0"
+  integrity sha512-dIugadZuIPrRzvIEevIu7A1smqOAjkSMv8qOfwPt9Ve6i6JT/FQcCHyk2qIAxwsQNKZt5/oGR0T4z9h2dXRAkg==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1657,12 +1666,12 @@ electron-winstaller@^5.0.0:
     lodash.template "^4.2.2"
     temp "^0.9.0"
 
-electron@^18.2.3:
-  version "18.2.3"
-  resolved "https://registry.npmmirror.com/electron/-/electron-18.2.3.tgz#36bcb8f71e41631e6b11179eeff291c8228bfd6a"
-  integrity sha512-DJWX03hCRKTscsfXxmW4gmgFuseop+g+m4ml7NfOMfankD8uYyr2Xyi3Ui02inL9qZOlbLMeLVCu6jKCKs8p/w==
+electron@^19.0.2:
+  version "19.0.2"
+  resolved "https://registry.npmmirror.com/electron/-/electron-19.0.2.tgz#48d744dc2dfae0a8590239c614db02f7bc0d6696"
+  integrity sha512-9RzS8wUpxY8dHFJRncro2mEIkCg9Vig1Q0iLu5y3dusEIDKcBRKoW9mVhUeqvZVZgb2SsTEowZBBdBhdL6/+aQ==
   dependencies:
-    "@electron/get" "^1.13.0"
+    "@electron/get" "^1.14.1"
     "@types/node" "^16.11.26"
     extract-zip "^1.0.3"
 
@@ -3576,10 +3585,10 @@ readable-stream@~1.1.9:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
-recoil@^0.7.3-alpha.2:
-  version "0.7.3-alpha.2"
-  resolved "https://registry.npmmirror.com/recoil/-/recoil-0.7.3-alpha.2.tgz#6aa80b4fe37700b067bd367bbe503e9c121947a4"
-  integrity sha512-8LL4T8Bh7WMA5/ka+420PCenaUFie0457kyxX7cy/gsyRlbIGYpyNkAyU0znCvtHTN2clVYkTjGF6zKJ/DzzJg==
+recoil@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.npmmirror.com/recoil/-/recoil-0.7.3.tgz#b674f5d9ceddb24f53dcb089731ec939d9e87cfc"
+  integrity sha512-WaPppk3Hz5/V9nOVmu1X/o3cJyf/rLXw/YsEENvMzEDk+LKqMiGfFgZ3Gg51TKWccpCZCyrSBXn2O4L1E2WDPQ==
   dependencies:
     hamt_plus "1.0.2"
 
@@ -4181,10 +4190,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npmmirror.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-typescript@^4.6.4:
-  version "4.6.4"
-  resolved "https://registry.npmmirror.com/typescript/-/typescript-4.6.4.tgz#caa78bbc3a59e6a5c510d35703f6a09877ce45e9"
-  integrity sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==
+typescript@^4.7.2:
+  version "4.7.2"
+  resolved "https://registry.npmmirror.com/typescript/-/typescript-4.7.2.tgz#1f9aa2ceb9af87cca227813b4310fff0b51593c4"
+  integrity sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==
 
 unique-filename@^1.1.1:
   version "1.1.1"
