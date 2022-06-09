@@ -527,7 +527,18 @@
     "@grpc/proto-loader" "^0.6.4"
     "@types/node" ">=12.12.47"
 
-"@grpc/proto-loader@^0.6.12", "@grpc/proto-loader@^0.6.4":
+"@grpc/proto-loader@^0.6.13":
+  version "0.6.13"
+  resolved "https://registry.npmmirror.com/@grpc/proto-loader/-/proto-loader-0.6.13.tgz#008f989b72a40c60c96cd4088522f09b05ac66bc"
+  integrity sha512-FjxPYDRTn6Ec3V0arm1FtSpmP6V50wuph2yILpyvTKzjc76oDdoihXqM1DzOW5ubvCC8GivfCnNtfaRE8myJ7g==
+  dependencies:
+    "@types/long" "^4.0.1"
+    lodash.camelcase "^4.3.0"
+    long "^4.0.0"
+    protobufjs "^6.11.3"
+    yargs "^16.2.0"
+
+"@grpc/proto-loader@^0.6.4":
   version "0.6.12"
   resolved "https://registry.npmmirror.com/@grpc/proto-loader/-/proto-loader-0.6.12.tgz#459b619b8b9b67794bf0d1cb819653a38c63e164"
   integrity sha512-filTVbETFnxb9CyRX98zN18ilChTuf/C5scZ2xyaOTp0EHGq0/ufX8rjqXUcSb1Gpv7eZq4M2jDvbh9BogKnrg==
@@ -793,10 +804,10 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^18.0.10":
-  version "18.0.10"
-  resolved "https://registry.npmmirror.com/@types/react/-/react-18.0.10.tgz#5692944d4a45e204fb7a981eb1388afe919cf4d0"
-  integrity sha512-dIugadZuIPrRzvIEevIu7A1smqOAjkSMv8qOfwPt9Ve6i6JT/FQcCHyk2qIAxwsQNKZt5/oGR0T4z9h2dXRAkg==
+"@types/react@^18.0.12":
+  version "18.0.12"
+  resolved "https://registry.npmmirror.com/@types/react/-/react-18.0.12.tgz#cdaa209d0a542b3fcf69cf31a03976ec4cdd8840"
+  integrity sha512-duF1OTASSBQtcigUvhuiTB1Ya3OvSy+xORCiEf20H0P0lzx+/KeVsA99U5UjLXSbyo1DRJDlLKqTeM1ngosqtg==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -1666,10 +1677,10 @@ electron-winstaller@^5.0.0:
     lodash.template "^4.2.2"
     temp "^0.9.0"
 
-electron@^19.0.2:
-  version "19.0.2"
-  resolved "https://registry.npmmirror.com/electron/-/electron-19.0.2.tgz#48d744dc2dfae0a8590239c614db02f7bc0d6696"
-  integrity sha512-9RzS8wUpxY8dHFJRncro2mEIkCg9Vig1Q0iLu5y3dusEIDKcBRKoW9mVhUeqvZVZgb2SsTEowZBBdBhdL6/+aQ==
+electron@^19.0.4:
+  version "19.0.4"
+  resolved "https://registry.npmmirror.com/electron/-/electron-19.0.4.tgz#a88d5e542868c4abd7704228ec62c553605605a0"
+  integrity sha512-roRYr1VNAWIhjD9n8qZdmhROtrzsFpuZEXrjWAw+GqPbZlrUInmvFCviRDC2Lt+VBsTNRpTfPpfzXSlLL4reEw==
   dependencies:
     "@electron/get" "^1.14.1"
     "@types/node" "^16.11.26"
@@ -3457,7 +3468,7 @@ proto-list@~1.2.1:
   resolved "https://registry.npmmirror.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
   integrity sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==
 
-protobufjs@^6.10.0:
+protobufjs@^6.10.0, protobufjs@^6.11.3:
   version "6.11.3"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.3.tgz#637a527205a35caa4f3e2a9a4a13ddffe0e7af74"
   integrity sha512-xL96WDdCZYdU7Slin569tFX712BxsxslWwAfAhCYjQKGTq7dAU91Lomy6nLLhh/dyGhk/YH4TwTSRxTzhuHyZg==
@@ -4268,10 +4279,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite@^2.9.9:
-  version "2.9.9"
-  resolved "https://registry.npmmirror.com/vite/-/vite-2.9.9.tgz#8b558987db5e60fedec2f4b003b73164cb081c5e"
-  integrity sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew==
+vite@^2.9.10:
+  version "2.9.10"
+  resolved "https://registry.npmmirror.com/vite/-/vite-2.9.10.tgz#f574d96655622c2e0fbc662edd0ed199c60fe91a"
+  integrity sha512-TwZRuSMYjpTurLqXspct+HZE7ONiW9d+wSWgvADGxhDPPyoIcNywY+RX4ng+QpK30DCa1l/oZgi2PLZDibhzbQ==
   dependencies:
     esbuild "^0.14.27"
     postcss "^8.4.13"
