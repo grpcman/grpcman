@@ -13,7 +13,7 @@
     "make": "npm run build && electron-forge make"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.7.1",
+    "@grpc/grpc-js": "^1.7.2",
     "@grpc/proto-loader": "^0.7.3",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
