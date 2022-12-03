@@ -1,20 +1,20 @@
-const {app, BrowserWindow} = require('electron')
+const { app, BrowserWindow } = require('electron')
 
 const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 900,
-        height: 810,
-        resizable: false,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            enableRemoteModule: true
-        }
-    })
+  const win = new BrowserWindow({
+    width: 900,
+    height: 810,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
+    }
+  })
 
-    win.loadFile('dist/index.html')
+  win.loadFile('dist/index.html')
 }
 
 app.whenReady().then(() => {
-    createWindow()
+  createWindow()
 })

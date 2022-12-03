@@ -9,31 +9,31 @@ import RequestError from './components/RequestError'
 import SendRequest from './components/SendRequest'
 
 function App() {
-    return (
-        <div style={ { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 } }>
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
 
-            <ServerAddress/>
+      <ServerAddress/>
 
-            <SelectProtoFile/>
+      <SelectProtoFile/>
 
-            <ServiceDefinition/>
+      <ServiceDefinition/>
 
-            <MethodDefinition/>
+      <MethodDefinition/>
 
-            <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
-                <RequestData/>
-            </div>
+      <div style={{ gridColumnStart: 1, gridColumnEnd: 3 }}>
+        <RequestData/>
+      </div>
 
-            <div style={ { gridColumnStart: 1, gridColumnEnd: 3 } }>
-                <SendRequest/>
-            </div>
+      <div style={{ gridColumnStart: 1, gridColumnEnd: 3 }}>
+        <SendRequest/>
+      </div>
 
-            <ResponseData/>
+      <ResponseData/>
 
-            <RequestError/>
+      <RequestError/>
 
-        </div>
-    )
+    </div>
+  )
 }
 
 export default App
