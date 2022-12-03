@@ -5,6 +5,10 @@ import { useEffect } from 'react'
 const protoLoader = require('@grpc/proto-loader')
 const grpc = require('@grpc/grpc-js')
 
+interface FileWithPath extends File {
+  path: string
+}
+
 const SelectProtoFile = () => {
   const [protoFilePath, setProtoFilePath] = useRecoilState(atoms.protoFilePath)
 
@@ -90,8 +94,7 @@ const SelectProtoFile = () => {
         onChange={e => {
           if (e.target.files) {
             const f = e.target.files[0]
-            // @ts-ignore
-            const fp = f['path']
+            const fp = (f as FileWithPath).path
             console.log('fp', fp)
             if (fp) {
               setProtoFilePath(fp)
