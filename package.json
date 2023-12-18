@@ -13,25 +13,25 @@
     "make": "npm run build && electron-forge make"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.7.3",
-    "@grpc/proto-loader": "^0.7.3",
+    "@grpc/grpc-js": "^1.9.13",
+    "@grpc/proto-loader": "^0.7.10",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recoil": "^0.7.6"
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.70",
-    "@electron-forge/maker-deb": "^6.0.0-beta.70",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.70",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.70",
-    "@electron-forge/maker-zip": "^6.0.0-beta.70",
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
-    "@vitejs/plugin-react": "^2.2.0",
-    "electron": "^21.2.0",
-    "typescript": "^4.8.4",
-    "vite": "^3.2.1"
+    "@electron-forge/cli": "^7.2.0",
+    "@electron-forge/maker-deb": "^7.2.0",
+    "@electron-forge/maker-rpm": "^7.2.0",
+    "@electron-forge/maker-squirrel": "^7.2.0",
+    "@electron-forge/maker-zip": "^7.2.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^25.9.8",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10"
   },
   "config": {
     "forge": {
