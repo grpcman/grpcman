@@ -13,7 +13,7 @@
     "make": "npm run build && electron-forge make"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.9.13",
+    "@grpc/grpc-js": "^1.9.14",
     "@grpc/proto-loader": "^0.7.10",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
@@ -26,10 +26,10 @@
     "@electron-forge/maker-rpm": "^7.2.0",
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
-    "@types/react": "^18.2.45",
+    "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
-    "electron": "^28.0.0",
+    "electron": "^28.2.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.12"
   },
