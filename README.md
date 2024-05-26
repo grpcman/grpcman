@@ -7,19 +7,19 @@
 ## Init
 
 ```bash
-yarn
+npm install
 ```
 
 ## Run
 
 ```bash
-yarn electron:start
+npm run electron:start
 ```
 
 ## Package
 
 ```bash
-yarn make
+npm run make
 ```
 
 ## License
