@@ -31,7 +31,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "electron": "^31.4.0",
     "typescript": "^5.5.4",
-    "vite": "^5.4.2"
+    "vite": "^5.4.8"
   },
   "config": {
     "forge": {
