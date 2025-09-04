@@ -28,10 +28,10 @@
     "@electron-forge/maker-zip": "^7.4.0",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^4.7.0",
     "electron": "^31.4.0",
     "typescript": "^5.5.4",
-    "vite": "^5.4.14"
+    "vite": "^7.1.1"
   },
   "config": {
     "forge": {
