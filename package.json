@@ -29,7 +29,7 @@
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^6.0.2",
-    "electron": "^39.8.5",
+    "electron": "^39.8.10",
     "typescript": "^5.9.2",
     "vite": "^8.0.16"
   },
